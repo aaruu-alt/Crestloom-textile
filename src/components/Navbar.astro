@@ -20,17 +20,24 @@ const right = [
   { label: 'About', href: `${base}/#about` },
   { label: 'Contact', href: `${base}/#contact` },
 ];
+
+/** Mark a link active when its path (ignoring #hash) matches the current page. */
+const current = Astro.url.pathname.replace(/\/$/, '');
+const isActive = (href: string) => {
+  const path = href.split('#')[0].replace(/\/$/, '');
+  return path !== '' && path !== base && path === current;
+};
 ---
 
 <header class:list={['navbar', `is-${theme}`]}>
   <nav class="navbar_left" aria-label="Primary">
-    {left.map((l) => <a href={l.href} class="text-style-nav navbar_link">{l.label}</a>)}
+    {left.map((l) => <a href={l.href} class="text-style-nav navbar_link" aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
   </nav>
 
   <Wordmark href={`${base}/`} class="navbar_brand" />
 
   <nav class="navbar_right" aria-label="Secondary">
-    {right.map((l) => <a href={l.href} class="text-style-nav navbar_link">{l.label}</a>)}
+    {right.map((l) => <a href={l.href} class="text-style-nav navbar_link" aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
   </nav>
 
   <button class="text-style-nav navbar_toggle" type="button" aria-expanded="false" aria-controls="navbar-menu">
@@ -38,7 +45,7 @@ const right = [
   </button>
 
   <div class="navbar_menu" id="navbar-menu" hidden>
-    {[...left, ...right].map((l) => <a href={l.href} class="text-style-nav navbar_link">{l.label}</a>)}
+    {[...left, ...right].map((l) => <a href={l.href} class="text-style-nav navbar_link" aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
   </div>
 </header>
 
@@ -87,16 +94,29 @@ const right = [
   }
   .navbar_right { justify-content: flex-end; }
 
+  /* Underline draws in from the left on hover, retreats to the right on leave;
+     stays drawn on the active page. */
   .navbar_link {
-    transition: color 300ms ease;
+    position: relative;
+    padding-bottom: 0.125rem;
   }
-  .navbar_link:hover,
-  .navbar_link:focus-visible {
-    color: var(--color--sandy-gold);
+  .navbar_link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 300ms ease-in-out;
   }
-  .navbar.is-dark .navbar_link:hover,
-  .navbar.is-dark .navbar_link:focus-visible {
-    color: var(--color--gold);
+  .navbar_link:hover::after,
+  .navbar_link:focus-visible::after,
+  .navbar_link[aria-current='page']::after {
+    transform: scaleX(1);
+    transform-origin: left;
   }
 
   .navbar_toggle,
