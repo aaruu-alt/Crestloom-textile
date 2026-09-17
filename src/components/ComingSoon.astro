@@ -1,9 +1,12 @@
 ---
 import { Image } from 'astro:assets';
 import bg from '../assets/coming-soon-bg.png';
+import strip from '../assets/coming-soon-mobile-strip.png';
+import Button from './Button.astro';
 ---
 
 <section class="coming-soon">
+  <!-- Desktop / tablet: full-bleed photo -->
   <Image
     src={bg}
     alt=""
@@ -14,54 +17,65 @@ import bg from '../assets/coming-soon-bg.png';
     fetchpriority="high"
   />
 
+  <!-- Mobile: lifestyle strip above the content -->
+  <Image
+    src={strip}
+    alt=""
+    class="coming-soon_strip"
+    widths={[480, 800, 1024]}
+    sizes="100vw"
+    loading="eager"
+  />
+
   <div class="coming-soon_content">
-    <a href="/" class="coming-soon_logo" aria-label="Crestlooms Textile">
-      <span class="coming-soon_logo-name">CRESTLOOMS</span>
+    <div class="coming-soon_logo-block">
+      <span class="coming-soon_logo-name">CRESTLOOM</span>
       <span class="coming-soon_logo-sub">TEXTILE</span>
-      <span class="coming-soon_logo-categories">
-        <span>Rugs</span>
-        <span class="coming-soon_dot"></span>
-        <span>Living</span>
-        <span class="coming-soon_dot"></span>
-        <span>Linen</span>
-      </span>
-    </a>
-
-    <h1 class="coming-soon_heading">Connecting you to better textile</h1>
-
-    <div class="coming-soon_divider"></div>
-
-    <div class="coming-soon_body">
-      <p class="coming-soon_text">
-        Rugs, carpets, throws, cushions, bed, bath and table linen. Made in India for brands and retailers worldwide.
-      </p>
-      <div class="coming-soon_inquiries">
-        <p class="coming-soon_label">Inquiries</p>
-        <a href="mailto:info@crestloom.in" class="coming-soon_email">
-          info@crestloom.in <span class="coming-soon_arrow">→</span>
-        </a>
-      </div>
     </div>
 
-    <nav class="coming-soon_regions" aria-label="Regions served">
-      <span>Europe</span>
-      <span class="coming-soon_slash">/</span>
-      <span>USA</span>
-      <span class="coming-soon_slash">/</span>
-      <span>Japan</span>
-      <span class="coming-soon_slash">/</span>
-      <span>Worldwide</span>
-    </nav>
+    <div class="coming-soon_content-block">
+      <div class="coming-soon_inner-block">
+        <div class="coming-soon_heading-block">
+          <h1 class="heading-style-h2 coming-soon_heading">Connecting you to better textiles</h1>
+          <div class="coming-soon_divider"></div>
+        </div>
+
+        <div class="coming-soon_body-block">
+          <p class="text-size-regular coming-soon_text">
+            Rugs, carpets, throws, cushions, bed, bath and table linen. Made in India for brands and retailers worldwide.
+          </p>
+          <div class="coming-soon_enquire-block">
+            <p class="text-style-tagline-xs coming-soon_label">Enquiries</p>
+            <Button href="mailto:info@crestloom.in" variant="ghost-black" icon={false} class="coming-soon_button">info@crestloom.in</Button>
+          </div>
+        </div>
+      </div>
+
+      <nav class="text-style-tagline-xs coming-soon_region-block" aria-label="Regions served">
+        <span>Europe</span>
+        <span class="coming-soon_dot"></span>
+        <span>USA</span>
+        <span class="coming-soon_dot"></span>
+        <span>Japan</span>
+        <span class="coming-soon_dot"></span>
+        <span>Worldwide</span>
+      </nav>
+    </div>
   </div>
 </section>
 
 <style>
-  /* Figma frame 1440 × 800. Content column starts at x=206 (55 + 151). */
+  /* ------------------------------------------------------------------
+     Desktop — Figma 1440 × 800. Content column 438 wide at x = 206.
+     Section fills the viewport; content sits slightly above centre
+     (grid rows 1fr / auto / 1.6fr ≈ 126 top / 211 bottom at 800 tall).
+     ------------------------------------------------------------------ */
   .coming-soon {
     position: relative;
     min-height: 100svh;
-    display: flex;
-    background-color: #f3ede3;   /* fallback while image loads */
+    display: grid;
+    grid-template-rows: 1fr auto 1.6fr;
+    background-color: var(--color--offwhite);
     overflow: clip;
   }
 
@@ -74,25 +88,27 @@ import bg from '../assets/coming-soon-bg.png';
     object-position: center;
     z-index: 0;
   }
+  .coming-soon_strip { display: none; }
 
   .coming-soon_content {
+    grid-row: 2;
     position: relative;
     z-index: 1;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    width: 100%;
-    max-width: 40.25rem;              /* 206 padding + 438 content */
-    padding: 7.875rem 0 7.875rem 12.875rem;   /* 126 top, 206 left */
+    gap: 3.625rem;                    /* 58 */
+    width: 27.375rem;                 /* 438 */
+    margin-left: 12.875rem;           /* 206 */
   }
 
-  /* --- Logo lockup --- */
-  .coming-soon_logo {
+  /* --- Logo block --- */
+  .coming-soon_logo-block {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.625rem;                    /* 10 */
-    color: var(--color--navy-blue);
+    gap: 0.25rem;                     /* 4 */
+    color: var(--color--text);
   }
   .coming-soon_logo-name {
     font-family: var(--font--heading);
@@ -100,123 +116,137 @@ import bg from '../assets/coming-soon-bg.png';
     font-size: 1.875rem;              /* 30 */
     line-height: 100%;
     letter-spacing: 0.16em;           /* 4.8px */
+    padding-left: 0.16em;             /* offset trailing tracking so glyphs centre */
   }
   .coming-soon_logo-sub {
     font-family: var(--font--accent);
-    font-weight: 400;
+    font-weight: 500;
     font-size: 0.75rem;               /* 12 */
     line-height: 100%;
-    letter-spacing: 0.45em;           /* 5.4px */
+    letter-spacing: 0.6em;            /* 7.2px */
+    padding-left: 0.6em;
     color: var(--color--gold);
-    padding-left: 0.45em;             /* visually recentre — trailing tracking */
-  }
-  .coming-soon_logo-categories {
-    display: flex;
-    align-items: center;
-    gap: 0.625rem;                    /* 10 */
-    font-family: var(--font--accent);
-    font-weight: 400;
-    font-size: 0.625rem;              /* 10 */
-    line-height: 146%;
-    letter-spacing: 0.18em;           /* 1.8px */
-    text-transform: uppercase;
-    color: var(--color--cyan-blue);
-    padding-left: 0.18em;
-  }
-  .coming-soon_dot {
-    width: 0.1875rem;                 /* 3 */
-    height: 0.1875rem;
-    border-radius: 50%;
-    background-color: var(--color--cyan-blue);
   }
 
-  /* --- Heading --- */
-  .coming-soon_heading {
-    margin-top: 2.125rem;             /* 34 */
-    max-width: 19.5625rem;            /* 313 */
-    font-family: var(--font--heading);
-    font-style: italic;
-    font-weight: 500;
-    font-size: 3.375rem;              /* 54 */
-    line-height: 112%;
-    letter-spacing: -0.01em;
-    color: var(--color--navy-blue);
+  /* --- Content block --- */
+  .coming-soon_content-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2.5rem;                      /* 40 */
+    width: 100%;
   }
+  .coming-soon_inner-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;                        /* 32 */
+    width: 100%;
+  }
+  .coming-soon_heading-block {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;                      /* 24 */
+    width: 24.25rem;                  /* 388 */
+    max-width: 100%;
+  }
+  .coming-soon_heading { color: var(--color--text); }
 
   .coming-soon_divider {
-    margin-top: 1.625rem;             /* 26 */
     width: 2.625rem;                  /* 42 */
     height: 1px;
     background-color: var(--color--sandy-brown);
   }
 
-  /* --- Body --- */
-  .coming-soon_body {
-    margin-top: 1.5rem;               /* 24 */
+  .coming-soon_body-block {
     display: flex;
     flex-direction: column;
     gap: 2.5rem;                      /* 40 */
+    width: 100%;
   }
   .coming-soon_text {
-    max-width: 25.5rem;               /* 408 */
-    font-family: var(--font--body);
-    font-size: 1rem;
-    line-height: 150%;
-    letter-spacing: -0.01em;
-    color: rgb(40 40 42 / 0.8);
+    max-width: 25.625rem;             /* 410 */
+    color: rgb(40 40 42 / 0.8);       /* charcoal @ 80% */
   }
-  .coming-soon_inquiries {
+
+  .coming-soon_enquire-block {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;                     /* 12 */
   }
-  .coming-soon_label {
-    font-family: var(--font--accent);
-    font-weight: 400;
-    font-size: 0.625rem;              /* 10 */
-    line-height: 146%;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--color--navy-blue);
+  .coming-soon_label { color: var(--color--text); }
+  .coming-soon_button {
+    text-transform: none;             /* email stays lowercase */
   }
-  .coming-soon_email {
-    font-family: var(--font--accent);
-    font-weight: 500;
-    font-size: 0.875rem;              /* 14 */
-    line-height: 100%;
-    letter-spacing: 0.02em;
-    color: var(--color--cyan-blue);
-  }
-  .coming-soon_arrow { color: var(--color--sandy-brown); }
 
-  /* --- Regions --- */
-  .coming-soon_regions {
-    margin-top: 4.125rem;             /* 66 */
+  /* --- Region block --- */
+  .coming-soon_region-block {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 0.75rem;                     /* 12 */
-    font-family: var(--font--accent);
-    font-weight: 400;
-    font-size: 0.75rem;               /* 12 */
-    line-height: 100%;
-    letter-spacing: 0.1em;
-    color: var(--color--navy-blue);
+    color: var(--color--text);
   }
-  .coming-soon_slash { color: var(--color--sandy-brown); }
+  .coming-soon_dot {
+    width: 0.1875rem;                 /* 3 */
+    height: 0.1875rem;
+    border-radius: 50%;
+    background-color: currentColor;
+  }
 
-  /* --- Responsive --- */
+  /* ------------------------------------------------------------------
+     Tablet — Figma 1024 × 768. Content at x = 40, y = 52; region row
+     pushed to the bottom. Photo cropped further right.
+     ------------------------------------------------------------------ */
   @media (max-width: 991px) {
+    .coming-soon {
+      display: flex;
+    }
+    .coming-soon_bg { object-position: 72% center; }
+
     .coming-soon_content {
-      padding: 5rem 2.5rem 5rem 2.5rem;
-      max-width: none;
+      flex: 1;
+      gap: 6.75rem;                   /* 108 */
+      margin-left: 0;
+      padding: 3.25rem 2.5rem;        /* 52 / 40 */
+    }
+    .coming-soon_content-block {
+      flex: 1;
+      justify-content: space-between; /* region row → bottom (192 gap in Figma) */
     }
   }
+
+  /* ------------------------------------------------------------------
+     Mobile — Figma 390. Offwhite page, 136-tall photo strip on top,
+     logo centred, H3 heading, region row at the bottom.
+     ------------------------------------------------------------------ */
   @media (max-width: 767px) {
-    .coming-soon_content {
-      padding: 4rem 1.25rem 3rem;
-      justify-content: flex-end;
+    .coming-soon {
+      flex-direction: column;
     }
-    .coming-soon_heading { font-size: 2.75rem; }
-    .coming-soon_regions { margin-top: 3rem; flex-wrap: wrap; row-gap: 0.5rem; }
+    .coming-soon_bg { display: none; }
+    .coming-soon_strip {
+      display: block;
+      width: 100%;
+      height: 8.5rem;                 /* 136 */
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .coming-soon_content {
+      width: 100%;
+      gap: 2rem;                      /* 32 */
+      padding: 2.25rem 1rem 1.25rem;  /* 36 / 16 / 20 */
+    }
+    .coming-soon_logo-block { align-self: center; }
+    .coming-soon_logo-name {
+      letter-spacing: 0.193em;        /* 5.8px */
+      padding-left: 0.193em;
+    }
+    .coming-soon_heading-block { width: 100%; }
+    .coming-soon_heading {
+      font-size: 2.5rem;              /* 40 — H3 */
+      line-height: 110%;
+    }
+    .coming-soon_text { max-width: none; }
   }
 </style>

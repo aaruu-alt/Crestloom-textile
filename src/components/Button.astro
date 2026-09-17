@@ -1,0 +1,121 @@
+---
+/**
+ * Button — mirrors the Figma "Button" component (node 154:722).
+ *
+ * Figma property → prop
+ *   Type       → variant: outline | filled-gold | filled-cyan | ghost-white | ghost-black
+ *   Show icon  → icon (boolean, default true)
+ *   href       → renders <a>; omit for a <button>
+ *
+ * Ghost-black used navy in Figma; navy was dropped from the palette, so it
+ * uses Charcoal (--color--text).
+ */
+type Variant = 'outline' | 'filled-gold' | 'filled-cyan' | 'ghost-white' | 'ghost-black';
+
+interface Props {
+  href?: string;
+  variant?: Variant;
+  icon?: boolean;
+  class?: string;
+  [key: string]: unknown;
+}
+
+const {
+  href,
+  variant = 'outline',
+  icon = true,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag
+  href={href}
+  class:list={['text-style-button', 'button', `is-${variant}`, className]}
+  {...rest}
+>
+  <span class="button_label"><slot /></span>
+  {icon && (
+    <svg class="button_icon" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+      <path d="M0.6 6H10.5M6.25 10.25L10.5 6L6.25 1.75" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  )}
+</Tag>
+
+<style>
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;                    /* 10 */
+    padding: 0.875rem 1rem;           /* 14 / 16 */
+    border: 1px solid transparent;
+    white-space: nowrap;
+    transition: color 300ms ease, background-color 300ms ease, border-color 300ms ease;
+  }
+
+  .button_icon {
+    width: 0.75rem;                   /* 12 */
+    height: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  /* --- Type: Outline --- */
+  .button.is-outline {
+    color: var(--color--offwhite);
+    border-color: var(--color--offwhite);
+  }
+  .button.is-outline:hover,
+  .button.is-outline:focus-visible {
+    background-color: var(--color--offwhite);
+    color: var(--color--text);
+  }
+
+  /* --- Type: Filled-gold --- */
+  .button.is-filled-gold {
+    color: var(--color--offwhite);
+    background-color: var(--color--sandy-brown);
+    border-color: var(--color--sandy-brown);
+  }
+  .button.is-filled-gold:hover,
+  .button.is-filled-gold:focus-visible {
+    background-color: var(--color--gold);
+    border-color: var(--color--gold);
+  }
+
+  /* --- Type: Filled-cyan --- */
+  .button.is-filled-cyan {
+    color: var(--color--offwhite);
+    background-color: var(--color--cyan-blue);
+    border-color: var(--color--cyan-blue);
+  }
+  .button.is-filled-cyan:hover,
+  .button.is-filled-cyan:focus-visible {
+    background-color: var(--color--text);
+    border-color: var(--color--text);
+  }
+
+  /* --- Type: Ghost-white (no box) --- */
+  .button.is-ghost-white {
+    padding: 0;
+    border: 0;
+    color: var(--color--offwhite);
+  }
+  .button.is-ghost-white:hover,
+  .button.is-ghost-white:focus-visible {
+    color: var(--color--sandy-gold);
+  }
+
+  /* --- Type: Ghost-black (no box) --- */
+  .button.is-ghost-black {
+    padding: 0;
+    border: 0;
+    color: var(--color--text);
+  }
+  .button.is-ghost-black:hover,
+  .button.is-ghost-black:focus-visible {
+    color: var(--color--gold);
+  }
+</style>
