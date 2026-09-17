@@ -1,0 +1,153 @@
+---
+/**
+ * Hero — Figma "Hero" (121:15), 1440 × 900.
+ */
+import { Image } from 'astro:assets';
+import Button from './Button.astro';
+import heroImage from '../assets/hero-living.png';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<section class="hero">
+  <Image
+    src={heroImage}
+    alt="Blue floral throw draped over a linen sofa"
+    class="hero_image"
+    widths={[800, 1200, 1672]}
+    sizes="100vw"
+    loading="eager"
+    fetchpriority="high"
+  />
+  <div class="hero_overlay-tonal" aria-hidden="true"></div>
+  <div class="hero_overlay-bottom" aria-hidden="true"></div>
+
+  <div class="hero_content padding-global">
+    <div class="hero_copy">
+      <p class="text-style-tagline hero_tagline">
+        <span>Rugs</span>
+        <span class="hero_dot"></span>
+        <span>Living</span>
+        <span class="hero_dot"></span>
+        <span>Linen</span>
+      </p>
+      <h1 class="heading-style-h1 hero_heading">
+        Rooted in craft.<br />
+        <em>Ready for what’s next.</em>
+      </h1>
+      <Button href={`${base}/#collections`} variant="outline">Explore collections</Button>
+    </div>
+
+    <p class="text-style-tagline-xs hero_badge">01 / Living</p>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100svh;
+    min-height: 40rem;
+    background-color: var(--color--charcoal-black);
+    color: var(--color--offwhite);
+    overflow: clip;
+  }
+
+  .hero_image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* Figma "Image / Tonal Overlay" — navy tint, 103.8deg */
+  .hero_overlay-tonal {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(
+      103.83deg,
+      rgb(27 51 80 / 0.58) 2.2%,
+      rgb(27 51 80 / 0.08) 55.6%,
+      rgb(27 51 80 / 0.22) 108.9%
+    );
+  }
+  /* Bottom darkening, from ~49% down */
+  .hero_overlay-bottom {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 50.8%;                    /* 457 / 900 */
+    background-image: linear-gradient(
+      to bottom,
+      rgb(246 245 242 / 0) 16.9%,
+      rgb(27 51 80 / 0.28) 100%
+    );
+  }
+
+  .hero_content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    width: 100%;
+    padding-bottom: 3rem;             /* 48 */
+  }
+
+  .hero_copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.125rem;                    /* 18 */
+    max-width: 38.125rem;             /* 610 */
+  }
+
+  .hero_tagline {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;                    /* 14 */
+    color: var(--color--sandy-gold);
+  }
+  .hero_dot {
+    width: 0.1875rem;                 /* 3 */
+    height: 0.1875rem;
+    border-radius: 50%;
+    background-color: currentColor;
+  }
+
+  .hero_heading {
+    color: var(--color--offwhite);
+  }
+  .hero_heading em {
+    font-style: italic;
+  }
+
+  .hero_badge {
+    flex-shrink: 0;
+    padding: 0.5rem 0.75rem;          /* 8 / 12 */
+    background-color: var(--color--offwhite);
+    color: var(--color--charcoal-black);
+  }
+
+  /* --- Tablet --- */
+  @media (max-width: 991px) {
+    .hero_heading { font-size: 3.5rem; }   /* 56 */
+  }
+
+  /* --- Mobile (no design yet — sensible default) --- */
+  @media (max-width: 767px) {
+    .hero { min-height: 36rem; }
+    .hero_content {
+      flex-direction: column;
+      align-items: flex-start;
+      padding-bottom: 2rem;
+    }
+    .hero_heading { font-size: 2.75rem; }  /* 44 */
+    .hero_badge { align-self: flex-end; }
+  }
+</style>

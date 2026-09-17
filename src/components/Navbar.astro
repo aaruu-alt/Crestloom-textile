@@ -1,0 +1,132 @@
+---
+/**
+ * Navbar — Figma "Navbar" (154:678). Left links / centred wordmark / right links.
+ * `theme="light"` = offwhite text for use over dark imagery (hero).
+ */
+import Wordmark from './Wordmark.astro';
+
+interface Props {
+  theme?: 'light' | 'dark';
+}
+const { theme = 'light' } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const left = [
+  { label: 'Collections', href: `${base}/#collections` },
+  { label: 'Sourcing', href: `${base}/#sourcing` },
+  { label: 'Our process', href: `${base}/#process` },
+];
+const right = [
+  { label: 'About', href: `${base}/#about` },
+  { label: 'Contact', href: `${base}/#contact` },
+];
+---
+
+<header class:list={['navbar', `is-${theme}`]}>
+  <nav class="navbar_left" aria-label="Primary">
+    {left.map((l) => <a href={l.href} class="text-style-nav navbar_link">{l.label}</a>)}
+  </nav>
+
+  <Wordmark href={`${base}/`} class="navbar_brand" />
+
+  <nav class="navbar_right" aria-label="Secondary">
+    {right.map((l) => <a href={l.href} class="text-style-nav navbar_link">{l.label}</a>)}
+  </nav>
+
+  <button class="text-style-nav navbar_toggle" type="button" aria-expanded="false" aria-controls="navbar-menu">
+    Menu
+  </button>
+
+  <div class="navbar_menu" id="navbar-menu" hidden>
+    {[...left, ...right].map((l) => <a href={l.href} class="text-style-nav navbar_link">{l.label}</a>)}
+  </div>
+</header>
+
+<script>
+  const nav = document.querySelector('.navbar');
+  const toggle = nav?.querySelector<HTMLButtonElement>('.navbar_toggle');
+  const menu = nav?.querySelector<HTMLElement>('.navbar_menu');
+  toggle?.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!open));
+    toggle.textContent = open ? 'Menu' : 'Close';
+    if (menu) menu.hidden = open;
+  });
+</script>
+
+<style>
+  .navbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 6.25rem;                  /* 100 */
+    padding: 0 3.5rem;                /* 56 — matches padding-global */
+  }
+  .navbar.is-light {
+    color: var(--color--offwhite);
+    --wordmark-color: var(--color--offwhite);
+    --wordmark-accent: var(--color--sandy-gold);
+  }
+  .navbar.is-dark {
+    color: var(--color--text);
+    --wordmark-color: var(--color--text);
+    --wordmark-accent: var(--color--gold);
+  }
+
+  .navbar_left,
+  .navbar_right {
+    display: flex;
+    align-items: center;
+    gap: 2.125rem;                    /* 34 */
+    width: 26.875rem;                 /* 430 — keeps the wordmark centred */
+  }
+  .navbar_right { justify-content: flex-end; }
+
+  .navbar_link {
+    transition: color 300ms ease;
+  }
+  .navbar_link:hover,
+  .navbar_link:focus-visible {
+    color: var(--color--sandy-gold);
+  }
+  .navbar.is-dark .navbar_link:hover,
+  .navbar.is-dark .navbar_link:focus-visible {
+    color: var(--color--gold);
+  }
+
+  .navbar_toggle,
+  .navbar_menu { display: none; }
+
+  /* --- Tablet: tighter link columns --- */
+  @media (max-width: 991px) {
+    .navbar { padding: 0 2.5rem; }
+    .navbar_left,
+    .navbar_right { width: auto; gap: 1.5rem; }
+  }
+
+  /* --- Mobile: wordmark + menu toggle (no mobile design yet — sensible default) --- */
+  @media (max-width: 767px) {
+    .navbar { padding: 0 1.25rem; height: 5rem; }
+    .navbar_left,
+    .navbar_right { display: none; }
+    .navbar_toggle { display: block; }
+    .navbar_menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      padding: 1.5rem 1.25rem 2rem;
+      background-color: var(--color--charcoal-black);
+      color: var(--color--offwhite);
+    }
+    .navbar_menu[hidden] { display: none; }
+  }
+</style>

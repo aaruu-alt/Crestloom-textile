@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import bg from '../assets/coming-soon-bg.png';
 import strip from '../assets/coming-soon-mobile-strip.png';
 import Button from './Button.astro';
+import Wordmark from './Wordmark.astro';
 ---
 
 <section class="coming-soon">
@@ -28,10 +29,7 @@ import Button from './Button.astro';
   />
 
   <div class="coming-soon_content">
-    <div class="coming-soon_logo-block">
-      <span class="coming-soon_logo-name">CRESTLOOM</span>
-      <span class="coming-soon_logo-sub">TEXTILE</span>
-    </div>
+    <Wordmark class="coming-soon_logo-block" />
 
     <div class="coming-soon_content-block">
       <div class="coming-soon_inner-block">
@@ -102,31 +100,7 @@ import Button from './Button.astro';
     margin-left: 12.875rem;           /* 206 */
   }
 
-  /* --- Logo block --- */
-  .coming-soon_logo-block {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.25rem;                     /* 4 */
-    color: var(--color--text);
-  }
-  .coming-soon_logo-name {
-    font-family: var(--font--heading);
-    font-weight: 500;
-    font-size: 1.875rem;              /* 30 */
-    line-height: 100%;
-    letter-spacing: 0.16em;           /* 4.8px */
-    padding-left: 0.16em;             /* offset trailing tracking so glyphs centre */
-  }
-  .coming-soon_logo-sub {
-    font-family: var(--font--accent);
-    font-weight: 500;
-    font-size: 0.75rem;               /* 12 */
-    line-height: 100%;
-    letter-spacing: 0.6em;            /* 7.2px */
-    padding-left: 0.6em;
-    color: var(--color--gold);
-  }
+  /* --- Logo block (Wordmark component, charcoal + gold defaults) --- */
 
   /* --- Content block --- */
   .coming-soon_content-block {
@@ -239,7 +213,7 @@ import Button from './Button.astro';
       padding: 2.25rem 1rem 1.25rem;  /* 36 / 16 / 20 */
     }
     .coming-soon_logo-block { align-self: center; }
-    .coming-soon_logo-name {
+    .coming-soon_logo-block :global(.wordmark_name) {
       letter-spacing: 0.193em;        /* 5.8px */
       padding-left: 0.193em;
     }

@@ -1,0 +1,46 @@
+---
+/**
+ * Wordmark — "CRESTLOOM / TEXTILE" lockup (Figma "Brand / Wordmark").
+ * Colours come from CSS vars so each context can theme it:
+ *   --wordmark-color   (name)   default: --color--text
+ *   --wordmark-accent  (sub)    default: --color--gold
+ */
+interface Props {
+  href?: string;
+  class?: string;
+}
+const { href, class: className } = Astro.props;
+const Tag = href ? 'a' : 'div';
+---
+
+<Tag href={href} class:list={['wordmark', className]} aria-label="Crestloom Textile">
+  <span class="wordmark_name">CRESTLOOM</span>
+  <span class="wordmark_sub">TEXTILE</span>
+</Tag>
+
+<style>
+  .wordmark {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;                     /* 4 */
+    color: var(--wordmark-color, var(--color--text));
+  }
+  .wordmark_name {
+    font-family: var(--font--heading);
+    font-weight: 500;
+    font-size: 1.875rem;              /* 30 */
+    line-height: 100%;
+    letter-spacing: 0.16em;           /* 4.8px */
+    padding-left: 0.16em;             /* offset trailing tracking so glyphs centre */
+  }
+  .wordmark_sub {
+    font-family: var(--font--accent);
+    font-weight: 500;
+    font-size: 0.75rem;               /* 12 */
+    line-height: 100%;
+    letter-spacing: 0.6em;            /* 7.2px */
+    padding-left: 0.6em;
+    color: var(--wordmark-accent, var(--color--gold));
+  }
+</style>
