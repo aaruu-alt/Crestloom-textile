@@ -1,8 +1,10 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 
-// https://astro.build/config
+// Staging: GitHub Pages project URL (https://aaruu-alt.github.io/Crestloom-textile/).
+// When the custom domain goes live, change `site` to the domain and remove `base`.
 export default defineConfig({
-  // site: 'https://<domain-tbd>', — set when the custom domain is decided
+  site: 'https://aaruu-alt.github.io',
+  base: '/Crestloom-textile',
   output: 'static',
 });
