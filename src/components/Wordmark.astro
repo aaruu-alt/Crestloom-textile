@@ -6,7 +6,9 @@
  *   --wordmark-color   (CRESTLOOM)  default: --color--text
  *   --wordmark-accent  (TEXTILE)    default: --color--gold
  */
-import svg from '../assets/wordmark.svg?raw';
+import raw from '../assets/wordmark.svg?raw';
+// The <svg> is the image; the wrapper is a plain link/div.
+const svg = raw.replace('<svg ', '<svg role="img" aria-label="Crestloom Textile" focusable="false" ');
 
 interface Props {
   href?: string;
@@ -17,7 +19,7 @@ const { href, class: className, ...rest } = Astro.props;
 const Tag = href ? 'a' : 'div';
 ---
 
-<Tag href={href} class:list={['wordmark', className]} role="img" aria-label="Crestloom Textile" {...rest} set:html={svg} />
+<Tag href={href} class:list={['wordmark', className]} aria-label={href ? 'Crestloom Textile — home' : undefined} {...rest} set:html={svg} />
 
 <style>
   .wordmark {
