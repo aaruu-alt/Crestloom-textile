@@ -73,10 +73,14 @@ const isActive = (href: string) => {
       '--wordmark-color': token('--color--charcoal-black'),
       '--wordmark-accent': token('--color--sandy-brown'),
     };
-    const tween = { duration: 0.4, ease: 'power4.inOut', overwrite: 'auto' as const };
+    // Soft, decelerating ease — long enough to read as a change of state, not a flicker.
+    const tweenIn  = { duration: 0.7, ease: 'power2.out', overwrite: 'auto' as const };
+    const tweenOut = { duration: 0.5, ease: 'power2.out', overwrite: 'auto' as const };
 
     const setSolid = (on: boolean, instant = false) =>
-      instant ? gsap.set(nav, on ? solid : transparent) : gsap.to(nav, { ...(on ? solid : transparent), ...tween });
+      instant
+        ? gsap.set(nav, on ? solid : transparent)
+        : gsap.to(nav, on ? { ...solid, ...tweenIn } : { ...transparent, ...tweenOut });
 
     const trigger = ScrollTrigger.create({
       start: 20,                      // switch once the page has scrolled 20px
