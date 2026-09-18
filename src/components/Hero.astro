@@ -141,12 +141,15 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   :global(html.js) .hero_copy > :global(.hero_button),
   :global(html.js) .hero_content > :global(.hero_badge) { opacity: 0; }
   :global(html.js) .hero_image { transform: scale(1.06); }
+  /* Navbar starts hidden only on pages that have a hero (this timeline reveals it) */
+  :global(html.js:has(.hero) .navbar) { opacity: 0; transform: translateY(-0.75rem); }
 
   @media (prefers-reduced-motion: reduce) {
     :global(html.js) .hero_mask-inner { transform: none; }
     :global(html.js) .hero_copy > :global(.hero_button),
     :global(html.js) .hero_content > :global(.hero_badge) { opacity: 1; }
     :global(html.js) .hero_image { transform: none; }
+    :global(html.js:has(.hero) .navbar) { opacity: 1; transform: none; }
   }
   .hero_heading em {
     font-style: italic;
@@ -185,7 +188,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
     gsap.timeline({ delay: 0.15 })
       .to(image, { scale: 1, duration: 2.4 }, 0)
-      .from(nav, { y: -12, opacity: 0, duration: 1 }, 0.2)
+      .to(nav, { y: 0, opacity: 1, duration: 1 }, 0.2)
       .to(lines, { y: 0, duration: 1.1, stagger: 0.14 }, 0.35)
       .to(button, { opacity: 1, duration: 0.9 }, 0.95)
       .fromTo(button, { y: 12 }, { y: 0, duration: 0.9 }, 0.95)
