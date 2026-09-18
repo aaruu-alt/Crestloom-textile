@@ -1,0 +1,120 @@
+---
+/**
+ * International Partnerships — Figma "International Partnerships" (128:16), 1440 × 720.
+ * Figma's region cells are 321 wide and overflow the container by 28px;
+ * here they're equal-width fills.
+ */
+import Button from './Button.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const regions = ['Europe', 'USA', 'Japan', 'Worldwide'];
+const audiences = ['For brands', 'Retailers', 'Interior projects'];
+---
+
+<section class="partnerships padding-global padding-section-medium" id="contact">
+  <div class="container-large partnerships_inner">
+    <header class="partnerships_header">
+      <div class="partnerships_heading-block">
+        <p class="text-style-tagline text-color-sandy-brown" data-reveal>International partnerships</p>
+        <h2 class="heading-style-h2" data-reveal>Made in India.<br />Ready to work worldwide.</h2>
+      </div>
+      <p class="text-size-large partnerships_intro" data-reveal>
+        Crestloom is being built to support brands, retailers and interior partners across Europe, the USA, Japan and beyond—with clear communication from brief to delivery.
+      </p>
+    </header>
+
+    <div class="partnerships_body">
+      <ol class="partnerships_regions" data-reveal-group>
+        {regions.map((name, i) => (
+          <li class="partnerships_region" data-reveal>
+            <p class="text-style-tagline text-color-sandy-brown">{String(i + 1).padStart(2, '0')}&nbsp;&nbsp;/&nbsp;&nbsp;Region</p>
+            <h3 class="heading-style-h3">{name}</h3>
+          </li>
+        ))}
+      </ol>
+
+      <div class="partnerships_footer">
+        <p class="text-style-tagline partnerships_audience" data-reveal>
+          {audiences.map((a, i) => (
+            <>
+              {i > 0 && <span class="partnerships_dot"></span>}
+              <span>{a}</span>
+            </>
+          ))}
+        </p>
+        <Button href="mailto:info@crestloom.in" variant="ghost-black" data-reveal>Start a conversation</Button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .partnerships {
+    background-color: var(--color--offwhite);
+  }
+  .partnerships_inner {
+    display: flex;
+    flex-direction: column;
+    gap: 9.25rem;                     /* 148 */
+  }
+
+  /* --- Header --- */
+  .partnerships_header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+  .partnerships_heading-block {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;                     /* 28 */
+    width: 37.5rem;                   /* 600 */
+  }
+  .partnerships_intro {
+    width: 31.5rem;                   /* 504 */
+    opacity: 0.85;
+  }
+
+  /* --- Regions --- */
+  .partnerships_body {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;                        /* 64 */
+  }
+  .partnerships_regions {
+    display: flex;
+    gap: 1.5rem;                      /* 24 */
+    border-top: 1px solid rgb(40 40 42 / 0.28);
+    border-bottom: 1px solid rgb(40 40 42 / 0.28);
+  }
+  .partnerships_region {
+    flex: 1 1 0;                      /* equal fill (Figma: fixed 321, overflows) */
+    display: flex;
+    flex-direction: column;
+    gap: 1.875rem;                    /* 30 */
+    height: 12.5rem;                  /* 200 */
+    padding-top: 2.75rem;             /* 44 */
+    border-right: 1px solid rgb(40 40 42 / 0.28);
+  }
+  .partnerships_region:last-child { border-right: 0; }
+
+  /* --- Audience + CTA --- */
+  .partnerships_footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .partnerships_audience {
+    display: flex;
+    align-items: center;
+    gap: 1rem;                        /* ≈ Figma's space-between across 480 */
+    color: var(--color--text);
+  }
+  .partnerships_dot {
+    width: 0.1875rem;                 /* 3 */
+    height: 0.1875rem;
+    border-radius: 50%;
+    background-color: currentColor;
+  }
+</style>

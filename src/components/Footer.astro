@@ -1,0 +1,117 @@
+---
+/**
+ * Footer — Figma "Footer" component (144:254), 1440 × 406.
+ */
+import Wordmark from './Wordmark.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const year = new Date().getFullYear();
+
+const columns = [
+  [
+    { label: 'Collections', href: `${base}/#collections` },
+    { label: 'Sourcing', href: `${base}/#sourcing` },
+  ],
+  [
+    { label: 'About', href: `${base}/#about` },
+    { label: 'Contact', href: `${base}/#contact` },
+  ],
+];
+---
+
+<footer class="footer padding-global">
+  <div class="container-large footer_inner">
+    <div class="footer_top">
+      <Wordmark href={`${base}/`} class="footer_brand" />
+      <nav class="footer_nav" aria-label="Footer">
+        {columns.map((links) => (
+          <ul class="footer_column">
+            {links.map((l) => (
+              <li><a href={l.href} class="text-style-nav text-link">{l.label}</a></li>
+            ))}
+          </ul>
+        ))}
+      </nav>
+    </div>
+
+    <div class="footer_bottom">
+      <div class="footer_rule" role="presentation"></div>
+      <div class="footer_meta">
+        <p class="footer_small">© {year} Crestloom Textile</p>
+        <a href="mailto:info@crestloom.in" class="footer_small text-link">info@crestloom.in</a>
+        <div class="footer_legal">
+          <p class="footer_small">All rights reserved</p>
+          <a href={`${base}/privacy`} class="text-style-nav text-link">Privacy</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background-color: var(--color--cyan-blue);
+    color: var(--color--offwhite);
+    padding-top: 4rem;                /* 64 */
+    padding-bottom: 1.5rem;           /* 24 */
+    --wordmark-color: var(--color--offwhite);
+    --wordmark-accent: var(--color--sandy-gold);
+  }
+  .footer_inner {
+    display: flex;
+    flex-direction: column;
+    gap: 12.5rem;                     /* 200 */
+  }
+
+  /* --- Top row --- */
+  .footer_top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  .footer_inner :global(.footer_brand) {
+    width: 23.5rem;                   /* wordmark scaled so CRESTLOOM ≈ 344 wide (Figma 48px lockup) */
+    height: auto;
+    aspect-ratio: 260 / 58;
+  }
+  .footer_nav {
+    display: flex;
+    justify-content: space-between;
+    width: 17rem;                     /* 272 */
+  }
+  .footer_column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.875rem;                    /* 30 */
+  }
+
+  /* --- Bottom row --- */
+  .footer_bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 1.875rem;                    /* 30 */
+  }
+  .footer_rule {
+    height: 1px;
+    background-color: var(--color--offwhite);
+    opacity: 0.7;
+  }
+  .footer_meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: rgb(246 245 242 / 0.9);
+  }
+  .footer_small {
+    font-family: var(--font--accent);
+    font-weight: 400;
+    font-size: 0.75rem;               /* 12 */
+    line-height: normal;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .footer_legal {
+    display: flex;
+    align-items: center;
+    gap: 4.625rem;                    /* 74 */
+  }
+</style>

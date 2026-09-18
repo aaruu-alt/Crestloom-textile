@@ -31,13 +31,13 @@ const isActive = (href: string) => {
 
 <header class:list={['navbar', `is-${theme}`]}>
   <nav class="navbar_left" aria-label="Primary">
-    {left.map((l) => <a href={l.href} class="text-style-nav navbar_link" aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
+    {left.map((l) => <a href={l.href} class="text-style-nav text-link navbar_link" aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
   </nav>
 
   <Wordmark href={`${base}/`} class="navbar_brand" />
 
   <nav class="navbar_right" aria-label="Secondary">
-    {right.map((l) => <a href={l.href} class="text-style-nav navbar_link" aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
+    {right.map((l) => <a href={l.href} class="text-style-nav text-link navbar_link" aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
   </nav>
 
   <button class="text-style-nav navbar_toggle" type="button" aria-expanded="false" aria-controls="navbar-menu">
@@ -45,7 +45,7 @@ const isActive = (href: string) => {
   </button>
 
   <div class="navbar_menu" id="navbar-menu" hidden>
-    {[...left, ...right].map((l) => <a href={l.href} class="text-style-nav navbar_link" aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
+    {[...left, ...right].map((l) => <a href={l.href} class="text-style-nav text-link navbar_link" aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
   </div>
 </header>
 
@@ -93,31 +93,6 @@ const isActive = (href: string) => {
     width: 26.875rem;                 /* 430 — keeps the wordmark centred */
   }
   .navbar_right { justify-content: flex-end; }
-
-  /* Underline draws in from the left on hover, retreats to the right on leave;
-     stays drawn on the active page. */
-  .navbar_link {
-    position: relative;
-    padding-bottom: 0.125rem;
-  }
-  .navbar_link::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 1px;
-    background-color: currentColor;
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform 300ms ease-in-out;
-  }
-  .navbar_link:hover::after,
-  .navbar_link:focus-visible::after,
-  .navbar_link[aria-current='page']::after {
-    transform: scaleX(1);
-    transform-origin: left;
-  }
 
   .navbar_toggle,
   .navbar_menu { display: none; }
