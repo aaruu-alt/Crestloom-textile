@@ -1,0 +1,76 @@
+---
+/**
+ * Origin — Figma "Origin" (123:63), 1440 × 685.
+ * Full-bleed image; copy block right-aligned to the container, 134 from top.
+ */
+import { Image } from 'astro:assets';
+import panipat from '../assets/origin-panipat.png';
+---
+
+<section class="origin" id="about">
+  <Image
+    src={panipat}
+    alt="Historic domed monument in Panipat at sunrise"
+    class="origin_image"
+    widths={[800, 1200, 1820]}
+    sizes="100vw"
+  />
+
+  <div class="origin_content padding-global">
+    <div class="container-large origin_inner">
+      <div class="origin_copy">
+        <div class="origin_heading-block">
+          <p class="text-style-tagline text-color-sandy-gold" data-reveal>Our origin</p>
+          <h2 class="heading-style-h2 origin_heading" data-reveal>Rooted in a city<br />woven through craft.</h2>
+        </div>
+        <p class="text-size-large origin_intro" data-reveal>
+          Crestloom Textile begins in Panipat, where textiles are part of the city’s working rhythm. While the company is new, it is informed by a family familiar with manufacturing and the practical decisions behind making.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .origin {
+    position: relative;
+    height: 42.8125rem;               /* 685 */
+    background-color: var(--color--charcoal-black);
+    color: var(--color--offwhite);
+    overflow: clip;
+  }
+  .origin_image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .origin_content {
+    position: relative;
+    z-index: 1;
+    padding-top: 8.375rem;            /* 134 */
+  }
+  .origin_inner {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .origin_copy {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;                        /* 32 */
+    width: 28.3125rem;                /* 453 */
+  }
+  .origin_heading-block {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;                        /* 16 */
+  }
+  .origin_heading { color: var(--color--offwhite); }
+  .origin_intro {
+    width: 25rem;                     /* 400 */
+    opacity: 0.86;
+  }
+</style>
