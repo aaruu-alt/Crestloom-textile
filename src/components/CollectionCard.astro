@@ -27,10 +27,13 @@ const { title, badge, href, image, alt, size = 'small' } = Astro.props;
     widths={size === 'large' ? [800, 1200, 1600] : [504, 800, 1008]}
     sizes={size === 'large' ? '(min-width: 992px) 56vw, 100vw' : '(min-width: 992px) 35vw, 100vw'}
   />
+  <div class="collection-card_overlay" aria-hidden="true"></div>
   <Badge class="collection-card_badge">{badge}</Badge>
   <div class="collection-card_content">
     <h3 class="heading-style-h3 collection-card_title">{title}</h3>
-    <Button href={href} variant="ghost-white">Explore {title}</Button>
+    <div class="collection-card_action">
+      <Button href={href} variant="ghost-white">Explore {title}</Button>
+    </div>
   </div>
 </article>
 
@@ -65,11 +68,36 @@ const { title, badge, href, image, alt, size = 'small' } = Astro.props;
     position: relative;
     z-index: 1;
   }
+
+  /* --- Hover: overlay fades in; the action rises from below the card and
+         lifts the title with it. At rest the content block sits lower by the
+         action's height + gap, so only the title is visible. --- */
+  .collection-card_overlay {
+    position: absolute;
+    inset: 0;
+    background-color: var(--color--charcoal-black);
+    opacity: 0;
+    transition: opacity 600ms var(--ease--apple);
+  }
   .collection-card_content {
+    --action-offset: 2.0625rem;       /* 17 button line + 16 gap */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;                        /* 16 */
+    transform: translateY(var(--action-offset));
+    transition: transform 700ms var(--ease--apple);
+  }
+  .collection-card_action {
+    opacity: 0;
+    transition: opacity 500ms var(--ease--apple);
   }
   .collection-card_title { color: var(--color--offwhite); }
+
+  .collection-card:hover .collection-card_overlay,
+  .collection-card:focus-within .collection-card_overlay { opacity: 0.3; }
+  .collection-card:hover .collection-card_content,
+  .collection-card:focus-within .collection-card_content { transform: translateY(0); }
+  .collection-card:hover .collection-card_action,
+  .collection-card:focus-within .collection-card_action { opacity: 1; }
 </style>
