@@ -142,8 +142,14 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   :global(html.js) .hero_content > :global(.hero_badge) { opacity: 0; }
   :global(html.js) .hero_image {
     transform: scale(1.06);
-    filter: blur(14px);               /* rack-focus on load */
+    filter: blur(5px);                /* rack-focus on load */
     will-change: transform, filter;
+  }
+  /* Once the load timeline finishes, drop the start state and the promoted layer */
+  :global(html.js) .hero.is-loaded .hero_image {
+    transform: none;
+    filter: none;
+    will-change: auto;
   }
   /* Navbar starts hidden only on pages that have a hero (this timeline reveals it) */
   :global(html.js:has(.hero) .navbar) { opacity: 0; transform: translateY(-0.75rem); }
@@ -190,9 +196,15 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     const badge = hero.querySelector('.hero_badge');
     const nav = document.querySelector('.navbar');
 
-    gsap.timeline({ delay: 0.15 })
+    gsap.timeline({
+      delay: 0.15,
+      onComplete: () => {
+        hero.classList.add('is-loaded');
+        gsap.set(image, { clearProps: 'all' });
+      },
+    })
       .to(image, { scale: 1, duration: 2.4 }, 0)
-      .to(image, { filter: 'blur(0px)', duration: 1.4, clearProps: 'filter,willChange' }, 0)
+      .to(image, { filter: 'blur(0px)', duration: 1.4 }, 0)
       .to(nav, { y: 0, opacity: 1, duration: 1 }, 0.2)
       .to(lines, { y: 0, duration: 1.1, stagger: 0.14 }, 0.35)
       .to(button, { opacity: 1, duration: 0.9 }, 0.95)
