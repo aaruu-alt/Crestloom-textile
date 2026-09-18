@@ -11,9 +11,9 @@ const regions = ['Europe', 'USA', 'Japan', 'Worldwide'];
 const audiences = ['For brands', 'Retailers', 'Interior projects'];
 ---
 
-<section class="partnerships padding-global padding-section-medium" id="contact">
+<section class="partnerships padding-global padding-section-medium" id="contact" data-reveal-section>
   <div class="container-large partnerships_inner">
-    <header class="partnerships_header">
+    <header class="partnerships_header" data-reveal-group>
       <div class="partnerships_heading-block">
         <p class="text-style-tagline text-color-sandy-brown" data-reveal>International partnerships</p>
         <h2 class="heading-style-h2" data-reveal>Made in India.<br />Ready to work worldwide.</h2>
@@ -33,7 +33,7 @@ const audiences = ['For brands', 'Retailers', 'Interior projects'];
         ))}
       </ol>
 
-      <div class="partnerships_footer">
+      <div class="partnerships_footer" data-reveal-group>
         <p class="text-style-tagline partnerships_audience" data-reveal>
           {audiences.map((a, i) => (
             <>
