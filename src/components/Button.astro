@@ -6,6 +6,7 @@
  *   Type       → variant: outline | filled-gold | filled-cyan | ghost-white | ghost-black
  *   Show icon  → icon (boolean, default true)
  *   href       → renders <a>; omit for a <button>
+ *   as="span"  → non-interactive (use inside a parent link, e.g. a card)
  *
  * Ghost-black used navy in Figma; navy was dropped from the palette, so it
  * uses Charcoal (--color--text).
@@ -14,6 +15,7 @@ type Variant = 'outline' | 'filled-gold' | 'filled-cyan' | 'ghost-white' | 'ghos
 
 interface Props {
   href?: string;
+  as?: 'a' | 'button' | 'span';
   variant?: Variant;
   icon?: boolean;
   class?: string;
@@ -22,13 +24,14 @@ interface Props {
 
 const {
   href,
+  as,
   variant = 'outline',
   icon = true,
   class: className,
   ...rest
 } = Astro.props;
 
-const Tag = href ? 'a' : 'button';
+const Tag = as ?? (href ? 'a' : 'button');
 ---
 
 <Tag
@@ -36,6 +39,7 @@ const Tag = href ? 'a' : 'button';
   class:list={['text-style-button', 'button', `is-${variant}`, className]}
   {...rest}
 >
+  <span class="button_fill" aria-hidden="true"></span>
   <span class="button_label"><slot /></span>
   {icon && (
     <svg class="button_icon" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
@@ -46,6 +50,7 @@ const Tag = href ? 'a' : 'button';
 
 <style>
   .button {
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -53,18 +58,22 @@ const Tag = href ? 'a' : 'button';
     padding: 0.875rem 1rem;           /* 14 / 16 */
     border: 1px solid transparent;
     white-space: nowrap;
+    overflow: clip;
     transition:
       color 500ms var(--ease--apple),
       background-color 500ms var(--ease--apple),
       border-color 500ms var(--ease--apple);
   }
 
+  .button_label,
+  .button_icon { position: relative; z-index: 1; }
   .button_icon {
     width: 0.75rem;                   /* 12 */
     height: 0.75rem;
     flex-shrink: 0;
     transition: transform 500ms var(--ease--apple);
   }
+  .button_fill { display: none; }
   .button:hover .button_icon,
   .button:focus-visible .button_icon {
     transform: translateX(0.25rem);   /* 4 */
@@ -74,11 +83,24 @@ const Tag = href ? 'a' : 'button';
   .button.is-outline {
     color: var(--color--offwhite);
     border-color: var(--color--offwhite);
+    transition: color 450ms var(--ease--apple) 100ms;
+  }
+  .button.is-outline .button_fill {
+    display: block;
+    position: absolute;
+    inset: 0;
+    background-color: var(--color--offwhite);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 600ms var(--ease--apple);
   }
   .button.is-outline:hover,
   .button.is-outline:focus-visible {
-    background-color: var(--color--offwhite);
     color: var(--color--text);
+  }
+  .button.is-outline:hover .button_fill,
+  .button.is-outline:focus-visible .button_fill {
+    transform: scaleY(1);
   }
 
   /* --- Type: Filled-gold --- */

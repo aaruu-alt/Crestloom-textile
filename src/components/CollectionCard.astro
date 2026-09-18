@@ -19,7 +19,7 @@ interface Props {
 const { title, badge, href, image, alt, size = 'small' } = Astro.props;
 ---
 
-<article class:list={['collection-card', `is-${size}`]} data-reveal>
+<a href={href} class:list={['collection-card', `is-${size}`]} data-reveal>
   <Image
     src={image}
     alt={alt}
@@ -32,10 +32,10 @@ const { title, badge, href, image, alt, size = 'small' } = Astro.props;
   <div class="collection-card_content">
     <h3 class="heading-style-h3 collection-card_title">{title}</h3>
     <div class="collection-card_action">
-      <Button href={href} variant="ghost-white">Explore {title}</Button>
+      <Button as="span" variant="ghost-white">Explore {title}</Button>
     </div>
   </div>
-</article>
+</a>
 
 <style>
   .collection-card {
@@ -60,7 +60,7 @@ const { title, badge, href, image, alt, size = 'small' } = Astro.props;
     transition: transform 1000ms var(--ease--apple);
   }
   .collection-card:hover .collection-card_image,
-  .collection-card:focus-within .collection-card_image {
+  .collection-card:focus-visible .collection-card_image {
     transform: scale(1.04);
   }
   .collection-card > :global(.collection-card_badge),
@@ -95,9 +95,14 @@ const { title, badge, href, image, alt, size = 'small' } = Astro.props;
   .collection-card_title { color: var(--color--offwhite); }
 
   .collection-card:hover .collection-card_overlay,
-  .collection-card:focus-within .collection-card_overlay { opacity: 0.3; }
+  .collection-card:focus-visible .collection-card_overlay { opacity: 0.3; }
   .collection-card:hover .collection-card_content,
-  .collection-card:focus-within .collection-card_content { transform: translateY(0); }
+  .collection-card:focus-visible .collection-card_content { transform: translateY(0); }
   .collection-card:hover .collection-card_action,
-  .collection-card:focus-within .collection-card_action { opacity: 1; }
+  .collection-card:focus-visible .collection-card_action { opacity: 1; }
+  /* the button follows the card's hover, not its own */
+  .collection-card:hover :global(.button),
+  .collection-card:focus-visible :global(.button) { color: var(--color--sandy-gold); }
+  .collection-card:hover :global(.button_icon),
+  .collection-card:focus-visible :global(.button_icon) { transform: translateX(0.25rem); }
 </style>

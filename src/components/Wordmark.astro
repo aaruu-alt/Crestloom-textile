@@ -11,12 +11,13 @@ import svg from '../assets/wordmark.svg?raw';
 interface Props {
   href?: string;
   class?: string;
+  [key: string]: unknown;
 }
-const { href, class: className } = Astro.props;
+const { href, class: className, ...rest } = Astro.props;
 const Tag = href ? 'a' : 'div';
 ---
 
-<Tag href={href} class:list={['wordmark', className]} role="img" aria-label="Crestloom Textile" set:html={svg} />
+<Tag href={href} class:list={['wordmark', className]} role="img" aria-label="Crestloom Textile" {...rest} set:html={svg} />
 
 <style>
   .wordmark {

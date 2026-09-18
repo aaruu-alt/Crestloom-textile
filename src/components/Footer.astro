@@ -18,13 +18,13 @@ const columns = [
 ];
 ---
 
-<footer class="footer padding-global">
+<footer class="footer padding-global" data-reveal-section>
   <div class="container-large footer_inner">
-    <div class="footer_top">
-      <Wordmark href={`${base}/`} class="footer_brand" />
+    <div class="footer_top" data-reveal-group>
+      <Wordmark href={`${base}/`} class="footer_brand" data-reveal />
       <nav class="footer_nav" aria-label="Footer">
         {columns.map((links) => (
-          <ul class="footer_column">
+          <ul class="footer_column" data-reveal>
             {links.map((l) => (
               <li><a href={l.href} class="text-style-nav text-link">{l.label}</a></li>
             ))}
@@ -33,9 +33,9 @@ const columns = [
       </nav>
     </div>
 
-    <div class="footer_bottom">
-      <div class="footer_rule" role="presentation"></div>
-      <div class="footer_meta">
+    <div class="footer_bottom" data-reveal-group>
+      <div class="footer_rule" role="presentation" data-reveal></div>
+      <div class="footer_meta" data-reveal>
         <p class="footer_small">© {year} Crestloom Textile</p>
         <a href="mailto:info@crestloom.in" class="footer_small text-link">info@crestloom.in</a>
         <div class="footer_legal">
