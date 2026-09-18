@@ -1,0 +1,117 @@
+---
+/**
+ * Sourcing — Figma "Sourcing" (123:35), 1440 × 939.
+ */
+const steps = [
+  { title: 'Product sourcing',        body: 'Matching each brief with suitable products and manufacturing partners.' },
+  { title: 'Sampling',                body: 'Refining construction, materials and colour through considered samples.' },
+  { title: 'Production coordination', body: 'Keeping specifications, timelines and communication aligned.' },
+  { title: 'Quality oversight',       body: 'Monitoring workmanship and consistency before goods move forward.' },
+  { title: 'Packing & delivery',      body: 'Coordinating packing requirements and the final delivery handover.' },
+];
+---
+
+<section class="sourcing padding-global padding-section-large" id="sourcing">
+  <div class="container-large sourcing_inner">
+    <div class="sourcing_copy">
+      <div class="sourcing_intro-block">
+        <div class="sourcing_heading-block">
+          <p class="text-style-tagline text-color-sandy-brown" data-reveal>Our sourcing</p>
+          <h2 class="heading-style-h2" data-reveal>A considered path<br />to the right product.</h2>
+        </div>
+        <p class="text-size-large sourcing_intro" data-reveal>
+          One point of coordination across the sourcing journey—connecting the right products, makers and production decisions for each brief.
+        </p>
+      </div>
+      <div class="sourcing_support-block">
+        <p class="text-style-tagline text-color-sandy-brown" data-reveal>From brief to delivery</p>
+        <h3 class="heading-style-h3" data-reveal>Built around clarity,<br />care and coordination.</h3>
+      </div>
+    </div>
+
+    <ol class="sourcing_steps" data-reveal-group>
+      {steps.map((step, i) => (
+        <li class="sourcing_step" data-reveal>
+          <div class="sourcing_step-lead">
+            <span class="text-style-tagline text-color-sandy-brown sourcing_step-number">{String(i + 1).padStart(2, '0')}</span>
+            <h4 class="heading-style-h4 sourcing_step-title">{step.title}</h4>
+          </div>
+          <p class="text-size-small sourcing_step-body">{step.body}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .sourcing {
+    background-color: var(--color--cyan-blue);
+    color: var(--color--offwhite);
+  }
+  .sourcing_inner {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  /* --- Left column --- */
+  .sourcing_copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-self: stretch;
+    width: 32.5rem;                   /* 520 */
+    flex-shrink: 0;
+  }
+  .sourcing_intro-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2.75rem;                     /* 44 */
+  }
+  .sourcing_heading-block,
+  .sourcing_support-block {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;                      /* 24 */
+  }
+  .sourcing_intro {
+    width: 29.5rem;                   /* 472 */
+    opacity: 0.8;
+  }
+  .sourcing_support-block { width: 31.25rem; }   /* 500 */
+  .sourcing h2, .sourcing h3, .sourcing h4 { color: var(--color--offwhite); }
+
+  /* --- Steps --- */
+  .sourcing_steps {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;                        /* 48 */
+    width: 42.5rem;                   /* 680 */
+    flex-shrink: 0;
+  }
+  .sourcing_step {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;                        /* 32 */
+    padding-top: 3rem;                /* 48 below the divider */
+    border-top: 1px solid rgb(246 245 242 / 0.7);
+  }
+  .sourcing_step-lead {
+    display: flex;
+    align-items: flex-start;
+    gap: 3.4375rem;                   /* 55 */
+  }
+  .sourcing_step-number {
+    padding-top: 0.5rem;              /* 8 — optical align with the title cap height */
+  }
+  .sourcing_step-title {
+    width: 15rem;                     /* 240 */
+    text-transform: uppercase;
+  }
+  .sourcing_step-body {
+    width: 21rem;                     /* 336 */
+    padding-top: 0.1875rem;           /* 3 */
+    opacity: 0.8;
+  }
+</style>
