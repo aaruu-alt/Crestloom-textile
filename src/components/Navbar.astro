@@ -75,13 +75,11 @@ const isActive = (href: string) => {
     };
     const tween = { duration: 0.4, ease: 'power4.inOut', overwrite: 'auto' as const };
 
-    const hero = document.querySelector<HTMLElement>('.hero');
     const setSolid = (on: boolean, instant = false) =>
       instant ? gsap.set(nav, on ? solid : transparent) : gsap.to(nav, { ...(on ? solid : transparent), ...tween });
 
     const trigger = ScrollTrigger.create({
-      // switch when the hero's bottom edge reaches the bottom of the navbar
-      start: () => (hero ? hero.offsetHeight - nav.offsetHeight : 1),
+      start: 20,                      // switch once the page has scrolled 20px
       end: 'max',
       onToggle: (self) => setSolid(self.isActive),
     });
@@ -109,8 +107,7 @@ const isActive = (href: string) => {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 6.25rem;                  /* 100 */
-    padding: 0 3.5rem;                /* 56 — matches padding-global */
+    padding: 1.25rem 3.5rem 1rem;     /* 20 top / 56 sides / 16 bottom */
   }
   .navbar.is-light {
     color: var(--color--offwhite);
@@ -137,14 +134,14 @@ const isActive = (href: string) => {
 
   /* --- Tablet: tighter link columns --- */
   @media (max-width: 991px) {
-    .navbar { padding: 0 2.5rem; }
+    .navbar { padding: 1.25rem 2.5rem 1rem; }
     .navbar_left,
     .navbar_right { width: auto; gap: 1.5rem; }
   }
 
   /* --- Mobile: wordmark + menu toggle (no mobile design yet — sensible default) --- */
   @media (max-width: 767px) {
-    .navbar { padding: 0 1.25rem; height: 5rem; }
+    .navbar { padding: 1.25rem 1.25rem 1rem; }
     .navbar_left,
     .navbar_right { display: none; }
     .navbar_toggle { display: block; }
