@@ -10,7 +10,7 @@ import Wordmark from './Wordmark.astro';
 <div class="small-screen-notice">
   <Wordmark class="small-screen-notice_brand" />
   <div class="small-screen-notice_copy">
-    <h1 class="heading-style-h3">Coming soon to tablet/mobile</h1>
+    <h1 class="heading-style-h3">Coming soon to <span class="small-screen-notice_device"></span></h1>
     <p class="text-size-regular">In the mean time check our website on a desktop or laptop</p>
   </div>
 </div>
@@ -34,6 +34,12 @@ import Wordmark from './Wordmark.astro';
     gap: 0.5rem;                      /* 8 */
   }
   .small-screen-notice_copy p { max-width: 17.25rem; }   /* 276 */
+
+  /* Device word set in CSS so it's correct before any JS */
+  .small-screen-notice_device::before { content: 'tablet'; }
+  @media (max-width: 767px) {
+    .small-screen-notice_device::before { content: 'mobile'; }
+  }
 
   @media (max-width: 991px) {
     .small-screen-notice { display: flex; }
