@@ -1,0 +1,80 @@
+---
+/**
+ * Principles — Figma "About / Principles" (146:628), 1440 × 645.
+ */
+const principles = [
+  { title: 'Considered sourcing',  body: 'The product should answer the brief—not simply fill a catalogue. We begin with use, material, quantity, and market.' },
+  { title: 'Clear coordination',   body: 'Sampling, production, quality, packing, and delivery are treated as one connected process.' },
+  { title: 'Long-term partnership', body: 'We aim to become a dependable extension of the client’s team, with communication that remains direct and useful.' },
+];
+---
+
+<section class="principles padding-global padding-section-large" id="process">
+  <div class="container-large principles_inner">
+    <div class="principles_heading-block">
+      <p class="text-style-tagline text-color-sandy-brown" data-reveal>Our process</p>
+      <h2 class="heading-style-h1" data-reveal>A clearer way to source.</h2>
+    </div>
+
+    <ol class="principles_grid" data-reveal-group>
+      {principles.map((p, i) => (
+        <li class="principles_item" data-reveal>
+          <div class="principles_item-head">
+            <span class="heading-style-h3 text-color-sandy-brown principles_item-number">{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="text-style-tagline principles_item-title">{p.title}</h3>
+          </div>
+          <p class="text-size-regular principles_item-body">{p.body}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .principles {
+    background-color: var(--color--offwhite);
+  }
+  .principles_inner {
+    display: flex;
+    flex-direction: column;
+    gap: 7.8125rem;                   /* 125 */
+  }
+
+  .principles_heading-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;                        /* 32 */
+    width: 38.3125rem;                /* 613 */
+  }
+
+  /* --- Columns --- */
+  .principles_grid {
+    display: flex;
+    align-items: stretch;
+    gap: 1.5rem;                      /* 24 */
+  }
+  .principles_item {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2.25rem;                     /* 36 */
+    padding-top: 0.625rem;            /* 10 */
+    border-right: 1px solid rgb(40 40 42 / 0.3);
+  }
+  .principles_item:last-child { border-right: 0; }
+
+  .principles_item-head {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;                      /* 24 */
+  }
+  .principles_item-title {
+    color: var(--color--text);
+    font-weight: 500;
+  }
+  .principles_item-body {
+    max-width: 23rem;                 /* 368 */
+    opacity: 0.85;
+  }
+  .principles_item:not(:first-child) .principles_item-body { max-width: none; padding-right: 1.5rem; }
+</style>
