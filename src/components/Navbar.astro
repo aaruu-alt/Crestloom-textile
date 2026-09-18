@@ -50,14 +50,7 @@ const isActive = (href: string) => {
 </header>
 
 <script>
-  import { gsap } from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-  import { CustomEase } from 'gsap/CustomEase';
-
-  gsap.registerPlugin(ScrollTrigger, CustomEase);
-
-  // Apple's standard curve (iOS sheets / macOS transitions): cubic-bezier(0.32, 0.72, 0, 1)
-  CustomEase.create('apple', '0.32, 0.72, 0, 1');
+  import { gsap, ScrollTrigger } from '../scripts/motion';
 
   const nav = document.querySelector<HTMLElement>('.navbar');
   if (nav) {

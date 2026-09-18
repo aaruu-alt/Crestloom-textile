@@ -24,18 +24,20 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   <div class="hero_content padding-global">
     <div class="hero_copy">
-      <p class="text-style-tagline hero_tagline">
-        <span>Rugs</span>
-        <span class="hero_dot"></span>
-        <span>Living</span>
-        <span class="hero_dot"></span>
-        <span>Linen</span>
+      <p class="text-style-tagline hero_tagline hero_mask">
+        <span class="hero_mask-inner">
+          <span>Rugs</span>
+          <span class="hero_dot"></span>
+          <span>Living</span>
+          <span class="hero_dot"></span>
+          <span>Linen</span>
+        </span>
       </p>
       <h1 class="heading-style-h1 hero_heading">
-        Rooted in craft.<br />
-        <em>Ready for what’s next.</em>
+        <span class="hero_mask"><span class="hero_mask-inner">Rooted in craft.</span></span>
+        <span class="hero_mask"><span class="hero_mask-inner"><em>Ready for what’s next.</em></span></span>
       </h1>
-      <Button href={`${base}/#collections`} variant="outline">Explore collections</Button>
+      <Button href={`${base}/#collections`} variant="outline" class="hero_button">Explore collections</Button>
     </div>
 
     <Badge class="hero_badge">01 / Living</Badge>
@@ -106,9 +108,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   }
 
   .hero_tagline {
-    display: flex;
-    align-items: center;
-    gap: 0.875rem;                    /* 14 */
     color: var(--color--sandy-gold);
   }
   .hero_dot {
@@ -120,6 +119,34 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   .hero_heading {
     color: var(--color--offwhite);
+  }
+  .hero_heading .hero_mask { display: block; }
+
+  /* --- Load reveal: line masks. Hidden by CSS (before JS) only when JS will run. --- */
+  .hero_mask {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+  }
+  .hero_mask-inner {
+    display: inline-block;
+    transform: translateY(0);
+  }
+  .hero_tagline .hero_mask-inner {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.875rem;
+  }
+  :global(html.js) .hero_mask-inner { transform: translateY(110%); }
+  :global(html.js) .hero_copy > :global(.hero_button),
+  :global(html.js) .hero_content > :global(.hero_badge) { opacity: 0; }
+  :global(html.js) .hero_image { transform: scale(1.06); }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(html.js) .hero_mask-inner { transform: none; }
+    :global(html.js) .hero_copy > :global(.hero_button),
+    :global(html.js) .hero_content > :global(.hero_badge) { opacity: 1; }
+    :global(html.js) .hero_image { transform: none; }
   }
   .hero_heading em {
     font-style: italic;
@@ -144,3 +171,24 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     .hero_content > :global(.hero_badge) { align-self: flex-end; }
   }
 </style>
+
+<script>
+  import { gsap, reducedMotion } from '../scripts/motion';
+
+  const hero = document.querySelector<HTMLElement>('.hero');
+  if (hero && !reducedMotion) {
+    const image = hero.querySelector('.hero_image');
+    const lines = hero.querySelectorAll('.hero_mask-inner');
+    const button = hero.querySelector('.hero_button');
+    const badge = hero.querySelector('.hero_badge');
+    const nav = document.querySelector('.navbar');
+
+    gsap.timeline({ delay: 0.15 })
+      .to(image, { scale: 1, duration: 2.4 }, 0)
+      .from(nav, { y: -12, opacity: 0, duration: 1 }, 0.2)
+      .to(lines, { y: 0, duration: 1.1, stagger: 0.14 }, 0.35)
+      .to(button, { opacity: 1, duration: 0.9 }, 0.95)
+      .fromTo(button, { y: 12 }, { y: 0, duration: 0.9 }, 0.95)
+      .to(badge, { opacity: 1, duration: 0.9 }, 1.05);
+  }
+</script>
