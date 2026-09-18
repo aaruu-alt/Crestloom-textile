@@ -40,7 +40,7 @@ const columns = [
         <a href="mailto:info@crestloom.in" class="footer_small text-link">info@crestloom.in</a>
         <div class="footer_legal">
           <p class="footer_small">All rights reserved</p>
-          <a href={`${base}/privacy`} class="text-style-nav text-link">Privacy</a>
+          <a href={`${base}/privacy`} class="text-style-nav footer_privacy">Privacy</a>
         </div>
       </div>
     </div>
@@ -114,4 +114,9 @@ const columns = [
     align-items: center;
     gap: 4.625rem;                    /* 74 */
   }
+  .footer_privacy {
+    transition: opacity 400ms var(--ease--apple);
+  }
+  .footer_privacy:hover,
+  .footer_privacy:focus-visible { opacity: 0.6; }
 </style>

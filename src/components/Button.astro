@@ -127,10 +127,40 @@ const Tag = as ?? (href ? 'a' : 'button');
     border-color: var(--color--text);
   }
 
-  /* --- Type: Ghost-white (no box) --- */
-  .button.is-ghost-white {
+  /* --- Ghost variants: no box, tighter arrow, underline draws in --- */
+  .button.is-ghost-white,
+  .button.is-ghost-black {
+    gap: 0.4rem;
     padding: 0;
     border: 0;
+  }
+  .button.is-ghost-white .button_label,
+  .button.is-ghost-black .button_label {
+    padding-bottom: 0.125rem;
+  }
+  .button.is-ghost-white .button_label::after,
+  .button.is-ghost-black .button_label::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 500ms var(--ease--apple);
+  }
+  .button.is-ghost-white:hover .button_label::after,
+  .button.is-ghost-white:focus-visible .button_label::after,
+  .button.is-ghost-black:hover .button_label::after,
+  .button.is-ghost-black:focus-visible .button_label::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  /* --- Type: Ghost-white --- */
+  .button.is-ghost-white {
     color: var(--color--offwhite);
   }
   .button.is-ghost-white:hover,
@@ -138,10 +168,8 @@ const Tag = as ?? (href ? 'a' : 'button');
     color: var(--color--sandy-gold);
   }
 
-  /* --- Type: Ghost-black (no box) --- */
+  /* --- Type: Ghost-black --- */
   .button.is-ghost-black {
-    padding: 0;
-    border: 0;
     color: var(--color--text);
   }
   .button.is-ghost-black:hover,
