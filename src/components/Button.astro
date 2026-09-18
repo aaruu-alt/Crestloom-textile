@@ -53,13 +53,21 @@ const Tag = href ? 'a' : 'button';
     padding: 0.875rem 1rem;           /* 14 / 16 */
     border: 1px solid transparent;
     white-space: nowrap;
-    transition: color 300ms ease, background-color 300ms ease, border-color 300ms ease;
+    transition:
+      color 500ms var(--ease--apple),
+      background-color 500ms var(--ease--apple),
+      border-color 500ms var(--ease--apple);
   }
 
   .button_icon {
     width: 0.75rem;                   /* 12 */
     height: 0.75rem;
     flex-shrink: 0;
+    transition: transform 500ms var(--ease--apple);
+  }
+  .button:hover .button_icon,
+  .button:focus-visible .button_icon {
+    transform: translateX(0.25rem);   /* 4 */
   }
 
   /* --- Type: Outline --- */

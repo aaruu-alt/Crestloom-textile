@@ -96,6 +96,8 @@ h1, h2, h3, h4, h5, h6, p { overflow-wrap: break-word; }
   --font--heading: 'Cormorant Garamond', Georgia, serif;
   --font--body: 'Inter', system-ui, sans-serif;
   --font--accent: 'Jost', system-ui, sans-serif;   /* taglines, nav, buttons */
+
+  --ease--apple: cubic-bezier(0.32, 0.72, 0, 1);   /* same curve as the GSAP 'apple' ease */
 }
 
 /* ---------- Structure ---------- */
@@ -174,7 +176,7 @@ h1, h2, h3, h4, h5, h6, p { overflow-wrap: break-word; }
   background-color: currentColor;
   transform: scaleX(0);
   transform-origin: right;
-  transition: transform 300ms ease-in-out;
+  transition: transform 500ms var(--ease--apple);
 }
 .text-link:hover::after,
 .text-link:focus-visible::after,

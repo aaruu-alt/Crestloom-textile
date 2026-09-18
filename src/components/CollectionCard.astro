@@ -54,6 +54,11 @@ const { title, badge, href, image, alt, size = 'small' } = Astro.props;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 1000ms var(--ease--apple);
+  }
+  .collection-card:hover .collection-card_image,
+  .collection-card:focus-within .collection-card_image {
+    transform: scale(1.04);
   }
   .collection-card > :global(.collection-card_badge),
   .collection-card_content {
