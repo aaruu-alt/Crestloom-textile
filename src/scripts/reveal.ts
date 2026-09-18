@@ -11,7 +11,7 @@
 import { gsap, ScrollTrigger, reducedMotion } from './motion';
 
 const END = { y: 0, opacity: 1, duration: 1.1, ease: 'apple' };
-const START_AT = 'top 85%';
+const START_AT = 'clamp(top 85%)';   // clamp: triggers near the page end still fire
 
 function finish(targets: Element[]) {
   targets.forEach((el) => el.classList.add('is-revealed'));
