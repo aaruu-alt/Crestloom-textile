@@ -127,6 +127,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     display: inline-block;
     overflow: hidden;
     vertical-align: bottom;
+    /* room for italic overhang + descenders, pulled back so layout is unchanged */
+    padding: 0.05em 0.15em 0.2em 0.1em;
+    margin: -0.05em -0.15em -0.2em -0.1em;
   }
   .hero_mask-inner {
     display: inline-block;
@@ -137,7 +140,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     align-items: center;
     gap: 0.875rem;
   }
-  :global(html.js) .hero_mask-inner { transform: translateY(110%); }
+  :global(html.js) .hero_mask-inner { transform: translateY(130%); }
   :global(html.js) .hero_copy > :global(.hero_button),
   :global(html.js) .hero_content > :global(.hero_badge) { opacity: 0; }
   :global(html.js) .hero_image {

@@ -58,7 +58,6 @@ const Tag = as ?? (href ? 'a' : 'button');
     padding: 0.875rem 1rem;           /* 14 / 16 */
     border: 1px solid transparent;
     white-space: nowrap;
-    overflow: clip;
     transition:
       color 500ms var(--ease--apple),
       background-color 500ms var(--ease--apple),
@@ -83,6 +82,7 @@ const Tag = as ?? (href ? 'a' : 'button');
   .button.is-outline {
     color: var(--color--offwhite);
     border-color: var(--color--offwhite);
+    overflow: clip;                   /* contains the fill wipe */
     transition: color 450ms var(--ease--apple) 100ms;
   }
   .button.is-outline .button_fill {
