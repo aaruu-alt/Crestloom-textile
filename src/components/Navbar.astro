@@ -80,8 +80,9 @@ const isActive = (href: string) => {
 
     const trigger = ScrollTrigger.create({
       start: 20,                      // switch once the page has scrolled 20px
-      end: 'max',
-      onToggle: (self) => setSolid(self.isActive),
+      end: 999999,                    // never "leave" at the bottom of the page
+      onEnter: () => setSolid(true),
+      onLeaveBack: () => setSolid(false),
     });
     setSolid(trigger.isActive, true);
 
