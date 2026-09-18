@@ -21,6 +21,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
   </head>
   <body>
+    <script>
+      import '../scripts/reveal';
+    </script>
     <div class="page-wrapper">
       <main class="main-wrapper">
         <slot />
