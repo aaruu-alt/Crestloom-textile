@@ -50,20 +50,47 @@ const isActive = (href: string) => {
 </header>
 
 <script>
-  const nav = document.querySelector('.navbar');
-  const toggle = nav?.querySelector<HTMLButtonElement>('.navbar_toggle');
-  const menu = nav?.querySelector<HTMLElement>('.navbar_menu');
-  toggle?.addEventListener('click', () => {
-    const open = toggle.getAttribute('aria-expanded') === 'true';
-    toggle.setAttribute('aria-expanded', String(!open));
-    toggle.textContent = open ? 'Menu' : 'Close';
-    if (menu) menu.hidden = open;
-  });
+  import { gsap } from 'gsap';
+
+  const nav = document.querySelector<HTMLElement>('.navbar');
+  if (nav) {
+    // --- Hover: navbar turns offwhite, text/wordmark to charcoal + sandy brown ---
+    const styles = getComputedStyle(document.documentElement);
+    const token = (name: string) => styles.getPropertyValue(name).trim();
+
+    const rest = {
+      backgroundColor: 'rgba(246, 245, 242, 0)',
+      color: token('--color--offwhite'),
+      '--wordmark-color': token('--color--offwhite'),
+      '--wordmark-accent': token('--color--sandy-gold'),
+    };
+    const hover = {
+      backgroundColor: token('--color--offwhite'),
+      color: token('--color--charcoal-black'),
+      '--wordmark-color': token('--color--charcoal-black'),
+      '--wordmark-accent': token('--color--sandy-brown'),
+    };
+    const tween = { duration: 0.4, ease: 'power4.inOut', overwrite: 'auto' as const };
+
+    gsap.set(nav, rest);
+    nav.addEventListener('mouseenter', () => gsap.to(nav, { ...hover, ...tween }));
+    nav.addEventListener('mouseleave', () => gsap.to(nav, { ...rest, ...tween }));
+
+    // --- Mobile menu toggle ---
+    const toggle = nav.querySelector<HTMLButtonElement>('.navbar_toggle');
+    const menu = nav.querySelector<HTMLElement>('.navbar_menu');
+    toggle?.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!open));
+      toggle.textContent = open ? 'Menu' : 'Close';
+      if (menu) menu.hidden = open;
+    });
+  }
 </script>
 
 <style>
   .navbar {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
