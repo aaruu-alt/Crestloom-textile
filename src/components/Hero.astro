@@ -4,6 +4,7 @@
  */
 import { Image } from 'astro:assets';
 import Button from './Button.astro';
+import Badge from './Badge.astro';
 import heroImage from '../assets/hero-living.png';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
@@ -37,7 +38,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       <Button href={`${base}/#collections`} variant="outline">Explore collections</Button>
     </div>
 
-    <p class="text-style-tagline-xs hero_badge">01 / Living</p>
+    <Badge class="hero_badge">01 / Living</Badge>
   </div>
 </section>
 
@@ -124,12 +125,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     font-style: italic;
   }
 
-  .hero_badge {
-    flex-shrink: 0;
-    padding: 0.5rem 0.75rem;          /* 8 / 12 */
-    background-color: var(--color--offwhite);
-    color: var(--color--charcoal-black);
-  }
+  .hero_content > :global(.hero_badge) { flex-shrink: 0; }
 
   /* --- Tablet --- */
   @media (max-width: 991px) {
@@ -145,6 +141,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       padding-bottom: 2rem;
     }
     .hero_heading { font-size: 2.75rem; }  /* 44 */
-    .hero_badge { align-self: flex-end; }
+    .hero_content > :global(.hero_badge) { align-self: flex-end; }
   }
 </style>

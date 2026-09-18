@@ -1,0 +1,95 @@
+---
+/**
+ * Collections — Figma "Collections" (122:16), 1440 × 1212.
+ * Static images for now; swaps to Supabase categories later.
+ */
+import CollectionCard from './CollectionCard.astro';
+import Button from './Button.astro';
+import living from '../assets/collection-living.jpg';
+import rugs from '../assets/collection-rugs.jpg';
+import linen from '../assets/collection-linen.jpg';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const collections = {
+  living: { title: 'Living', badge: 'Throw',  image: living, alt: 'Textured throw and patterned cushions on a linen sofa', href: `${base}/#collections` },
+  rugs:   { title: 'Rugs',   badge: 'Rugs',   image: rugs,   alt: 'Patterned area rug under a round coffee table',       href: `${base}/#collections` },
+  linen:  { title: 'Linen',  badge: 'Towels', image: linen,  alt: 'Layered bed linen in a sunlit bedroom',               href: `${base}/#collections` },
+};
+---
+
+<section class="collections padding-global padding-section-large" id="collections">
+  <div class="container-large collections_inner">
+    <header class="collections_header">
+      <div class="collections_heading-block">
+        <p class="text-style-tagline text-color-sandy-brown" data-reveal>Our collections</p>
+        <h2 class="heading-style-h2" data-reveal>Textiles for<br />considered spaces.</h2>
+      </div>
+      <p class="text-size-large collections_intro" data-reveal>
+        Explore a curated range of rugs, living textiles and linen, sourced for brands, retailers and interior projects worldwide.
+      </p>
+    </header>
+
+    <div class="collections_body">
+      <div class="collections_grid" data-reveal-group>
+        <CollectionCard {...collections.living} size="large" />
+        <div class="collections_column">
+          <CollectionCard {...collections.rugs} />
+          <CollectionCard {...collections.linen} />
+        </div>
+      </div>
+      <Button href={`${base}/#collections`} variant="ghost-black" data-reveal>Explore rugs</Button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .collections {
+    background-color: var(--color--offwhite);
+  }
+  .collections_inner {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;                        /* 64 */
+  }
+
+  /* --- Header --- */
+  .collections_header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+  .collections_heading-block {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;                      /* 24 */
+    width: 22.75rem;                  /* 364 */
+  }
+  .collections_intro {
+    width: 31.5rem;                   /* 504 */
+    opacity: 0.85;
+  }
+
+  /* --- Grid --- */
+  .collections_body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2.5rem;                      /* 40 */
+  }
+  .collections_grid {
+    display: flex;
+    gap: 1.5rem;                      /* 24 */
+    width: 100%;
+    height: 45.875rem;                /* 734 */
+  }
+  .collections_grid > :global(.collection-card) { flex: 1 1 0; }
+  .collections_column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;                      /* 24 */
+    width: 31.5rem;                   /* 504 */
+    flex-shrink: 0;
+  }
+  .collections_column > :global(.collection-card) { flex: 1 1 0; }
+</style>
