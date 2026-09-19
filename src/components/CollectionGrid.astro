@@ -1,5 +1,4 @@
 ---
-import Lines from './Lines.astro';
 /**
  * CollectionGrid — Figma "All Filter / Infinite Grid" (162:111) and the
  * filtered grid (144:250). Every state is rendered at build; the filter
@@ -9,6 +8,8 @@ import Lines from './Lines.astro';
 import ProductCard from './ProductCard.astro';
 import Button from './Button.astro';
 import { categories, products, lifestyle, type Product, type Lifestyle } from '../data/collection';
+
+import CollectionEnd from './CollectionEnd.astro';
 
 const LIFESTYLE_WIDTHS = [644, 872, 1288, 1744];
 const LIFESTYLE_SIZES = '(min-width: 992px) 45vw, 100vw';
@@ -67,12 +68,7 @@ const byCategory = categories.map((c) => {
       </div>
     ))}
     <div class="collection-grid_sentinel" aria-hidden="true"></div>
-
-    <div class="collection-grid_end" data-reveal-group>
-      <Lines tag="h2" class="heading-style-h3" lines={['Looking for something more specific?']} />
-      <p class="text-size-regular" data-reveal>If you need a custom product or cannot find the right fit, tell us what you’re looking for.</p>
-      <Button href="mailto:info@crestloom.in" variant="filled-gold" icon={false} data-reveal>Start a conversation</Button>
-    </div>
+    <CollectionEnd />
   </div>
 
   <!-- Per category -->
@@ -92,6 +88,7 @@ const byCategory = categories.map((c) => {
           </div>
         )
       )}
+      <CollectionEnd />
     </div>
   ))}
 </div>
@@ -132,15 +129,4 @@ const byCategory = categories.map((c) => {
   }
   .collection-grid_stack > :global(.product-card) { flex: 1 1 0; }
 
-  /* --- End of collection --- */
-  .collection-grid_end {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;                      /* 24 */
-    padding-top: 2.5rem;              /* 40 */
-    text-align: center;
-  }
-  .collection-grid_end h2 { max-width: 47.5rem; }   /* 760 */
-  .collection-grid_end p  { max-width: 38.75rem; }  /* 620 */
 </style>

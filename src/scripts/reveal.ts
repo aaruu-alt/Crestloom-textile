@@ -42,6 +42,12 @@ function add(tl: gsap.core.Timeline, items: Element[], at: number, stagger = 0.1
   return t;
 }
 
+/** Show everything inside `root` immediately and drop its scroll triggers (used by filter switches). */
+export function revealNow(root: Element) {
+  finish([...root.querySelectorAll('[data-reveal]')].filter((el) => !el.classList.contains('is-revealed')));
+  ScrollTrigger.getAll().forEach((st) => { if (st.trigger && root.contains(st.trigger as Element)) st.kill(); });
+}
+
 export function initReveals(root: ParentNode = document) {
   const sections = [...root.querySelectorAll('[data-reveal-section]')];
   if (!sections.length) return;

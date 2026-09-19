@@ -1,0 +1,24 @@
+---
+/** "Looking for something more specific?" — closes every collection grid state (Figma "All / End of Collection"). */
+import Lines from './Lines.astro';
+import Button from './Button.astro';
+---
+
+<div class="collection-end" data-reveal-group>
+  <Lines tag="h2" class="heading-style-h3" lines={['Looking for something more specific?']} />
+  <p class="text-size-regular" data-reveal>If you need a custom product or cannot find the right fit, tell us what you’re looking for.</p>
+  <Button href="mailto:info@crestloom.in" variant="filled-gold" icon={false} data-reveal>Start a conversation</Button>
+</div>
+
+<style>
+  .collection-end {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;                      /* 24 */
+    padding-top: 2.5rem;              /* 40 */
+    text-align: center;
+  }
+  .collection-end h2 { max-width: 47.5rem; }   /* 760 */
+  .collection-end p  { max-width: 38.75rem; }  /* 620 */
+</style>

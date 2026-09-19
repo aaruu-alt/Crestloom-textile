@@ -19,6 +19,7 @@ const options = [{ slug: 'all', name: 'All' }, ...categories];
 
 <script>
   import { gsap, ScrollTrigger } from '../scripts/motion';
+  import { revealNow } from '../scripts/reveal';
 
   const bar = document.querySelector<HTMLElement>('.category-filter');
   const grid = document.getElementById('collection-grid');
@@ -26,6 +27,8 @@ const options = [{ slug: 'all', name: 'All' }, ...categories];
     const options = [...bar.querySelectorAll<HTMLButtonElement>('.category-filter_option')];
     const active = bar.querySelector<HTMLElement>('.category-filter_active')!;
     const states = [...grid.querySelectorAll<HTMLElement>('.collection-grid_state')];
+    const nav = document.querySelector<HTMLElement>('.navbar');
+    let busy = false;
 
     // --- Active indicator follows the selected option ---
     const moveIndicator = (btn: HTMLElement, instant = false) => {
@@ -33,32 +36,66 @@ const options = [{ slug: 'all', name: 'All' }, ...categories];
       const w = btn.offsetWidth;
       instant ? gsap.set(active, { x, width: w }) : gsap.to(active, { x, width: w, duration: 0.6 });
     };
-
-    const select = (slug: string, { push = true, instant = false } = {}) => {
-      const btn = options.find((o) => o.dataset.category === slug) ?? options[0];
-      slug = btn.dataset.category!;
-      options.forEach((o) => o.setAttribute('aria-pressed', String(o === btn)));
-      moveIndicator(btn, instant);
-      states.forEach((s) => (s.hidden = s.dataset.category !== slug));
-      ScrollTrigger.refresh();
-      if (push) {
-        const url = new URL(location.href);
-        slug === 'all' ? url.searchParams.delete('category') : url.searchParams.set('category', slug);
-        history.replaceState(null, '', url);
-      }
+    const setPressed = (btn: HTMLElement) => options.forEach((o) => o.setAttribute('aria-pressed', String(o === btn)));
+    const syncUrl = (slug: string) => {
+      const url = new URL(location.href);
+      slug === 'all' ? url.searchParams.delete('category') : url.searchParams.set('category', slug);
+      history.replaceState(null, '', url);
     };
 
-    options.forEach((o) => o.addEventListener('click', () => select(o.dataset.category!)));
-    select(new URLSearchParams(location.search).get('category') ?? 'all', { push: false, instant: true });
+    // --- Pinch transition between grid states ---
+    const switchTo = (slug: string) => {
+      const btn = options.find((o) => o.dataset.category === slug) ?? options[0];
+      slug = btn.dataset.category!;
+      const from = states.find((s) => !s.hidden)!;
+      const to = states.find((s) => s.dataset.category === slug)!;
+      if (busy || from === to) return;
+      busy = true;
+      setPressed(btn);
+      moveIndicator(btn);
+      syncUrl(slug);
+
+      const zoomIn = slug !== 'all';                 // category = zoom in, All = zoom out
+      const origin = '50% 0%';
+      gsap.timeline({ onComplete: () => (busy = false) })
+        .to(from, { opacity: 0, scale: zoomIn ? 1.04 : 0.96, transformOrigin: origin, duration: 0.4 })
+        .add(() => {
+          from.hidden = true;
+          to.hidden = false;
+          revealNow(to);                            // incoming cards are simply there
+          gsap.set(to, { opacity: 0, scale: zoomIn ? 0.96 : 1.04, transformOrigin: origin });
+          // keep the top of the grid in view while it's invisible
+          const top = grid.getBoundingClientRect().top + scrollY - (nav?.offsetHeight ?? 0) - 40;
+          if (grid.getBoundingClientRect().top < 0) window.scrollTo({ top, behavior: 'instant' as ScrollBehavior });
+          ScrollTrigger.refresh();
+        })
+        .to(to, { opacity: 1, scale: 1, duration: 0.8 })
+        .set([from, to], { clearProps: 'transform,opacity' });
+    };
+
+    options.forEach((o) => o.addEventListener('click', () => switchTo(o.dataset.category!)));
+
+    // Initial state from the URL (no transition)
+    {
+      const slug = new URLSearchParams(location.search).get('category') ?? 'all';
+      const btn = options.find((o) => o.dataset.category === slug) ?? options[0];
+      setPressed(btn);
+      moveIndicator(btn, true);
+      states.forEach((s) => (s.hidden = s.dataset.category !== btn.dataset.category));
+    }
     window.addEventListener('resize', () => moveIndicator(options.find((o) => o.getAttribute('aria-pressed') === 'true')!, true));
 
-    // --- Show only while the grid is on screen ---
+    // --- Show only while the grid is on screen; first appearance waits for the cards ---
     gsap.set(bar, { y: 24, opacity: 0 });
+    let first = true;
     ScrollTrigger.create({
       trigger: grid,
       start: 'top bottom-=120',
       end: 'bottom bottom-=120',
-      onToggle: (self) => gsap.to(bar, { y: self.isActive ? 0 : 24, opacity: self.isActive ? 1 : 0, duration: 0.5 }),
+      onToggle: (self) => {
+        gsap.to(bar, { y: self.isActive ? 0 : 24, opacity: self.isActive ? 1 : 0, duration: 0.6, delay: first && self.isActive ? 1.2 : 0 });
+        first = false;
+      },
     });
 
     // --- Infinite grid: reveal the next batch of 14 as the sentinel approaches ---
