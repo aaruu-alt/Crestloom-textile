@@ -33,18 +33,19 @@ const allBatches: AllBatch[] = [];
 }
 
 /* ---- Per category: 3 · L + 2 small · 3 · 3 ---- */
+type CategoryRow =
+  | { kind: 'three-500' | 'three'; items: Product[] }
+  | { kind: 'feature'; large?: Lifestyle; small: Lifestyle[] };
 const byCategory = categories.map((c) => {
   const ps = products.filter((p) => p.category === c.slug);
   const ls = lifestyle.filter((l) => l.category === c.slug);
-  return {
-    ...c,
-    rows: [
-      { kind: 'three-500', items: ps.slice(0, 3) },
-      { kind: 'feature', large: ls.find((l) => /-l\d$/.test(l.id)), small: ls.filter((l) => /-s\d$/.test(l.id)).slice(0, 2) },
-      { kind: 'three', items: ps.slice(3, 6) },
-      { kind: 'three', items: ps.slice(6, 9) },
-    ],
-  };
+  const rows: CategoryRow[] = [
+    { kind: 'three-500', items: ps.slice(0, 3) },
+    { kind: 'feature', large: ls.find((l) => /-l\d$/.test(l.id)), small: ls.filter((l) => /-s\d$/.test(l.id)).slice(0, 2) },
+    { kind: 'three', items: ps.slice(3, 6) },
+    { kind: 'three', items: ps.slice(6, 9) },
+  ];
+  return { ...c, rows };
 });
 ---
 

@@ -88,7 +88,7 @@ h1, h2, h3, h4, h5, h6, p { overflow-wrap: break-word; }
   --color--offwhite: #f6f5f2;
   --color--sandy-brown: #c6a15c;
   --color--sandy-gold: #f0d59a;   /* "Sandy Gold / On Image" */
-  --color--cyan-blue: #5d7793;
+  --color--cyan-blue: #56708c;   /* was #5d7793; nudged for 4.5:1 with offwhite text */
   --color--gold: #c07d00;
 
   --color--background: var(--color--offwhite);
