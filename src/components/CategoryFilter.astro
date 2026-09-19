@@ -86,14 +86,14 @@ const options = [{ slug: 'all', name: 'All' }, ...categories];
     window.addEventListener('resize', () => moveIndicator(options.find((o) => o.getAttribute('aria-pressed') === 'true')!, true));
 
     // --- Show only while the grid is on screen; first appearance waits for the cards ---
-    gsap.set(bar, { y: 24, opacity: 0 });
+    gsap.set(bar, { y: 24, autoAlpha: 0 });   // autoAlpha: visibility:hidden at 0 → no hover-blocking over the footer
     let first = true;
     ScrollTrigger.create({
       trigger: grid,
       start: 'top bottom-=120',
       end: 'bottom bottom-=120',
       onToggle: (self) => {
-        gsap.to(bar, { y: self.isActive ? 0 : 24, opacity: self.isActive ? 1 : 0, duration: 0.6, delay: first && self.isActive ? 1.2 : 0 });
+        gsap.to(bar, { y: self.isActive ? 0 : 24, autoAlpha: self.isActive ? 1 : 0, duration: 0.6, delay: first && self.isActive ? 1.2 : 0 });
         first = false;
       },
     });
