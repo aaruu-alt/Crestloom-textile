@@ -22,10 +22,11 @@ const right = [
   { label: 'Contact', href: routes.contact },
 ];
 
-/** Mark a link active when its path (ignoring #hash) matches the current page. */
+/** Mark a link active only when it is a page (no #hash) and its path matches the current page. */
 const current = Astro.url.pathname.replace(/\/$/, '');
 const isActive = (href: string) => {
-  const path = href.split('#')[0].replace(/\/$/, '');
+  if (href.includes('#')) return false;
+  const path = href.replace(/\/$/, '');
   return path !== '' && path !== base && path === current;
 };
 ---
