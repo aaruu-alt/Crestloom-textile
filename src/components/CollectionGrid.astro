@@ -124,10 +124,8 @@ const byCategory = categories.map((c) => {
   .is-three-500 { height: 31.25rem; }        /* 500 */
   .is-three     { height: 32.5rem; }         /* 520 */
   .is-feature   { height: 40rem; }           /* 640 */
-  /* feature = two of the three columns + one gap */
-  .is-feature > :global(.is-feature-large) {
-    flex: 0 0 calc((100% - 2 * var(--gap)) / 3 * 2 + var(--gap));
-  }
+  /* feature tile 765 + gap + 539 stack (Figma 144:247) */
+  .is-feature > :global(.is-feature-large) { flex: 0 0 47.8125rem; }   /* 765 */
   .collection-grid_stack {
     flex: 1 1 0;
     display: flex;
