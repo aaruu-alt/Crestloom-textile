@@ -33,6 +33,7 @@ const {
 
 const Tag = as ?? (href ? 'a' : 'button');
 const label = (await Astro.slots.render('default')).trim();
+const swaps = variant === 'filled-gold' || variant === 'filled-cyan';   // masked label-swap hover
 ---
 
 <Tag
@@ -43,7 +44,7 @@ const label = (await Astro.slots.render('default')).trim();
   <span class="button_fill" aria-hidden="true"></span>
   <span class="button_label">
     <span class="button_label-text" set:html={label} />
-    <span class="button_label-text is-swap" aria-hidden="true" set:html={label} />
+    {swaps && <span class="button_label-text is-swap" aria-hidden="true" set:html={label} />}
   </span>
   {icon && (
     <svg class="button_icon" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
