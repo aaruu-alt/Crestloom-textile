@@ -128,7 +128,7 @@ const options = [{ slug: 'all', name: 'All' }, ...categories];
      flow, sticks while the grid is on screen, can never reach the footer. */
   .category-filter_dock {
     position: sticky;
-    bottom: calc(2rem + 4.0625rem);   /* 32 gap + 65 bar height */
+    bottom: calc(2rem + 3.5625rem);   /* 32 gap + 57 bar height */
     height: 0;
     z-index: 20;
     display: flex;
@@ -155,7 +155,7 @@ const options = [{ slug: 'all', name: 'All' }, ...categories];
   .category-filter_option {
     position: relative;
     width: 5.75rem;                   /* 92 */
-    padding: 1rem 0.875rem;           /* 16 / 14 */
+    padding: 0.75rem 0.875rem;        /* 12 / 14 */
     color: var(--color--offwhite);
     transition: color 500ms var(--ease--apple);
   }
