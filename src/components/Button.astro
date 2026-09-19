@@ -32,6 +32,7 @@ const {
 } = Astro.props;
 
 const Tag = as ?? (href ? 'a' : 'button');
+const label = (await Astro.slots.render('default')).trim();
 ---
 
 <Tag
@@ -40,7 +41,10 @@ const Tag = as ?? (href ? 'a' : 'button');
   {...rest}
 >
   <span class="button_fill" aria-hidden="true"></span>
-  <span class="button_label"><slot /></span>
+  <span class="button_label">
+    <span class="button_label-text" set:html={label} />
+    <span class="button_label-text is-swap" aria-hidden="true" set:html={label} />
+  </span>
   {icon && (
     <svg class="button_icon" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
       <path d="M0.6 6H10.5M6.25 10.25L10.5 6L6.25 1.75" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
@@ -102,6 +106,33 @@ const Tag = as ?? (href ? 'a' : 'button');
   .button.is-outline:focus-visible .button_fill {
     transform: scaleY(1);
   }
+
+  /* --- Filled variants: masked label swap (text slides up, its twin slides in) + deeper fill --- */
+  .button.is-filled-gold .button_label,
+  .button.is-filled-cyan .button_label {
+    position: relative;
+    display: block;
+    overflow: clip;
+  }
+  .button.is-filled-gold .button_label-text,
+  .button.is-filled-cyan .button_label-text {
+    display: block;
+    transition: transform 550ms var(--ease--apple);
+  }
+  .button.is-filled-gold .button_label-text.is-swap,
+  .button.is-filled-cyan .button_label-text.is-swap {
+    position: absolute;
+    inset: 0;
+    transform: translateY(110%);
+  }
+  .button.is-filled-gold:hover .button_label-text,
+  .button.is-filled-gold:focus-visible .button_label-text,
+  .button.is-filled-cyan:hover .button_label-text,
+  .button.is-filled-cyan:focus-visible .button_label-text { transform: translateY(-110%); }
+  .button.is-filled-gold:hover .button_label-text.is-swap,
+  .button.is-filled-gold:focus-visible .button_label-text.is-swap,
+  .button.is-filled-cyan:hover .button_label-text.is-swap,
+  .button.is-filled-cyan:focus-visible .button_label-text.is-swap { transform: translateY(0); }
 
   /* --- Type: Filled-gold --- */
   .button.is-filled-gold {
