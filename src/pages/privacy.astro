@@ -89,14 +89,14 @@ const sections = [
         <header class="privacy_header" data-reveal-group>
           <Lines class="text-style-tagline text-color-sandy-brown" lines={['Privacy']} />
           <Lines tag="h1" class="heading-style-h1" lines={['How we handle', 'your information.']} />
-          <p class="text-size-small privacy_updated" data-reveal>Last updated {updated}</p>
+          <p class="text-size-small privacy_updated">Last updated {updated}</p>
         </header>
 
         <div class="privacy_body">
           {sections.map((s) => (
             <section class="privacy_section" data-reveal-group>
               <h2 class="heading-style-h4" data-reveal>{s.title}</h2>
-              <div class="privacy_text" data-reveal>
+              <div class="privacy_text">
                 {s.body.map((p) => <p class="text-size-regular" set:html={p} />)}
               </div>
             </section>

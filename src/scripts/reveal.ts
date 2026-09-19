@@ -12,9 +12,9 @@
  */
 import { gsap, ScrollTrigger, reducedMotion } from './motion';
 
-const FADE = { y: 0, opacity: 1, duration: 1.1 };
-const LINE = { y: 0, duration: 1.1 };
-const START_AT = 'clamp(top 85%)';   // clamp: triggers near the page end still fire
+const FADE = { y: 0, opacity: 1, duration: 0.8 };
+const LINE = { y: 0, duration: 0.9 };
+const START_AT = 'clamp(top 95%)';   // fire as soon as it enters; clamp: page-end elements still fire
 
 const isLines = (el: Element) => el.getAttribute('data-reveal') === 'lines';
 const linesOf = (el: Element) => [...el.querySelectorAll('.lines_inner')];
@@ -27,13 +27,13 @@ function finish(targets: Element[]) {
 }
 
 /** Adds the reveal tweens for `items` to `tl` at `at`, staggered. Returns end time. */
-function add(tl: gsap.core.Timeline, items: Element[], at: number, stagger = 0.12) {
+function add(tl: gsap.core.Timeline, items: Element[], at: number, stagger = 0.08) {
   let t = at;
   items.forEach((el) => {
     if (isLines(el)) {
       const lines = linesOf(el);
-      tl.to(lines, { ...LINE, stagger: 0.14, onComplete: () => finish([el]) }, t);
-      t += 0.14 * lines.length;
+      tl.to(lines, { ...LINE, stagger: 0.12, onComplete: () => finish([el]) }, t);
+      t += 0.12 * lines.length;
     } else {
       tl.to(el, { ...FADE, onComplete: () => finish([el]) }, t);
       t += stagger;
