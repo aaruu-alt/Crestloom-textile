@@ -1,0 +1,31 @@
+---
+/**
+ * About page — Figma "About Page" (146:330).
+ */
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import AboutHero from '../components/about/AboutHero.astro';
+import AboutOrigin from '../components/about/AboutOrigin.astro';
+import AboutApproach from '../components/about/AboutApproach.astro';
+import Principles from '../components/Principles.astro';
+import AboutGlobal from '../components/about/AboutGlobal.astro';
+import Footer from '../components/Footer.astro';
+import SmallScreenNotice from '../components/SmallScreenNotice.astro';
+---
+
+<Layout
+  title="About — Crestloom Textile"
+  description="A new sourcing company shaped by textile knowledge, material understanding, and close coordination. Grounded in Panipat, built for what comes next."
+>
+  <SmallScreenNotice />
+
+  <div class="desktop-only">
+    <Navbar theme="light" />
+    <AboutHero />
+    <AboutOrigin />
+    <AboutApproach />
+    <Principles />
+    <AboutGlobal />
+    <Footer />
+  </div>
+</Layout>

@@ -1,0 +1,75 @@
+---
+/** About / Global Partnership — Figma 146:335, 1440 × 486. */
+import Lines from '../Lines.astro';
+import Button from '../Button.astro';
+import { routes } from '../../lib/routes';
+
+const regions = ['Europe', 'USA', 'Japan', 'Worldwide'];
+---
+
+<section class="about-global padding-global padding-section-medium" data-reveal-section>
+  <div class="container-large about-global_inner">
+    <div class="about-global_heading-block" data-reveal-group>
+      <Lines class="text-style-tagline text-color-sandy-gold" lines={['Global partnership']} />
+      <Lines tag="h2" class="heading-style-h1 about-global_heading" lines={['From Panipat,', 'with a wider outlook.']} />
+    </div>
+
+    <div class="about-global_side" data-reveal-group>
+      <p class="text-size-large" data-reveal>
+        Crestloom is being built for partnerships across Europe, the USA, Japan, and markets worldwide. We bring local product access together with communication shaped around international briefs.
+      </p>
+      <div class="about-global_cta">
+        <p class="text-style-tagline about-global_regions" data-reveal>
+          {regions.map((r, i) => (<>{i > 0 && <span class="about-global_dot"></span>}<span>{r}</span></>))}
+        </p>
+        <Button href={routes.contact} variant="filled-gold" icon={false} data-reveal>Start a conversation</Button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-global {
+    background-color: var(--color--cyan-blue);
+    color: var(--color--offwhite);
+  }
+  .about-global_inner {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 2rem;
+    min-height: 22.375rem;            /* 358 */
+  }
+  .about-global_heading-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;                        /* 32 */
+    width: 34.5625rem;                /* 553 */
+  }
+  .about-global_heading { color: var(--color--offwhite); }
+  .about-global_side {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-self: stretch;
+    width: 33.125rem;                 /* 530 */
+  }
+  .about-global_cta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3.0625rem;                   /* 49 */
+  }
+  .about-global_regions {
+    display: flex;
+    align-items: center;
+    gap: 1.3125rem;                   /* ≈ space-between across 415 */
+    color: var(--color--offwhite);
+  }
+  .about-global_dot {
+    width: 0.1875rem;
+    height: 0.1875rem;
+    border-radius: 50%;
+    background-color: currentColor;
+  }
+</style>

@@ -9,7 +9,7 @@ export const routes = {
   collections: `${base}/collections`,
   sourcing: `${base}/home#sourcing`,
   process: `${base}/home#process`,
-  about: `${base}/home#about`,
+  about: `${base}/about`,
   contact: `${base}/contact`,
   privacy: `${base}/privacy`,
 };

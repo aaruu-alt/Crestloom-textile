@@ -1,0 +1,63 @@
+---
+/** About / Approach — Figma 146:333, 1440 × 751. */
+import Lines from '../Lines.astro';
+
+const steps = ['Product sourcing', 'Sampling', 'Production coordination', 'Quality oversight', 'Packing & delivery coordination'];
+---
+
+<section class="about-approach padding-global padding-section-large" data-reveal-section>
+  <div class="container-large about-approach_inner">
+    <div class="about-approach_copy" data-reveal-group>
+      <div class="about-approach_heading-block">
+        <Lines class="text-style-tagline text-color-sandy-brown" lines={['Our approach']} />
+        <Lines tag="h2" class="heading-style-h1" lines={['From the brief', 'to the finished piece.']} />
+      </div>
+      <p class="text-size-large" data-reveal>
+        We connect the decisions that sit between an idea and a finished product. Each stage is coordinated around the client’s category, quantity, quality expectations, and destination.
+      </p>
+    </div>
+
+    <ol class="about-approach_steps" data-reveal-group>
+      {steps.map((step, i) => (
+        <li class="about-approach_step" data-reveal>
+          <h3 class="heading-style-h4">{String(i + 1).padStart(2, '0')}&nbsp;&nbsp;{step}</h3>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .about-approach { background-color: var(--color--offwhite); }
+  .about-approach_inner {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+  .about-approach_copy {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;                        /* 48 */
+    width: 35rem;                     /* 560 */
+  }
+  .about-approach_heading-block {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;                      /* 24 */
+    width: 33.3125rem;                /* 533 */
+  }
+  .about-approach_steps {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;                        /* 48 */
+    width: 35rem;                     /* 560 */
+    border-bottom: 1px solid rgb(40 40 42 / 0.18);
+  }
+  .about-approach_step {
+    padding-top: 1.75rem;             /* 28 below the rule */
+    border-top: 1px solid rgb(40 40 42 / 0.18);
+  }
+  .about-approach_step:last-child { padding-bottom: 3rem; }   /* 48 to the closing rule */
+  .about-approach_step h3 { text-transform: uppercase; }
+</style>

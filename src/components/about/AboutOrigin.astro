@@ -1,0 +1,53 @@
+---
+/** About / Origin — Figma 146:332, 1440 × 729. */
+import Lines from '../Lines.astro';
+---
+
+<section class="about-origin padding-global padding-section-large" data-reveal-section>
+  <div class="container-large about-origin_inner">
+    <div class="about-origin_block" data-reveal-group>
+      <Lines class="text-style-tagline text-color-sandy-brown" lines={['Our ground']} />
+      <div class="about-origin_row">
+        <Lines tag="h2" class="heading-style-h1" lines={['Textile knowledge', 'belongs to the place.']} />
+        <p class="text-size-large about-origin_body" data-reveal>
+          Crestloom begins in Panipat, where textiles are not treated as a trend or an abstraction. They are part of the city’s working rhythm—understood through materials, making, and the practical decisions behind every finished piece.
+        </p>
+      </div>
+    </div>
+
+    <div class="about-origin_rule" role="presentation" data-reveal></div>
+
+    <div class="about-origin_row" data-reveal-group>
+      <Lines tag="p" class="heading-style-h2 about-origin_statement" lines={['The company is new.', 'The understanding behind it is not.']} />
+      <p class="text-size-large about-origin_body" data-reveal>
+        Our perspective is informed by a family familiar with textile manufacturing and the realities behind production. Crestloom brings that knowledge into a clearer, more considered sourcing partnership.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-origin { background-color: var(--color--offwhite); }
+  .about-origin_inner {
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;                        /* 80 */
+  }
+  .about-origin_block {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;                        /* 32 */
+  }
+  .about-origin_row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+  .about-origin_body { width: 33.125rem; }        /* 530 */
+  .about-origin_statement { width: 34.0625rem; }  /* 545 */
+  .about-origin_rule {
+    height: 1px;
+    background-color: var(--color--text);
+  }
+</style>
