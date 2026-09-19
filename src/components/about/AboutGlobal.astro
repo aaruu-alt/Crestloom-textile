@@ -15,11 +15,11 @@ const regions = ['Europe', 'USA', 'Japan', 'Worldwide'];
     </div>
 
     <div class="about-global_side" data-reveal-group>
-      <p class="text-size-large">
+      <p class="text-size-large" data-reveal="fade">
         Crestloom is being built for partnerships across Europe, the USA, Japan, and markets worldwide. We bring local product access together with communication shaped around international briefs.
       </p>
       <div class="about-global_cta">
-        <p class="text-style-tagline about-global_regions">
+        <p class="text-style-tagline about-global_regions" data-reveal="fade">
           {regions.map((r, i) => (<>{i > 0 && <span class="about-global_dot"></span>}<span>{r}</span></>))}
         </p>
         <Button href={routes.contact} variant="filled-gold" icon={false} data-reveal>Start a conversation</Button>

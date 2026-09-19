@@ -16,7 +16,7 @@ const audiences = ['For brands', 'Retailers', 'Interior projects'];
   <div class="container-large partnerships_inner">
     <header class="partnerships_header" data-reveal-group>
       <Lines tag="h2" class="heading-style-h1 partnerships_heading" lines={['Made in India.', 'Ready to work worldwide.']} />
-      <p class="text-size-large partnerships_intro">
+      <p class="text-size-large partnerships_intro" data-reveal="fade">
         Crestloom is being built to support brands, retailers and interior partners across Europe, the USA, Japan and beyond—with clear communication from brief to delivery.
       </p>
     </header>
@@ -32,7 +32,7 @@ const audiences = ['For brands', 'Retailers', 'Interior projects'];
       </ol>
 
       <div class="partnerships_footer" data-reveal-group>
-        <p class="text-style-tagline partnerships_audience">
+        <p class="text-style-tagline partnerships_audience" data-reveal="fade">
           {audiences.map((a, i) => (
             <>
               {i > 0 && <span class="partnerships_dot"></span>}

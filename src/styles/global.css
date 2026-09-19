@@ -187,9 +187,9 @@ h1, h2, h3, h4, h5, h6, p { overflow-wrap: break-word; }
 }
 
 /* ---------- Scroll reveal start state (see scripts/reveal.ts) ---------- */
-html.js [data-reveal-section] [data-reveal]:not([data-reveal='lines']) {
-  opacity: 0;
-  transform: translateY(1rem);
+html.js [data-reveal-section] [data-reveal]:not([data-reveal='lines']) { opacity: 0; }
+html.js [data-reveal-section] [data-reveal]:not([data-reveal='lines'], [data-reveal='fade']) {
+  transform: translateY(1rem);              /* body copy (fade) doesn't travel */
 }
 html.js [data-reveal-section] [data-reveal].is-revealed {
   opacity: 1;
