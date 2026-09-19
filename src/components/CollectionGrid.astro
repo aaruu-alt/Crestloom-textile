@@ -93,18 +93,20 @@ const byCategory = categories.map((c) => {
 </div>
 
 <style>
+  .collection-grid { --gap: 1.5rem; }   /* 24 — every gap and derived width follows this */
+
   .collection-grid_state,
   .collection-grid_batch {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;                      /* 24 */
+    gap: var(--gap);
   }
   .collection-grid_state[hidden],
   .collection-grid_batch[hidden] { display: none; }
 
   .collection-grid_row {
     display: flex;
-    gap: 1.5rem;                      /* 24 */
+    gap: var(--gap);
   }
   .collection-grid_row > :global(.product-card) { flex: 1 1 0; }
 
@@ -112,19 +114,25 @@ const byCategory = categories.map((c) => {
   .is-four            { height: 20rem; }     /* 320 */
   .is-lifestyle-left,
   .is-lifestyle-right { height: 26.25rem; }  /* 420 */
+  /* lifestyle = two of the four product columns + one gap, so edges line up with the row above */
   .is-lifestyle-left  > :global(.product-card:first-child),
-  .is-lifestyle-right > :global(.product-card:last-child) { flex: 0 0 40.25rem; }   /* 644 */
+  .is-lifestyle-right > :global(.product-card:last-child) {
+    flex: 0 0 calc((100% - 3 * var(--gap)) / 2 + var(--gap));
+  }
 
   /* --- Category: 3 (500) · 872 + stack of 300s · 3 (520) --- */
   .is-three-500 { height: 31.25rem; }        /* 500 */
   .is-three     { height: 32.5rem; }         /* 520 */
   .is-feature   { height: 40rem; }           /* 640 */
-  .is-feature > :global(.is-feature-large) { flex: 0 0 54.5rem; }   /* 872 */
+  /* feature = two of the three columns + one gap */
+  .is-feature > :global(.is-feature-large) {
+    flex: 0 0 calc((100% - 2 * var(--gap)) / 3 * 2 + var(--gap));
+  }
   .collection-grid_stack {
     flex: 1 1 0;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;                      /* 24 */
+    gap: var(--gap);
   }
   .collection-grid_stack > :global(.product-card) { flex: 1 1 0; }
 
