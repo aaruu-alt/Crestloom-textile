@@ -15,10 +15,7 @@ const audiences = ['For brands', 'Retailers', 'Interior projects'];
 <section class="partnerships padding-global padding-section-medium" id="contact" data-reveal-section>
   <div class="container-large partnerships_inner">
     <header class="partnerships_header" data-reveal-group>
-      <div class="partnerships_heading-block">
-        <Lines class="text-style-tagline text-color-sandy-brown" lines={['International partnerships']} />
-        <Lines tag="h2" class="heading-style-h2" lines={['Made in India.', 'Ready to work worldwide.']} />
-      </div>
+      <Lines tag="h2" class="heading-style-h1 partnerships_heading" lines={['Made in India.', 'Ready to work worldwide.']} />
       <p class="text-size-large partnerships_intro">
         Crestloom is being built to support brands, retailers and interior partners across Europe, the USA, Japan and beyond—with clear communication from brief to delivery.
       </p>
@@ -56,24 +53,20 @@ const audiences = ['For brands', 'Retailers', 'Interior projects'];
   .partnerships_inner {
     display: flex;
     flex-direction: column;
-    gap: 9.25rem;                     /* 148 */
+    gap: 5rem;                        /* 80 */
   }
 
   /* --- Header --- */
   .partnerships_header {
     display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 2rem;
-  }
-  .partnerships_heading-block {
-    display: flex;
     flex-direction: column;
-    gap: 1.75rem;                     /* 28 */
-    width: 37.5rem;                   /* 600 */
+    align-items: center;
+    gap: 1.5rem;                      /* 24 */
+    text-align: center;
   }
+  .partnerships_heading { text-align: center; }
   .partnerships_intro {
-    width: 31.5rem;                   /* 504 */
+    width: 42.875rem;                 /* 686 */
     opacity: 0.85;
   }
 
