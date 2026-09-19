@@ -20,3 +20,23 @@ export async function submitEnquiry(data: Enquiry): Promise<{ ok: boolean }> {
   console.info('[enquiry] stub submit', data);
   return { ok: true };
 }
+
+/**
+ * Catalogue request ("View catalog" popup).
+ * TODO (Supabase): POST to the edge function → `catalog_requests` (name, email, category_id).
+ */
+export type CatalogRequest = {
+  name: string;
+  email: string;
+  category: string;
+  website?: string;   // honeypot
+  startedAt: number;
+};
+
+export async function submitCatalogRequest(data: CatalogRequest): Promise<{ ok: boolean }> {
+  if (data.website) return { ok: true };
+  if (Date.now() - data.startedAt < 2000) return { ok: true };
+  await new Promise((r) => setTimeout(r, 600));
+  console.info('[catalog] stub submit', data);
+  return { ok: true };
+}

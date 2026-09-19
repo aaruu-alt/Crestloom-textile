@@ -1,0 +1,262 @@
+---
+/**
+ * CatalogPopup — Figma "Collection / View Catalogue Popup" (315:107) and
+ * its success state (318:107). Opened by any [data-catalog] card.
+ * Native <dialog> for focus trapping / Esc / inert background; motion via GSAP.
+ */
+import Lines from './Lines.astro';
+import Button from './Button.astro';
+---
+
+<dialog class="catalog-popup" aria-labelledby="catalog-popup-title">
+  <div class="catalog-popup_scrim" data-close></div>
+
+  <div class="catalog-popup_surface">
+    <!-- Form state -->
+    <form class="catalog-popup_form" novalidate>
+      <div class="catalog-popup_head">
+        <div class="catalog-popup_bar">
+          <p class="text-style-tagline-xs text-color-sandy-brown">View the catalogue</p>
+          <button type="button" class="catalog-popup_close" aria-label="Close" data-close>×</button>
+        </div>
+        <h2 id="catalog-popup-title" class="heading-style-h2">Discover the collection.</h2>
+      </div>
+      <p class="text-size-regular catalog-popup_body">Leave your details to view the latest Crestloom catalogue.</p>
+
+      <div class="catalog-popup_fields">
+        <div class="catalog-popup_field">
+          <label for="catalog-name">Name</label>
+          <input id="catalog-name" name="name" type="text" placeholder="Your name" autocomplete="name" required />
+        </div>
+        <div class="catalog-popup_field">
+          <label for="catalog-email">Email</label>
+          <input id="catalog-email" name="email" type="email" placeholder="name@company.com" autocomplete="email" required />
+        </div>
+        <input type="hidden" name="category" value="" />
+        <div class="catalog-popup_hp" aria-hidden="true">
+          <label for="catalog-website">Website</label>
+          <input id="catalog-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+      </div>
+
+      <p class="text-size-small catalog-popup_error" role="alert" hidden></p>
+      <Button variant="filled-gold" icon={false} class="catalog-popup_submit">View catalog</Button>
+    </form>
+
+    <!-- Success state -->
+    <div class="catalog-popup_success" hidden>
+      <div class="catalog-popup_head is-success">
+        <div class="catalog-popup_bar">
+          <p class="text-style-tagline-xs text-color-sandy-brown">Request received</p>
+          <button type="button" class="catalog-popup_close" aria-label="Close" data-close>×</button>
+        </div>
+        <h2 class="heading-style-h2">Thank you.</h2>
+      </div>
+      <p class="text-size-regular catalog-popup_body">We’ll get back to you within 2 working days with the catalogue.</p>
+      <Button variant="filled-gold" icon={false} class="catalog-popup_submit" data-close>Close</Button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  import { gsap } from '../scripts/motion';
+  import { submitCatalogRequest } from '../lib/enquiry';
+
+  const dialog = document.querySelector<HTMLDialogElement>('.catalog-popup');
+  if (dialog) {
+    const scrim = dialog.querySelector<HTMLElement>('.catalog-popup_scrim')!;
+    const surface = dialog.querySelector<HTMLElement>('.catalog-popup_surface')!;
+    const form = dialog.querySelector<HTMLFormElement>('.catalog-popup_form')!;
+    const success = dialog.querySelector<HTMLElement>('.catalog-popup_success')!;
+    const error = form.querySelector<HTMLElement>('.catalog-popup_error')!;
+    const submit = form.querySelector<HTMLButtonElement>('.catalog-popup_submit')!;
+    const categoryInput = form.querySelector<HTMLInputElement>('input[name=category]')!;
+    let startedAt = 0;
+    let opener: HTMLElement | null = null;
+
+    const reset = () => {
+      form.reset();
+      form.hidden = false;
+      success.hidden = true;
+      error.hidden = true;
+      form.querySelectorAll('.is-invalid').forEach((el) => el.classList.remove('is-invalid'));
+    };
+
+    const open = (category: string, from: HTMLElement) => {
+      reset();
+      categoryInput.value = category;
+      opener = from;
+      startedAt = Date.now();
+      dialog.showModal();
+      document.documentElement.style.overflow = 'hidden';
+      gsap.timeline()
+        .fromTo(scrim, { opacity: 0 }, { opacity: 1, duration: 0.5 }, 0)
+        .fromTo(surface, { opacity: 0, y: 16, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.7 }, 0.05);
+      form.querySelector<HTMLInputElement>('input[name=name]')?.focus({ preventScroll: true });
+    };
+
+    const close = () => {
+      gsap.timeline({
+        onComplete: () => {
+          dialog.close();
+          document.documentElement.style.overflow = '';
+          opener?.focus({ preventScroll: true });
+        },
+      })
+        .to(surface, { opacity: 0, y: 8, scale: 0.98, duration: 0.35 }, 0)
+        .to(scrim, { opacity: 0, duration: 0.4 }, 0.05);
+    };
+
+    // Openers: any card with data-catalog
+    document.querySelectorAll<HTMLElement>('[data-catalog]').forEach((card) => {
+      card.addEventListener('click', () => open(card.dataset.catalog ?? '', card));
+    });
+    dialog.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', close));
+    dialog.addEventListener('cancel', (e) => { e.preventDefault(); close(); });   // Esc → animated close
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      error.hidden = true;
+      form.querySelectorAll('.is-invalid').forEach((el) => el.classList.remove('is-invalid'));
+      const invalid = [...form.querySelectorAll<HTMLInputElement>('[required]')].filter((el) => !el.checkValidity());
+      if (invalid.length) {
+        invalid.forEach((el) => el.closest('.catalog-popup_field')?.classList.add('is-invalid'));
+        error.textContent = invalid.some((el) => el.type === 'email' && el.value) ? 'Please enter a valid email address.' : 'Please fill in your name and email.';
+        error.hidden = false;
+        invalid[0].focus();
+        return;
+      }
+      const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
+      submit.disabled = true;
+      const { ok } = await submitCatalogRequest({ name: data.name, email: data.email, category: data.category, website: data.website, startedAt });
+      submit.disabled = false;
+      if (!ok) { error.textContent = 'Something went wrong — please try again.'; error.hidden = false; return; }
+      gsap.timeline()
+        .to(form, { opacity: 0, duration: 0.3 })
+        .add(() => { form.hidden = true; success.hidden = false; gsap.set(form, { clearProps: 'opacity' }); })
+        .from(success, { opacity: 0, y: 8, duration: 0.6 });
+    });
+  }
+</script>
+
+<style>
+  .catalog-popup {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    display: none;
+    place-items: center;
+    z-index: 100;
+  }
+  .catalog-popup[open] { display: grid; }
+  .catalog-popup::backdrop { background: transparent; }
+
+  .catalog-popup_scrim {
+    position: absolute;
+    inset: 0;
+    background-color: rgb(40 40 42 / 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .catalog-popup_surface {
+    position: relative;
+    width: 40rem;                     /* 640 */
+    padding: 2.5rem 3rem 3rem;        /* 40 / 48 / 48 */
+    background-color: var(--color--offwhite);
+    color: var(--color--text);
+  }
+  .catalog-popup_form,
+  .catalog-popup_success {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .catalog-popup_form[hidden],
+  .catalog-popup_success[hidden],
+  .catalog-popup_error[hidden] { display: none; }
+
+  .catalog-popup_head {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;                        /* 16 */
+  }
+  .catalog-popup_head.is-success { gap: 1.25rem; }   /* 20 */
+  .catalog-popup_bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 1.5rem;                   /* 24 */
+  }
+  .catalog-popup_close {
+    font-family: var(--font--body);
+    font-size: 1.5rem;                /* 24 */
+    line-height: 1;
+    color: var(--color--text);
+    transition: opacity 400ms var(--ease--apple);
+  }
+  .catalog-popup_close:hover,
+  .catalog-popup_close:focus-visible { opacity: 0.6; }
+
+  .catalog-popup_body {
+    margin-top: 2rem;                 /* 32 */
+    opacity: 0.72;
+  }
+  .catalog-popup_success .catalog-popup_body { margin-top: 0.75rem; }   /* 12 */
+
+  /* --- Fields --- */
+  .catalog-popup_fields {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;                     /* 20 */
+    margin-top: 1.25rem;              /* 20 */
+  }
+  .catalog-popup_field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5625rem;                   /* 9 */
+    height: 3.75rem;                  /* 60 */
+  }
+  .catalog-popup_field label {
+    font-family: var(--font--accent);
+    font-weight: 500;
+    font-size: 0.75rem;               /* 12 */
+    line-height: 100%;
+    letter-spacing: 0.16em;           /* 1.92px */
+    text-transform: uppercase;
+  }
+  .catalog-popup_field input {
+    flex: 1;
+    width: 100%;
+    padding: 0 0 0.375rem;
+    border: 0;
+    border-bottom: 1px solid rgb(40 40 42 / 0.28);
+    border-radius: 0;
+    background: transparent;
+    color: var(--color--text);
+    font-family: var(--font--body);
+    font-size: 1rem;
+    line-height: 140%;
+    outline: none;
+    transition: border-color 500ms var(--ease--apple);
+  }
+  .catalog-popup_field input::placeholder { color: rgb(40 40 42 / 0.5); }
+  .catalog-popup_field input:focus { border-bottom-color: var(--color--text); }
+  .catalog-popup_field.is-invalid input { border-bottom-color: var(--color--sandy-brown); }
+
+  .catalog-popup_hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+  .catalog-popup_error { color: var(--color--sandy-brown); margin-top: 1rem; }
+
+  .catalog-popup_surface :global(.catalog-popup_submit) {
+    width: 100%;
+    margin-top: 2.5rem;               /* 40 */
+  }
+  .catalog-popup_success :global(.catalog-popup_submit) { margin-top: 2.25rem; }   /* 36 */
+</style>
