@@ -40,35 +40,44 @@ const p = (id: string, category: string, label: string, image: ImageMetadata, al
 const l = (id: string, category: string, label: string, image: ImageMetadata, alt: string): Lifestyle =>
   ({ id, category, label, image, alt });
 
-/** Products in display order. */
-export const products: Product[] = [
-  p('throw-01',   'living', 'Throw',   allThrow01,   'Woven floral throw on a stone block'),
-  p('cushion-01', 'living', 'Cushion', allCushion01, 'Botanical print cushion'),
-  p('pouf-01',    'living', 'Pouf',    allPouf01,    'Patterned kilim pouf'),
-  p('bathmat-01', 'linen',  'Bathmat', allBathmat01, 'Ochre embroidered bathmat'),
-  p('rug-01',     'rugs',   'Rug',     allRug01,     'Patterned area rug under a coffee table'),
-  p('bathmat-02', 'linen',  'Bathmat', allBathmat02, 'Geometric striped bathmat'),
-  p('throw-02',   'living', 'Throw',   gallery09,    'Indigo floral throw on a bench'),
-  p('pouf-02',    'living', 'Pouf',    gallery08,    'Sage green pouf'),
-  p('throw-03',   'living', 'Throw',   gallery06,    'Indigo throw draped over a bench'),
-  p('bathmat-03', 'linen',  'Bathmat', gallery07,    'Ochre bathmat beside a bath'),
-  p('cushion-02', 'living', 'Cushion', allCushion02, 'Checked cushion on a stone plinth'),
-  p('cushion-03', 'living', 'Cushion', allCushion03, 'Rust velvet cushion on an armchair'),
-  p('cushion-04', 'living', 'Cushion', gallery05a,   'Checked cushion on a plinth'),
-  p('cushion-05', 'living', 'Cushion', gallery05b,   'Velvet cushion on an armchair'),
-  p('pouf-03',    'living', 'Pouf',    allPouf03,    'Rust velvet pouf'),
+/** Placeholder pools — each category gets 9 products + 3 lifestyle (1 large, 2 small), like the CMS will. */
+const productPool: Array<[string, ImageMetadata, string]> = [
+  ['Throw',   allThrow01,   'Woven floral throw on a stone block'],
+  ['Cushion', allCushion01, 'Botanical print cushion'],
+  ['Pouf',    allPouf01,    'Patterned kilim pouf'],
+  ['Bathmat', allBathmat01, 'Ochre embroidered bathmat'],
+  ['Rug',     allRug01,     'Patterned area rug under a coffee table'],
+  ['Bathmat', allBathmat02, 'Geometric striped bathmat'],
+  ['Throw',   gallery09,    'Indigo floral throw on a bench'],
+  ['Pouf',    gallery08,    'Sage green pouf'],
+  ['Throw',   gallery06,    'Indigo throw draped over a bench'],
+  ['Bathmat', gallery07,    'Ochre bathmat beside a bath'],
+  ['Cushion', allCushion02, 'Checked cushion on a stone plinth'],
+  ['Cushion', allCushion03, 'Rust velvet cushion on an armchair'],
+  ['Cushion', gallery05a,   'Checked cushion on a plinth'],
+  ['Cushion', gallery05b,   'Velvet cushion on an armchair'],
+  ['Pouf',    allPouf03,    'Rust velvet pouf'],
+];
+const lifestylePool: Array<[string, ImageMetadata, string]> = [
+  ['Living', allLivingLifestyle, 'Sofa with cushions, throw and pouf'],
+  ['Linen',  allLinenLifestyle,  'Bed dressed in layered linen'],
+  ['Living', livingLarge,        'Living room with textured textiles'],
+  ['Rug',    rugsSmall,          'Rug under a round coffee table'],
+  ['Linen',  linenSmall,         'Layered bed linen'],
 ];
 
-/** Lifestyle images: one large + two small per category (placeholders reuse across categories). */
-export const lifestyle: Lifestyle[] = [
-  l('living-l1', 'living', 'Living', allLivingLifestyle, 'Sofa with cushions, throw and pouf'),
-  l('living-l2', 'living', 'Living', livingLarge,        'Living room with textured textiles'),
-  l('living-s1', 'living', 'Rug',    rugsSmall,          'Rug under a round coffee table'),
-  l('living-s2', 'living', 'Linen',  linenSmall,         'Layered bed linen'),
-  l('linen-l1',  'linen',  'Linen',  allLinenLifestyle,  'Bed dressed in layered linen'),
-  l('linen-s1',  'linen',  'Linen',  linenSmall,         'Layered bed linen'),
-  l('linen-s2',  'linen',  'Rug',    rugsSmall,          'Rug under a round coffee table'),
-  l('rugs-l1',   'rugs',   'Rug',    rugsSmall,          'Rug under a round coffee table'),
-  l('rugs-s1',   'rugs',   'Living', livingLarge,        'Living room with textured textiles'),
-  l('rugs-s2',   'rugs',   'Linen',  linenSmall,         'Layered bed linen'),
-];
+/** Products in display order — 9 per category. */
+export const products: Product[] = categories.flatMap((c, ci) =>
+  Array.from({ length: 9 }, (_, i) => {
+    const [label, image, alt] = productPool[(ci * 5 + i) % productPool.length];
+    return p(`${c.slug}-p${i + 1}`, c.slug, label, image, alt);
+  })
+);
+
+/** Lifestyle — per category: one large (`-l1`) and two small (`-s1`, `-s2`). */
+export const lifestyle: Lifestyle[] = categories.flatMap((c, ci) =>
+  (['l1', 's1', 's2'] as const).map((k, i) => {
+    const [label, image, alt] = lifestylePool[(ci * 2 + i) % lifestylePool.length];
+    return l(`${c.slug}-${k}`, c.slug, label, image, alt);
+  })
+);
