@@ -85,18 +85,19 @@ const options = [{ slug: 'all', name: 'All' }, ...categories];
     }
     window.addEventListener('resize', () => moveIndicator(options.find((o) => o.getAttribute('aria-pressed') === 'true')!, true));
 
-    // --- Show only while the grid is on screen; first appearance waits for the cards ---
-    gsap.set(bar, { y: 24, autoAlpha: 0 });   // autoAlpha: visibility:hidden at 0 → no hover-blocking over the footer
+    // --- Visible while the grid is on screen and the end block is not ---
+    gsap.set(bar, { y: 24, autoAlpha: 0 });
+    let gridInView = false;
+    let endInView = false;
     let first = true;
-    ScrollTrigger.create({
-      trigger: grid,
-      start: 'top bottom-=120',
-      end: 'bottom bottom-=120',
-      onToggle: (self) => {
-        gsap.to(bar, { y: self.isActive ? 0 : 24, autoAlpha: self.isActive ? 1 : 0, duration: 0.6, delay: first && self.isActive ? 1.2 : 0 });
-        first = false;
-      },
-    });
+    const update = () => {
+      const show = gridInView && !endInView;
+      gsap.to(bar, { y: show ? 0 : 24, autoAlpha: show ? 1 : 0, duration: 0.6, delay: first && show ? 1.2 : 0, overwrite: true });
+      if (show) first = false;
+    };
+    new IntersectionObserver((entries) => { gridInView = entries[0].isIntersecting; update(); }, { rootMargin: '-120px 0px 0px 0px' }).observe(grid);
+    const endObserver = new IntersectionObserver((entries) => { endInView = entries.some((e) => e.isIntersecting); update(); });
+    grid.querySelectorAll('.collection-end').forEach((el) => endObserver.observe(el));
 
     // --- Infinite grid: reveal the next batch of 14 as the sentinel approaches ---
     const sentinel = grid.querySelector('.collection-grid_sentinel');
@@ -114,18 +115,19 @@ const options = [{ slug: 'all', name: 'All' }, ...categories];
 </script>
 
 <style>
+  /* Sticky inside the collection container: it can never sit over the footer. */
   .category-filter {
-    position: fixed;
-    left: 50%;
+    position: sticky;
     bottom: 2rem;
     z-index: 20;
     display: flex;
     align-items: center;
     gap: 1.5rem;                      /* 24 */
     padding: 0.5rem;                  /* 8 */
+    margin: -1.5rem auto 0;           /* overlaps the container's bottom padding, not the flow */
+    width: fit-content;
     border-radius: 2px;
     background-color: var(--color--cyan-blue);
-    transform: translateX(-50%);
   }
   .category-filter_active {
     position: absolute;
