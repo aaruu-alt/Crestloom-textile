@@ -6,6 +6,7 @@ import Lines from './Lines.astro';
  * here they're equal-width fills.
  */
 import Button from './Button.astro';
+import { routes } from '../lib/routes';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const regions = ['Europe', 'USA', 'Japan', 'Worldwide'];
@@ -43,7 +44,7 @@ const audiences = ['For brands', 'Retailers', 'Interior projects'];
             </>
           ))}
         </p>
-        <Button href="mailto:info@crestloom.in" variant="ghost-black" data-reveal>Start a conversation</Button>
+        <Button href={routes.contact} variant="ghost-black" data-reveal>Start a conversation</Button>
       </div>
     </div>
   </div>

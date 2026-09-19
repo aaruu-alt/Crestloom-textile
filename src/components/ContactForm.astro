@@ -1,0 +1,177 @@
+---
+/**
+ * ContactForm — Figma "Contact" (144:290) right column.
+ * Labels sit above a 1px rule; the input lives between them.
+ */
+import Lines from './Lines.astro';
+import Button from './Button.astro';
+---
+
+<div class="contact-form" data-reveal-group>
+  <Lines tag="h2" class="heading-style-h3" lines={['Tell us what you’re looking for.']} />
+
+  <form class="contact-form_form" novalidate data-reveal>
+    <div class="contact-form_fields">
+      <div class="contact-form_row">
+        <div class="contact-form_field is-first-name">
+          <label for="first-name" class="text-style-nav">First name</label>
+          <input id="first-name" name="firstName" type="text" autocomplete="given-name" required />
+        </div>
+        <div class="contact-form_field is-company">
+          <label for="company" class="text-style-nav">Company</label>
+          <input id="company" name="company" type="text" autocomplete="organization" />
+        </div>
+      </div>
+      <div class="contact-form_field">
+        <label for="email" class="text-style-nav">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required />
+      </div>
+      <div class="contact-form_field is-message">
+        <label for="message" class="text-style-nav">Message</label>
+        <textarea id="message" name="message" rows="2" required></textarea>
+      </div>
+      <!-- honeypot: hidden from people, filled by bots -->
+      <div class="contact-form_hp" aria-hidden="true">
+        <label for="website">Website</label>
+        <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+    </div>
+
+    <p class="text-size-small contact-form_note">Include the category, approximate quantity and desired timeline if known.</p>
+    <p class="text-size-small contact-form_error" role="alert" hidden></p>
+
+    <Button variant="filled-cyan" class="contact-form_submit">Send enquiry</Button>
+  </form>
+
+  <div class="contact-form_success" hidden>
+    <h3 class="heading-style-h3">Thank you — we’ve received your brief.</h3>
+    <p class="text-size-regular">We’ll come back to you with the right questions within two working days.</p>
+  </div>
+</div>
+
+<script>
+  import { submitEnquiry } from '../lib/enquiry';
+  import { gsap } from '../scripts/motion';
+
+  const root = document.querySelector<HTMLElement>('.contact-form');
+  const form = root?.querySelector<HTMLFormElement>('form');
+  if (root && form) {
+    const error = form.querySelector<HTMLElement>('.contact-form_error')!;
+    const success = root.querySelector<HTMLElement>('.contact-form_success')!;
+    const submit = form.querySelector<HTMLButtonElement>('.contact-form_submit')!;
+    const startedAt = Date.now();
+
+    const showError = (msg: string) => { error.textContent = msg; error.hidden = false; };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      error.hidden = true;
+      form.querySelectorAll('.is-invalid').forEach((el) => el.classList.remove('is-invalid'));
+
+      const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
+      const invalid = [...form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[required]')]
+        .filter((el) => !el.checkValidity());
+      if (invalid.length) {
+        invalid.forEach((el) => el.closest('.contact-form_field')?.classList.add('is-invalid'));
+        showError(invalid.some((el) => el.type === 'email' && el.value) ? 'Please enter a valid email address.' : 'Please fill in the highlighted fields.');
+        invalid[0].focus();
+        return;
+      }
+
+      submit.disabled = true;
+      const { ok } = await submitEnquiry({
+        firstName: data.firstName, company: data.company, email: data.email, message: data.message,
+        website: data.website, startedAt,
+      });
+      submit.disabled = false;
+      if (!ok) { showError('Something went wrong — please email us at info@crestloom.in.'); return; }
+
+      gsap.timeline()
+        .to(form, { opacity: 0, y: -8, duration: 0.4 })
+        .add(() => { form.hidden = true; success.hidden = false; })
+        .from(success, { opacity: 0, y: 12, duration: 0.8 });
+    });
+  }
+</script>
+
+<style>
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 3.75rem;                     /* 60 */
+    width: 40rem;                     /* 640 */
+  }
+  .contact-form_form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2.5rem;                      /* 40 */
+  }
+  .contact-form_fields {
+    display: flex;
+    flex-direction: column;
+    gap: 4.5rem;                      /* 72 between field rows */
+    width: 100%;
+  }
+  .contact-form_row {
+    display: flex;
+    gap: 2rem;                        /* 32 */
+  }
+  .contact-form_row > .is-first-name { flex: 0 0 18.5rem; }  /* 296 */
+  .contact-form_row > .is-company    { flex: 0 0 19.5rem; }  /* 312 */
+
+  /* --- Field: label over a rule; input fills the 36 between --- */
+  .contact-form_field {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  .contact-form_field label { color: var(--color--text); }
+  .contact-form_field input,
+  .contact-form_field textarea {
+    width: 100%;
+    height: 2.25rem;                  /* 36 */
+    padding: 0.5rem 0 0.25rem;
+    border: 0;
+    border-bottom: 1px solid rgb(40 40 42 / 0.28);
+    border-radius: 0;
+    background: transparent;
+    color: var(--color--text);
+    font-family: var(--font--body);
+    font-size: 1rem;
+    line-height: 150%;
+    letter-spacing: -0.04em;
+    outline: none;
+    resize: none;
+    transition: border-color 500ms var(--ease--apple);
+  }
+  .is-message textarea { height: 4.5rem; }   /* 72: label→rule gap in Figma */
+  .contact-form_field input:focus,
+  .contact-form_field textarea:focus { border-bottom-color: var(--color--text); }
+  .contact-form_field.is-invalid input,
+  .contact-form_field.is-invalid textarea { border-bottom-color: var(--color--sandy-brown); }
+
+  .contact-form_hp {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .contact-form_note {
+    margin-top: -0.75rem;             /* 28 from the rule instead of 40 */
+    opacity: 0.7;
+  }
+  .contact-form_error { color: var(--color--sandy-brown); margin-top: -1.5rem; }
+
+  .contact-form_success {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 30rem;
+  }
+  .contact-form_form[hidden],
+  .contact-form_success[hidden],
+  .contact-form_error[hidden] { display: none; }
+</style>

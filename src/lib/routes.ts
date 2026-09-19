@@ -10,6 +10,6 @@ export const routes = {
   sourcing: `${base}/home#sourcing`,
   process: `${base}/home#process`,
   about: `${base}/home#about`,
-  contact: `${base}/home#contact`,
+  contact: `${base}/contact`,
   privacy: `${base}/privacy`,
 };

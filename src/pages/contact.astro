@@ -1,0 +1,66 @@
+---
+/**
+ * Contact page — Figma "Contact Page" (144:277).
+ */
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Lines from '../components/Lines.astro';
+import ContactForm from '../components/ContactForm.astro';
+import Footer from '../components/Footer.astro';
+import SmallScreenNotice from '../components/SmallScreenNotice.astro';
+---
+
+<Layout
+  title="Contact — Crestloom Textile"
+  description="Share the product category, intended quantities, target market and timeline. We’ll begin with the right questions and shape the next steps together."
+>
+  <SmallScreenNotice />
+
+  <div class="desktop-only">
+    <Navbar theme="dark" />
+
+    <section class="contact padding-global" id="contact" data-reveal-section>
+      <div class="container-large contact_inner">
+        <div class="contact_copy" data-reveal-group>
+          <div class="contact_heading-block">
+            <Lines class="text-style-tagline text-color-sandy-brown" lines={['Contact']} />
+            <Lines tag="h1" class="heading-style-h2" lines={['Let’s begin', 'with the brief.']} />
+          </div>
+          <p class="text-size-large contact_intro" data-reveal>
+            Share the product category, intended quantities, target market and timeline. We’ll begin with the right questions and shape the next steps together.
+          </p>
+        </div>
+
+        <ContactForm />
+      </div>
+    </section>
+
+    <Footer />
+  </div>
+</Layout>
+
+<style>
+  .contact {
+    background-color: var(--color--offwhite);
+    padding-top: 12.5rem;             /* 100 navbar + 100 */
+    padding-bottom: 7.5rem;           /* 120 */
+  }
+  .contact_inner {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+  .contact_copy {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;                        /* 48 */
+    width: 32.5rem;                   /* 520 */
+  }
+  .contact_heading-block {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;                      /* 24 */
+  }
+  .contact_intro { width: 30rem; }    /* 480 */
+</style>

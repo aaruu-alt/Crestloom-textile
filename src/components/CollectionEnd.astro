@@ -2,12 +2,13 @@
 /** "Looking for something more specific?" — closes every collection grid state (Figma "All / End of Collection"). */
 import Lines from './Lines.astro';
 import Button from './Button.astro';
+import { routes } from '../lib/routes';
 ---
 
 <div class="collection-end" data-reveal-group>
   <Lines tag="h2" class="heading-style-h3" lines={['Looking for something more specific?']} />
   <p class="text-size-regular" data-reveal>If you need a custom product or cannot find the right fit, tell us what you’re looking for.</p>
-  <Button href="mailto:info@crestloom.in" variant="filled-gold" icon={false} data-reveal>Start a conversation</Button>
+  <Button href={routes.contact} variant="filled-gold" icon={false} data-reveal>Start a conversation</Button>
 </div>
 
 <style>
