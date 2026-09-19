@@ -96,6 +96,26 @@ const isActive = (href: string) => {
       gsap.to(nav, { y: 0, opacity: 1, duration: 1, delay: 0.2 });
     }
 
+    // --- Scroll-spy: anchor links to sections on this page get aria-current while in view ---
+    const here = location.pathname.replace(/\/$/, '');
+    const anchorLinks = [...nav.querySelectorAll<HTMLAnchorElement>('.navbar_link[href*="#"]')];
+    const byHash = new Map<string, HTMLAnchorElement[]>();
+    anchorLinks.forEach((a) => {
+      const url = new URL(a.href);
+      if (url.pathname.replace(/\/$/, '') !== here || !url.hash) return;
+      byHash.set(url.hash.slice(1), [...(byHash.get(url.hash.slice(1)) ?? []), a]);
+    });
+    byHash.forEach((links, id) => {
+      const target = document.getElementById(id);
+      if (!target) return;
+      ScrollTrigger.create({
+        trigger: target,
+        start: 'top 50%',
+        end: 'bottom 50%',
+        onToggle: (self) => links.forEach((a) => self.isActive ? a.setAttribute('aria-current', 'location') : a.removeAttribute('aria-current')),
+      });
+    });
+
     // --- Mobile menu toggle ---
     const toggle = nav.querySelector<HTMLButtonElement>('.navbar_toggle');
     const menu = nav.querySelector<HTMLElement>('.navbar_menu');

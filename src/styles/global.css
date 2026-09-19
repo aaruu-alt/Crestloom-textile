@@ -48,6 +48,7 @@
 */
 html {
   font-size: 1.111vw;            /* 16 / 1440 */
+  scroll-padding-top: 5.875rem;  /* anchors land below the fixed navbar (94) */
 }
 @media (min-width: 1600px) {
   html { font-size: 17.778px; }  /* 1600 × 1.111% — stop growing */
@@ -180,7 +181,7 @@ h1, h2, h3, h4, h5, h6, p { overflow-wrap: break-word; }
 }
 .text-link:hover::after,
 .text-link:focus-visible::after,
-.text-link[aria-current='page']::after {
+.text-link[aria-current]::after {
   transform: scaleX(1);
   transform-origin: left;
 }
