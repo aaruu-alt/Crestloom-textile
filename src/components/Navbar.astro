@@ -90,6 +90,11 @@ const isActive = (href: string) => {
     });
     setSolid(trigger.isActive, true);
 
+    // --- Load: drop in (the hero timeline does this on pages that have one) ---
+    if (!document.querySelector('.hero')) {
+      gsap.to(nav, { y: 0, opacity: 1, duration: 1, delay: 0.2 });
+    }
+
     // --- Mobile menu toggle ---
     const toggle = nav.querySelector<HTMLButtonElement>('.navbar_toggle');
     const menu = nav.querySelector<HTMLElement>('.navbar_menu');
@@ -113,6 +118,10 @@ const isActive = (href: string) => {
     align-items: center;
     justify-content: space-between;
     padding: 1.25rem 3.5rem 1rem;     /* 20 top / 56 sides / 16 bottom */
+  }
+  :global(html.js) .navbar { opacity: 0; transform: translateY(-0.75rem); }
+  @media (prefers-reduced-motion: reduce) {
+    :global(html.js) .navbar { opacity: 1; transform: none; }
   }
   .navbar.is-light {
     color: var(--color--offwhite);

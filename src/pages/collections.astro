@@ -1,4 +1,5 @@
 ---
+import Lines from '../components/Lines.astro';
 /**
  * Collections page — Figma "Collection Grid / All Filter" (162:105) and
  * "Collection Page" (135:176).
@@ -24,8 +25,8 @@ import SmallScreenNotice from '../components/SmallScreenNotice.astro';
       <div class="container-large collection_inner">
         <header class="collection_header" data-reveal-group>
           <div class="collection_heading-block">
-            <p class="text-style-tagline text-color-sandy-brown" data-reveal>The collection</p>
-            <h1 class="heading-style-h1" data-reveal>Objects for living,<br />chosen with intention.</h1>
+            <Lines class="text-style-tagline text-color-sandy-brown" lines={['The collection']} />
+            <Lines tag="h1" class="heading-style-h1" lines={['Objects for living,', 'chosen with intention.']} />
           </div>
           <p class="text-size-large collection_intro" data-reveal>
             Explore rugs, living textiles and linen through a changing edit of texture, material and craft.

@@ -1,4 +1,5 @@
 ---
+import Lines from './Lines.astro';
 /**
  * Principles — Figma "About / Principles" (146:628), 1440 × 645.
  */
@@ -12,8 +13,8 @@ const principles = [
 <section class="principles padding-global padding-section-large" id="process" data-reveal-section>
   <div class="container-large principles_inner">
     <div class="principles_heading-block" data-reveal-group>
-      <p class="text-style-tagline text-color-sandy-brown" data-reveal>Our process</p>
-      <h2 class="heading-style-h1" data-reveal>A clearer way to source.</h2>
+      <Lines class="text-style-tagline text-color-sandy-brown" lines={['Our process']} />
+      <Lines tag="h2" class="heading-style-h1" lines={['A clearer way to source.']} />
     </div>
 
     <ol class="principles_grid" data-reveal-group>

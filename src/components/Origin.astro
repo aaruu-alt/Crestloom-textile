@@ -1,4 +1,5 @@
 ---
+import Lines from './Lines.astro';
 /**
  * Origin — Figma "Origin" (123:63), 1440 × 685.
  * Full-bleed image; copy block right-aligned to the container, 134 from top.
@@ -20,8 +21,8 @@ import panipat from '../assets/origin-panipat.png';
     <div class="container-large origin_inner">
       <div class="origin_copy" data-reveal-group>
         <div class="origin_heading-block">
-          <p class="text-style-tagline text-color-sandy-gold" data-reveal>Our origin</p>
-          <h2 class="heading-style-h2 origin_heading" data-reveal>Rooted in a city<br />woven through craft.</h2>
+          <Lines class="text-style-tagline text-color-sandy-gold" lines={['Our origin']} />
+          <Lines tag="h2" class="heading-style-h2 origin_heading" lines={['Rooted in a city', 'woven through craft.']} />
         </div>
         <p class="text-size-large origin_intro" data-reveal>
           Crestloom Textile begins in Panipat, where textiles are part of the city’s working rhythm. While the company is new, it is informed by a family familiar with manufacturing and the practical decisions behind making.

@@ -1,58 +1,84 @@
 /**
- * Scroll reveals — one-shot, compositor-only (opacity + transform).
+ * Reveals — one-shot, compositor-only (opacity + transform).
  *
  * Opt in per section with `data-reveal-section`. Inside it:
- *   data-reveal        → element fades up when it enters the viewport
- *   data-reveal-group  → its [data-reveal] children stagger as one
+ *   data-reveal          → fades up when it enters the viewport
+ *   data-reveal="lines"  → its .lines_inner children slide up out of masks
+ *   data-reveal-group    → its [data-reveal] children stagger as one
  *
- * Start state lives in CSS (global.css, under html.js); this only animates
- * to the end state and then hands control back via `.is-revealed`.
+ * Anything already in the viewport on load plays in one staggered load
+ * timeline (navbar → lines → the rest); everything else waits for scroll.
+ * Start states live in CSS (global.css / Lines.astro, under html.js).
  */
 import { gsap, ScrollTrigger, reducedMotion } from './motion';
 
-const END = { y: 0, opacity: 1, duration: 1.1, ease: 'apple' };
+const FADE = { y: 0, opacity: 1, duration: 1.1 };
+const LINE = { y: 0, duration: 1.1 };
 const START_AT = 'clamp(top 85%)';   // clamp: triggers near the page end still fire
 
+const isLines = (el: Element) => el.getAttribute('data-reveal') === 'lines';
+const linesOf = (el: Element) => [...el.querySelectorAll('.lines_inner')];
+
 function finish(targets: Element[]) {
-  targets.forEach((el) => el.classList.add('is-revealed'));
-  gsap.set(targets, { clearProps: 'transform,opacity' });
+  targets.forEach((el) => {
+    el.classList.add('is-revealed');
+    gsap.set(isLines(el) ? linesOf(el) : el, { clearProps: 'transform,opacity' });
+  });
 }
 
-function reveal(targets: Element[], stagger = 0) {
-  gsap.to(targets, { ...END, stagger, onComplete: () => finish(targets) });
+/** Adds the reveal tweens for `items` to `tl` at `at`, staggered. Returns end time. */
+function add(tl: gsap.core.Timeline, items: Element[], at: number, stagger = 0.12) {
+  let t = at;
+  items.forEach((el) => {
+    if (isLines(el)) {
+      const lines = linesOf(el);
+      tl.to(lines, { ...LINE, stagger: 0.14, onComplete: () => finish([el]) }, t);
+      t += 0.14 * lines.length;
+    } else {
+      tl.to(el, { ...FADE, onComplete: () => finish([el]) }, t);
+      t += stagger;
+    }
+  });
+  return t;
 }
 
 export function initReveals(root: ParentNode = document) {
-  const sections = root.querySelectorAll('[data-reveal-section]');
+  const sections = [...root.querySelectorAll('[data-reveal-section]')];
   if (!sections.length) return;
 
-  if (reducedMotion) {
-    sections.forEach((s) => finish([...s.querySelectorAll('[data-reveal]')]));
-    return;
+  const all = sections.flatMap((s) => [...s.querySelectorAll('[data-reveal]')]);
+  if (reducedMotion) { finish(all); return; }
+
+  // ---- Load: everything already on screen, in document order ----
+  const inView = all.filter((el) => {
+    const r = el.getBoundingClientRect();
+    return r.top < window.innerHeight * 0.95 && r.bottom > 0 && !el.closest('[hidden]');
+  });
+  const onScroll = all.filter((el) => !inView.includes(el));
+
+  if (inView.length) {
+    const tl = gsap.timeline({ delay: 0.3 });
+    add(tl, inView.filter(isLines), 0);
+    add(tl, inView.filter((el) => !isLines(el)), 0.25, 0.08);
   }
 
+  // ---- Scroll: the rest, grouped or single ----
+  const handled = new Set<Element>();
   sections.forEach((section) => {
-    // Groups: stagger children together
     section.querySelectorAll('[data-reveal-group]').forEach((group) => {
-      const items = [...group.querySelectorAll('[data-reveal]')];
+      const items = [...group.querySelectorAll('[data-reveal]')].filter((el) => onScroll.includes(el));
       if (!items.length) return;
+      items.forEach((el) => handled.add(el));
       ScrollTrigger.create({
-        trigger: group,
-        start: START_AT,
-        once: true,
-        onEnter: () => reveal(items, 0.12),
+        trigger: group, start: START_AT, once: true,
+        onEnter: () => add(gsap.timeline(), items, 0),
       });
     });
-
-    // Singles: anything with data-reveal not inside a group
-    section.querySelectorAll('[data-reveal]').forEach((el) => {
-      if (el.closest('[data-reveal-group]')) return;
-      ScrollTrigger.create({
-        trigger: el,
-        start: START_AT,
-        once: true,
-        onEnter: () => reveal([el]),
-      });
+  });
+  onScroll.filter((el) => !handled.has(el)).forEach((el) => {
+    ScrollTrigger.create({
+      trigger: el, start: START_AT, once: true,
+      onEnter: () => add(gsap.timeline(), [el], 0),
     });
   });
 }

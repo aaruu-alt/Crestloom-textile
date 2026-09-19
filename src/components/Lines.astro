@@ -1,0 +1,40 @@
+---
+/**
+ * Lines — text split into masked lines for the slide-up reveal
+ * (same mechanism as the hero). Each line sits in an overflow-hidden mask.
+ *
+ *   <Lines tag="h2" class="heading-style-h2" lines={['A considered path', 'to the right product.']} />
+ *
+ * Add `data-reveal="lines"` (default) so reveal.ts animates the masks.
+ */
+interface Props {
+  tag?: string;
+  lines: string[];
+  class?: string;
+  [key: string]: unknown;
+}
+const { tag = 'p', lines, class: className, ...rest } = Astro.props;
+const Tag = tag;
+---
+
+<Tag class:list={['lines', className]} data-reveal="lines" {...rest}>
+  {lines.map((line) => (
+    <span class="lines_mask"><span class="lines_inner" set:html={line} /></span>
+  ))}
+</Tag>
+
+<style is:global>
+  .lines_mask {
+    display: block;
+    overflow: hidden;
+    /* room for italic overhang + descenders, pulled back so layout is unchanged */
+    padding: 0.05em 0.15em 0.2em 0.1em;
+    margin: -0.05em -0.15em -0.2em -0.1em;
+  }
+  .lines_inner { display: block; }
+  html.js [data-reveal-section] [data-reveal='lines'] .lines_inner { transform: translateY(130%); }
+  html.js [data-reveal-section] [data-reveal='lines'].is-revealed .lines_inner { transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    html.js [data-reveal-section] [data-reveal='lines'] .lines_inner { transform: none; }
+  }
+</style>
