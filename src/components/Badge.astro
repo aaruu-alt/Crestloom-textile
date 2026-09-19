@@ -1,9 +1,9 @@
 ---
 /** Badge — small offwhite label used on imagery ("THROW", "01 / LIVING"). */
-interface Props { class?: string }
-const { class: className } = Astro.props;
+interface Props { class?: string; size?: 'sm' | 'md' }
+const { class: className, size = 'sm' } = Astro.props;
 ---
-<span class:list={['text-style-tagline-xs', 'badge', className]}><slot /></span>
+<span class:list={[size === 'md' ? 'text-style-tagline' : 'text-style-tagline-xs', 'badge', className]}><slot /></span>
 
 <style>
   .badge {

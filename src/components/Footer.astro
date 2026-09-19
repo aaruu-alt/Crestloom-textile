@@ -3,17 +3,17 @@
  * Footer — Figma "Footer" component (144:254), 1440 × 406.
  */
 import Wordmark from './Wordmark.astro';
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+import { routes } from '../lib/routes';
 const year = new Date().getFullYear();
 
 const columns = [
   [
-    { label: 'Collections', href: `${base}/#collections` },
-    { label: 'Sourcing', href: `${base}/#sourcing` },
+    { label: 'Collections', href: routes.collections },
+    { label: 'Sourcing', href: routes.sourcing },
   ],
   [
-    { label: 'About', href: `${base}/#about` },
-    { label: 'Contact', href: `${base}/#contact` },
+    { label: 'About', href: routes.about },
+    { label: 'Contact', href: routes.contact },
   ],
 ];
 ---
@@ -21,7 +21,7 @@ const columns = [
 <footer class="footer padding-global" data-reveal-section>
   <div class="container-large footer_inner">
     <div class="footer_top" data-reveal-group>
-      <Wordmark href={`${base}/`} class="footer_brand" data-reveal />
+      <Wordmark href={routes.home} class="footer_brand" data-reveal />
       <nav class="footer_nav" aria-label="Footer">
         {columns.map((links) => (
           <ul class="footer_column" data-reveal>
@@ -40,7 +40,7 @@ const columns = [
         <a href="mailto:info@crestloom.in" class="footer_small text-link">info@crestloom.in</a>
         <div class="footer_legal">
           <p class="footer_small">All rights reserved</p>
-          <a href={`${base}/privacy`} class="text-style-nav footer_privacy">Privacy</a>
+          <a href={routes.privacy} class="text-style-nav footer_privacy">Privacy</a>
         </div>
       </div>
     </div>

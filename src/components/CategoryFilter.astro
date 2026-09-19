@@ -1,0 +1,109 @@
+---
+/**
+ * CategoryFilter — Figma "Collection Page / Category Filter" (140:209).
+ * Fixed to the viewport bottom while the grid is on screen. Switches the
+ * rendered grid state and mirrors the choice in ?category=.
+ */
+import { categories } from '../data/collection';
+const options = [{ slug: 'all', name: 'All' }, ...categories];
+---
+
+<nav class="category-filter" aria-label="Filter by category">
+  <span class="category-filter_active" aria-hidden="true"></span>
+  {options.map((o, i) => (
+    <button type="button" class="text-style-button category-filter_option" data-category={o.slug} aria-pressed={i === 0 ? 'true' : 'false'}>
+      {o.name}
+    </button>
+  ))}
+</nav>
+
+<script>
+  import { gsap, ScrollTrigger } from '../scripts/motion';
+
+  const bar = document.querySelector<HTMLElement>('.category-filter');
+  const grid = document.getElementById('collection-grid');
+  if (bar && grid) {
+    const options = [...bar.querySelectorAll<HTMLButtonElement>('.category-filter_option')];
+    const active = bar.querySelector<HTMLElement>('.category-filter_active')!;
+    const states = [...grid.querySelectorAll<HTMLElement>('.collection-grid_state')];
+
+    // --- Active indicator follows the selected option ---
+    const moveIndicator = (btn: HTMLElement, instant = false) => {
+      const x = btn.offsetLeft;
+      const w = btn.offsetWidth;
+      instant ? gsap.set(active, { x, width: w }) : gsap.to(active, { x, width: w, duration: 0.6 });
+    };
+
+    const select = (slug: string, { push = true, instant = false } = {}) => {
+      const btn = options.find((o) => o.dataset.category === slug) ?? options[0];
+      slug = btn.dataset.category!;
+      options.forEach((o) => o.setAttribute('aria-pressed', String(o === btn)));
+      moveIndicator(btn, instant);
+      states.forEach((s) => (s.hidden = s.dataset.category !== slug));
+      ScrollTrigger.refresh();
+      if (push) {
+        const url = new URL(location.href);
+        slug === 'all' ? url.searchParams.delete('category') : url.searchParams.set('category', slug);
+        history.replaceState(null, '', url);
+      }
+    };
+
+    options.forEach((o) => o.addEventListener('click', () => select(o.dataset.category!)));
+    select(new URLSearchParams(location.search).get('category') ?? 'all', { push: false, instant: true });
+    window.addEventListener('resize', () => moveIndicator(options.find((o) => o.getAttribute('aria-pressed') === 'true')!, true));
+
+    // --- Show only while the grid is on screen ---
+    gsap.set(bar, { y: 24, opacity: 0 });
+    ScrollTrigger.create({
+      trigger: grid,
+      start: 'top bottom-=120',
+      end: 'bottom bottom-=120',
+      onToggle: (self) => gsap.to(bar, { y: self.isActive ? 0 : 24, opacity: self.isActive ? 1 : 0, duration: 0.5 }),
+    });
+
+    // --- Infinite grid: reveal the next batch of 14 as the sentinel approaches ---
+    const sentinel = grid.querySelector('.collection-grid_sentinel');
+    const batches = [...grid.querySelectorAll<HTMLElement>('.collection-grid_batch')];
+    if (sentinel && batches.length > 1) {
+      const io = new IntersectionObserver((entries) => {
+        if (!entries[0].isIntersecting) return;
+        const next = batches.find((b) => b.hidden);
+        if (next) { next.hidden = false; ScrollTrigger.refresh(); }
+        else io.disconnect();
+      }, { rootMargin: '600px 0px' });
+      io.observe(sentinel);
+    }
+  }
+</script>
+
+<style>
+  .category-filter {
+    position: fixed;
+    left: 50%;
+    bottom: 2rem;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;                      /* 24 */
+    padding: 0.5rem;                  /* 8 */
+    border-radius: 2px;
+    background-color: var(--color--cyan-blue);
+    transform: translateX(-50%);
+  }
+  .category-filter_active {
+    position: absolute;
+    top: 0.5rem;
+    left: 0;
+    height: calc(100% - 1rem);
+    width: 5.75rem;
+    background-color: var(--color--offwhite);
+  }
+  .category-filter_option {
+    position: relative;
+    width: 5.75rem;                   /* 92 */
+    padding: 1rem 0.875rem;           /* 16 / 14 */
+    color: var(--color--offwhite);
+    transition: color 500ms var(--ease--apple);
+  }
+  .category-filter_option[aria-pressed='true'] { color: var(--color--charcoal-black); }
+</style>

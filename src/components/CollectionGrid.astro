@@ -1,0 +1,145 @@
+---
+/**
+ * CollectionGrid — Figma "All Filter / Infinite Grid" (162:111) and the
+ * filtered grid (144:250). Every state is rendered at build; the filter
+ * script shows one at a time. "All" is split into batches of 14 that reveal
+ * as you scroll (images are lazy, so hidden batches cost nothing).
+ */
+import ProductCard from './ProductCard.astro';
+import Button from './Button.astro';
+import { categories, products, lifestyle, type Product, type Lifestyle } from '../data/collection';
+
+const LIFESTYLE_WIDTHS = [644, 872, 1288, 1744];
+const LIFESTYLE_SIZES = '(min-width: 992px) 45vw, 100vw';
+
+/* ---- "All": repeating 4 · L+2 · 2+L · 4 (12 products + 2 lifestyle per batch) ---- */
+const largeLifestyle = lifestyle.filter((l) => /-l\d$/.test(l.id));
+type AllBatch = { rows: Array<{ kind: 'four' | 'lifestyle-left' | 'lifestyle-right'; items: (Product | Lifestyle)[] }> };
+const allBatches: AllBatch[] = [];
+{
+  const ps = [...products];
+  const ls = [...largeLifestyle];
+  while (ps.length) {
+    const take = (n: number) => ps.splice(0, n);
+    const life = () => ls.shift() ?? largeLifestyle[0];
+    const rows: AllBatch['rows'] = [];
+    rows.push({ kind: 'four', items: take(4) });
+    if (ps.length) rows.push({ kind: 'lifestyle-left', items: [life(), ...take(2)] });
+    if (ps.length) rows.push({ kind: 'lifestyle-right', items: [...take(2), life()] });
+    if (ps.length) rows.push({ kind: 'four', items: take(4) });
+    allBatches.push({ rows });
+  }
+}
+
+/* ---- Per category: 3 · L + 2 small · 3 · 3 ---- */
+const byCategory = categories.map((c) => {
+  const ps = products.filter((p) => p.category === c.slug);
+  const ls = lifestyle.filter((l) => l.category === c.slug);
+  return {
+    ...c,
+    rows: [
+      { kind: 'three-500', items: ps.slice(0, 3) },
+      { kind: 'feature', large: ls.find((l) => /-l\d$/.test(l.id)), small: ls.filter((l) => /-s\d$/.test(l.id)).slice(0, 2) },
+      { kind: 'three', items: ps.slice(3, 6) },
+      { kind: 'three', items: ps.slice(6, 9) },
+    ],
+  };
+});
+---
+
+<div class="collection-grid" id="collection-grid">
+  <!-- All -->
+  <div class="collection-grid_state" data-category="all">
+    {allBatches.map((batch, b) => (
+      <div class="collection-grid_batch" data-batch={b} hidden={b > 0}>
+        {batch.rows.map((row) => (
+          <div class:list={['collection-grid_row', `is-${row.kind}`]} data-reveal-group>
+            {row.items.map((item) => (
+              <ProductCard
+                image={item.image} alt={item.alt} label={item.label} category={item.category}
+                widths={'id' in item && /-l\d$/.test(item.id) ? LIFESTYLE_WIDTHS : undefined}
+                sizes={'id' in item && /-l\d$/.test(item.id) ? LIFESTYLE_SIZES : undefined}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
+    ))}
+    <div class="collection-grid_sentinel" aria-hidden="true"></div>
+
+    <div class="collection-grid_end" data-reveal-group>
+      <h2 class="heading-style-h3" data-reveal>Looking for something more specific?</h2>
+      <p class="text-size-regular" data-reveal>If you need a custom product or cannot find the right fit, tell us what you’re looking for.</p>
+      <Button href="mailto:info@crestloom.in" variant="filled-gold" icon={false} data-reveal>Start a conversation</Button>
+    </div>
+  </div>
+
+  <!-- Per category -->
+  {byCategory.map((c) => (
+    <div class="collection-grid_state" data-category={c.slug} hidden>
+      {c.rows.map((row) =>
+        row.kind === 'feature' ? (
+          <div class="collection-grid_row is-feature" data-reveal-group>
+            {row.large && <ProductCard {...row.large} widths={LIFESTYLE_WIDTHS} sizes={LIFESTYLE_SIZES} class="is-feature-large" />}
+            <div class="collection-grid_stack">
+              {row.small.map((s) => <ProductCard {...s} />)}
+            </div>
+          </div>
+        ) : (
+          <div class:list={['collection-grid_row', `is-${row.kind}`]} data-reveal-group>
+            {row.items.map((item) => <ProductCard {...item} />)}
+          </div>
+        )
+      )}
+    </div>
+  ))}
+</div>
+
+<style>
+  .collection-grid_state,
+  .collection-grid_batch {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;                      /* 40 */
+  }
+  .collection-grid_state[hidden],
+  .collection-grid_batch[hidden] { display: none; }
+
+  .collection-grid_row {
+    display: flex;
+    gap: 2.5rem;                      /* 40 */
+  }
+  .collection-grid_row > :global(.product-card) { flex: 1 1 0; }
+
+  /* --- All: 4 products (320) · lifestyle 644 + 2 (420) · 2 + lifestyle (420) --- */
+  .is-four            { height: 20rem; }     /* 320 */
+  .is-lifestyle-left,
+  .is-lifestyle-right { height: 26.25rem; }  /* 420 */
+  .is-lifestyle-left  > :global(.product-card:first-child),
+  .is-lifestyle-right > :global(.product-card:last-child) { flex: 0 0 40.25rem; }   /* 644 */
+
+  /* --- Category: 3 (500) · 872 + stack of 300s · 3 (520) --- */
+  .is-three-500 { height: 31.25rem; }        /* 500 */
+  .is-three     { height: 32.5rem; }         /* 520 */
+  .is-feature   { height: 40rem; }           /* 640 */
+  .is-feature > :global(.is-feature-large) { flex: 0 0 54.5rem; }   /* 872 */
+  .collection-grid_stack {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;                      /* 40 */
+  }
+  .collection-grid_stack > :global(.product-card) { flex: 1 1 0; }
+
+  /* --- End of collection --- */
+  .collection-grid_end {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;                      /* 24 */
+    padding-top: 2.5rem;              /* 40 */
+    text-align: center;
+  }
+  .collection-grid_end h2 { max-width: 47.5rem; }   /* 760 */
+  .collection-grid_end p  { max-width: 38.75rem; }  /* 620 */
+</style>

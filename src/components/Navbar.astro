@@ -4,6 +4,7 @@
  * `theme="light"` = offwhite text for use over dark imagery (hero).
  */
 import Wordmark from './Wordmark.astro';
+import { routes } from '../lib/routes';
 
 interface Props {
   theme?: 'light' | 'dark';
@@ -12,13 +13,13 @@ const { theme = 'light' } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const left = [
-  { label: 'Collections', href: `${base}/#collections` },
-  { label: 'Sourcing', href: `${base}/#sourcing` },
-  { label: 'Our process', href: `${base}/#process` },
+  { label: 'Collections', href: routes.collections },
+  { label: 'Sourcing', href: routes.sourcing },
+  { label: 'Our process', href: routes.process },
 ];
 const right = [
-  { label: 'About', href: `${base}/#about` },
-  { label: 'Contact', href: `${base}/#contact` },
+  { label: 'About', href: routes.about },
+  { label: 'Contact', href: routes.contact },
 ];
 
 /** Mark a link active when its path (ignoring #hash) matches the current page. */
@@ -34,7 +35,7 @@ const isActive = (href: string) => {
     {left.map((l) => <a href={l.href} class="text-style-nav text-link navbar_link" aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
   </nav>
 
-  <Wordmark href={`${base}/`} class="navbar_brand" />
+  <Wordmark href={routes.home} class="navbar_brand" />
 
   <nav class="navbar_right" aria-label="Secondary">
     {right.map((l) => <a href={l.href} class="text-style-nav text-link navbar_link" aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
@@ -58,11 +59,13 @@ const isActive = (href: string) => {
     const styles = getComputedStyle(document.documentElement);
     const token = (name: string) => styles.getPropertyValue(name).trim();
 
+    // Dark theme (pages without a hero): text is charcoal from the start.
+    const dark = nav.classList.contains('is-dark');
     const transparent = {
       backgroundColor: 'rgba(246, 245, 242, 0)',
-      color: token('--color--offwhite'),
-      '--wordmark-color': token('--color--offwhite'),
-      '--wordmark-accent': token('--color--sandy-gold'),
+      color: token(dark ? '--color--charcoal-black' : '--color--offwhite'),
+      '--wordmark-color': token(dark ? '--color--charcoal-black' : '--color--offwhite'),
+      '--wordmark-accent': token(dark ? '--color--sandy-brown' : '--color--sandy-gold'),
     };
     const solid = {
       backgroundColor: token('--color--offwhite'),

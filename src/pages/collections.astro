@@ -1,0 +1,68 @@
+---
+/**
+ * Collections page — Figma "Collection Grid / All Filter" (162:105) and
+ * "Collection Page" (135:176).
+ */
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import CollectionGrid from '../components/CollectionGrid.astro';
+import CategoryFilter from '../components/CategoryFilter.astro';
+import Footer from '../components/Footer.astro';
+import SmallScreenNotice from '../components/SmallScreenNotice.astro';
+---
+
+<Layout
+  title="The Collection — Crestloom Textile"
+  description="Explore rugs, living textiles and linen through a changing edit of texture, material and craft."
+>
+  <SmallScreenNotice />
+
+  <div class="desktop-only">
+    <Navbar theme="dark" />
+
+    <section class="collection padding-global" id="collections" data-reveal-section>
+      <div class="container-large collection_inner">
+        <header class="collection_header" data-reveal-group>
+          <div class="collection_heading-block">
+            <p class="text-style-tagline text-color-sandy-brown" data-reveal>The collection</p>
+            <h1 class="heading-style-h1" data-reveal>Objects for living,<br />chosen with intention.</h1>
+          </div>
+          <p class="text-size-large collection_intro" data-reveal>
+            Explore rugs, living textiles and linen through a changing edit of texture, material and craft.
+          </p>
+        </header>
+
+        <CollectionGrid />
+      </div>
+    </section>
+
+    <CategoryFilter />
+    <Footer />
+  </div>
+</Layout>
+
+<style>
+  .collection {
+    background-color: var(--color--offwhite);
+    padding-top: 12.5rem;             /* 100 navbar + 100 */
+    padding-bottom: 6.25rem;          /* 100 */
+  }
+  .collection_inner {
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;                        /* 80 */
+  }
+  .collection_header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+  .collection_heading-block {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;                      /* 24 */
+    width: 45rem;                     /* 720 */
+  }
+  .collection_intro { width: 31.5rem; }   /* 504 */
+</style>
