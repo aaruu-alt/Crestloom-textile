@@ -34,8 +34,10 @@ import SmallScreenNotice from '../components/SmallScreenNotice.astro';
           </p>
         </header>
 
-        <CollectionGrid />
-        <CategoryFilter />
+        <div class="collection_body">
+          <CollectionGrid />
+          <CategoryFilter />
+        </div>
       </div>
     </section>
 
@@ -69,4 +71,5 @@ import SmallScreenNotice from '../components/SmallScreenNotice.astro';
     width: 45rem;                     /* 720 */
   }
   .collection_intro { width: 31.5rem; }   /* 504 */
+  .collection_body { position: relative; }   /* the sticky filter's range = this box */
 </style>

@@ -8,6 +8,7 @@ import { categories } from '../data/collection';
 const options = [{ slug: 'all', name: 'All' }, ...categories];
 ---
 
+<div class="category-filter_dock">
 <nav class="category-filter" aria-label="Filter by category">
   <span class="category-filter_active" aria-hidden="true"></span>
   {options.map((o, i) => (
@@ -16,6 +17,7 @@ const options = [{ slug: 'all', name: 'All' }, ...categories];
     </button>
   ))}
 </nav>
+</div>
 
 <script>
   import { gsap, ScrollTrigger } from '../scripts/motion';
@@ -122,17 +124,22 @@ const options = [{ slug: 'all', name: 'All' }, ...categories];
 </script>
 
 <style>
-  /* Sticky inside the collection container: it can never sit over the footer. */
-  .category-filter {
+  /* Zero-height sticky dock at the end of the grid box: takes no space in the
+     flow, sticks while the grid is on screen, can never reach the footer. */
+  .category-filter_dock {
     position: sticky;
-    bottom: 2rem;
+    bottom: calc(2rem + 4.0625rem);   /* 32 gap + 65 bar height */
+    height: 0;
     z-index: 20;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;          /* don't stretch the bar to the dock's 0 height */
+  }
+  .category-filter {
     display: flex;
     align-items: center;
     gap: 1.5rem;                      /* 24 */
     padding: 0.5rem;                  /* 8 */
-    margin: -1.5rem auto 0;           /* overlaps the container's bottom padding, not the flow */
-    width: fit-content;
     border-radius: 2px;
     background-color: var(--color--cyan-blue);
   }
