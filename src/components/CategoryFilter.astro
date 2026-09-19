@@ -136,6 +136,7 @@ const options = [{ slug: 'all', name: 'All' }, ...categories];
     align-items: flex-start;          /* don't stretch the bar to the dock's 0 height */
   }
   .category-filter {
+    position: relative;             /* containing block for the indicator */
     display: flex;
     align-items: center;
     gap: 1.5rem;                      /* 24 */
