@@ -1,0 +1,157 @@
+---
+/**
+ * Privacy page — no Figma frame; typographic page in the site system.
+ * Copy reflects the site as built: enquiry + catalogue forms (Supabase), no analytics, no cookies.
+ * DRAFT — review with legal counsel before launch.
+ */
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Lines from '../components/Lines.astro';
+import Footer from '../components/Footer.astro';
+import SmallScreenNotice from '../components/SmallScreenNotice.astro';
+
+const updated = '19 September 2026';
+
+const sections = [
+  {
+    title: 'Who we are',
+    body: [
+      'Crestloom Textile (“Crestloom”, “we”, “us”) is a textile sourcing company based in Panipat, India. This policy explains what personal information we collect through this website, why we collect it, and the choices you have.',
+      'If you have any questions about this policy or your information, write to us at <a href="mailto:info@crestloom.in">info@crestloom.in</a>.',
+    ],
+  },
+  {
+    title: 'What we collect',
+    body: [
+      'We only collect information you choose to give us through two forms on this site:',
+      '<strong>Enquiry form</strong> — your first name, company, email address and message.',
+      '<strong>Catalogue request</strong> — your name, email address and the product category you were viewing.',
+      'Alongside each submission we record the date and time, and technical signals used to filter automated spam (for example, how quickly the form was completed). We do not collect payment details, government identifiers or any special categories of personal data.',
+    ],
+  },
+  {
+    title: 'How we use it',
+    body: [
+      'We use the information you send us to respond to your enquiry, to send you the catalogue you requested, and to follow up on that conversation. We may also use it to keep records of our business relationship with you.',
+      'We do not sell your information, use it for advertising, or share it with third parties for their own marketing.',
+    ],
+  },
+  {
+    title: 'Our legal basis',
+    body: [
+      'Where data protection law requires a legal basis, we rely on our legitimate interest in responding to business enquiries and, where you have asked us for something specific such as a catalogue, on the steps needed to act on your request. For visitors in the European Economic Area and the United Kingdom this is set out in the GDPR and UK GDPR; in India we act in accordance with the Digital Personal Data Protection Act, 2023.',
+    ],
+  },
+  {
+    title: 'Where it is stored and who can see it',
+    body: [
+      'Form submissions are stored in a database hosted by Supabase, our infrastructure provider, and are accessible only to the Crestloom team. The website itself is hosted by GitHub Pages. These providers process data on our behalf under their own security and privacy commitments.',
+      'Because our providers operate internationally, your information may be stored or processed outside the country you are in. Where required, we rely on the safeguards those providers offer for international transfers.',
+    ],
+  },
+  {
+    title: 'How long we keep it',
+    body: [
+      'We keep enquiry and catalogue-request details for as long as the conversation is active and for up to three years afterwards, so that we can refer back to earlier discussions if you return to us. You can ask us to delete your details sooner at any time.',
+    ],
+  },
+  {
+    title: 'Cookies and analytics',
+    body: [
+      'This website does not use analytics services, advertising trackers or third-party cookies. Any data the site keeps in your browser is limited to what is technically needed for the page to work and is not used to identify you.',
+      'If we introduce analytics in future, we will update this policy and, where the law requires it, ask for your consent first.',
+    ],
+  },
+  {
+    title: 'Your rights',
+    body: [
+      'Depending on where you live, you may have the right to ask for a copy of the information we hold about you, to have it corrected or deleted, to object to or restrict how we use it, and to receive it in a portable format. To exercise any of these rights, email <a href="mailto:info@crestloom.in">info@crestloom.in</a>. We will respond within the time the law requires, and in any case within 30 days.',
+      'If you are unhappy with how we have handled your information, you also have the right to complain to the data protection authority in your country.',
+    ],
+  },
+  {
+    title: 'Changes to this policy',
+    body: [
+      'We may update this policy as the website or our services change. The date at the top of this page shows when it was last revised. Significant changes will be highlighted here.',
+    ],
+  },
+];
+---
+
+<Layout title="Privacy — Crestloom Textile" description="How Crestloom Textile collects, uses and protects the information you share through this website.">
+  <SmallScreenNotice />
+
+  <div class="desktop-only">
+    <Navbar theme="dark" />
+
+    <section class="privacy padding-global" data-reveal-section>
+      <div class="container-large privacy_inner">
+        <header class="privacy_header" data-reveal-group>
+          <Lines class="text-style-tagline text-color-sandy-brown" lines={['Privacy']} />
+          <Lines tag="h1" class="heading-style-h1" lines={['How we handle', 'your information.']} />
+          <p class="text-size-small privacy_updated" data-reveal>Last updated {updated}</p>
+        </header>
+
+        <div class="privacy_body">
+          {sections.map((s) => (
+            <section class="privacy_section" data-reveal-group>
+              <h2 class="heading-style-h4" data-reveal>{s.title}</h2>
+              <div class="privacy_text" data-reveal>
+                {s.body.map((p) => <p class="text-size-regular" set:html={p} />)}
+              </div>
+            </section>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <Footer />
+  </div>
+</Layout>
+
+<style>
+  .privacy {
+    background-color: var(--color--offwhite);
+    padding-top: 12.5rem;             /* 100 navbar + 100 */
+    padding-bottom: 7.5rem;           /* 120 */
+  }
+  .privacy_inner {
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;                        /* 80 */
+  }
+  .privacy_header {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;                      /* 24 */
+    width: 45rem;                     /* 720 */
+  }
+  .privacy_updated { opacity: 0.7; }
+
+  .privacy_body {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;                        /* 64 */
+    width: 45rem;                     /* 720 */
+    margin-left: 24.5rem;             /* sits in the right two-thirds, like the intro columns elsewhere */
+  }
+  .privacy_section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;                     /* 20 */
+    padding-top: 2rem;                /* 32 */
+    border-top: 1px solid rgb(40 40 42 / 0.18);
+  }
+  .privacy_text {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    opacity: 0.85;
+  }
+  .privacy_text :global(a) {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+    transition: opacity 400ms var(--ease--apple);
+  }
+  .privacy_text :global(a:hover) { opacity: 0.6; }
+</style>
