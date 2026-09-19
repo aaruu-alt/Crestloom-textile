@@ -4,12 +4,12 @@ import Lines from './Lines.astro';
  * Origin — Figma "Origin" (123:63), 1440 × 685.
  * Full-bleed image; copy block right-aligned to the container, 134 from top.
  */
-import { Image } from 'astro:assets';
+import BlurImage from './BlurImage.astro';
 import panipat from '../assets/origin-panipat.png';
 ---
 
 <section class="origin" id="about" data-reveal-section>
-  <Image
+  <BlurImage
     src={panipat}
     alt="Historic domed monument in Panipat at sunrise"
     class="origin_image"
@@ -40,13 +40,11 @@ import panipat from '../assets/origin-panipat.png';
     color: var(--color--offwhite);
     overflow: clip;
   }
-  .origin_image {
+  .origin > :global(.origin_image) {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    object-position: center;
   }
 
   .origin_content {
