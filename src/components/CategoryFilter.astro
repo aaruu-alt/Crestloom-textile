@@ -28,7 +28,7 @@ const options = [{ slug: 'all', name: 'All' }, ...categories];
     const active = bar.querySelector<HTMLElement>('.category-filter_active')!;
     const states = [...grid.querySelectorAll<HTMLElement>('.collection-grid_state')];
     const nav = document.querySelector<HTMLElement>('.navbar');
-    let busy = false;
+    let tl: gsap.core.Timeline | null = null;
 
     // --- Active indicator follows the selected option ---
     const moveIndicator = (btn: HTMLElement, instant = false) => {
@@ -43,21 +43,25 @@ const options = [{ slug: 'all', name: 'All' }, ...categories];
       history.replaceState(null, '', url);
     };
 
-    // --- Pinch transition between grid states ---
+    // --- Pinch transition between grid states (a new choice mid-flight retargets) ---
     const switchTo = (slug: string) => {
       const btn = options.find((o) => o.dataset.category === slug) ?? options[0];
       slug = btn.dataset.category!;
-      const from = states.find((s) => !s.hidden)!;
-      const to = states.find((s) => s.dataset.category === slug)!;
-      if (busy || from === to) return;
-      busy = true;
       setPressed(btn);
       moveIndicator(btn);
       syncUrl(slug);
 
+      tl?.kill();
+      const from = states.find((s) => !s.hidden)!;
+      const to = states.find((s) => s.dataset.category === slug)!;
+      if (from === to) {                              // e.g. re-chosen mid-transition
+        tl = gsap.timeline().to(to, { opacity: 1, scale: 1, duration: 0.5 }).set(to, { clearProps: 'transform,opacity' });
+        return;
+      }
+
       const zoomIn = slug !== 'all';                 // category = zoom in, All = zoom out
       const origin = '50% 0%';
-      gsap.timeline({ onComplete: () => (busy = false) })
+      tl = gsap.timeline()
         .to(from, { opacity: 0, scale: zoomIn ? 1.04 : 0.96, transformOrigin: origin, duration: 0.4 })
         .add(() => {
           from.hidden = true;
@@ -90,8 +94,11 @@ const options = [{ slug: 'all', name: 'All' }, ...categories];
     let gridInView = false;
     let endInView = false;
     let first = true;
+    let lastShow: boolean | null = null;
     const update = () => {
       const show = gridInView && !endInView;
+      if (show === lastShow) return;               // observers fire on setup too; only tween on change
+      lastShow = show;
       gsap.to(bar, { y: show ? 0 : 24, autoAlpha: show ? 1 : 0, duration: 0.6, delay: first && show ? 1.2 : 0, overwrite: true });
       if (show) first = false;
     };
