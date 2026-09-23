@@ -1,0 +1,32 @@
+# Live site: the coming-soon page only, published to the crestloom-coming-soon
+# repo, which serves www.crestloomtextile.com from its gh-pages branch.
+# Staging (every page) keeps deploying from deploy.yml to this repo's Pages.
+name: Deploy live (coming soon)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build:live
+
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ secrets.LIVE_DEPLOY_TOKEN }}
+          external_repository: aaruu-alt/crestloom-coming-soon
+          publish_branch: gh-pages
+          publish_dir: ./dist
+          cname: www.crestloomtextile.com
+          commit_message: ${{ github.event.head_commit.message }}
