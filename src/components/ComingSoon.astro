@@ -304,16 +304,45 @@ const slides = [bg2, bg3, bg4];
     ].filter(Boolean);
 
     // --- Load: rack-focus on the photo, copy rises after it ---
-    gsap.timeline({
+    // A full-screen blur is cheap on a GPU and brutal without one. Skip it on
+    // machines that report few cores, and drop it mid-flight if frames start
+    // running long — an otherwise-fine laptop under load looks the same to us.
+    const fewCores = (navigator.hardwareConcurrency || 8) <= 4;
+    let watching = !fewCores;
+
+    const dropBlur = () => {
+      watching = false;
+      gsap.killTweensOf(first, 'filter');
+      gsap.set(first, { filter: 'none' });
+    };
+
+    const tl = gsap.timeline({
       delay: 0.15,
       onComplete: () => {
+        watching = false;
         section.classList.add('is-loaded');
         gsap.set(first, { clearProps: 'transform,filter,willChange' });
       },
-    })
-      .to(first, { scale: 1, duration: 2.4 }, 0)
-      .to(first, { filter: 'blur(0px)', duration: 1.4 }, 0)
-      .to(copy, { y: 0, opacity: 1, duration: 1, stagger: 0.12 }, 0.35);
+    });
+    tl.to(first, { scale: 1, duration: 2.4 }, 0);
+    if (fewCores) gsap.set(first, { filter: 'none' });
+    else tl.to(first, { filter: 'blur(0px)', duration: 1.4 }, 0);
+    tl.to(copy, { y: 0, opacity: 1, duration: 1, stagger: 0.12 }, 0.35);
+
+    if (watching) {
+      const BUDGET = 32;   // ms — two missed frames at 60Hz
+      let long = 0;
+      let last = performance.now();
+      const watch = () => {
+        if (!watching) return;
+        const now = performance.now();
+        long = now - last > BUDGET ? long + 1 : 0;
+        last = now;
+        if (long >= 6) dropBlur();          // sustained, not a one-off hitch
+        else requestAnimationFrame(watch);
+      };
+      requestAnimationFrame(watch);
+    }
 
     // --- Cycle the scenes (desktop/tablet only — a phone keeps one photo) ---
     const bgs = section.querySelector<HTMLElement>('.coming-soon_bgs')!;
