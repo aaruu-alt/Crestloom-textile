@@ -233,20 +233,24 @@ const slides = [bg2, bg3, bg4];
      ------------------------------------------------------------------ */
   @media (max-width: 991px) {
     .coming-soon {
-      display: flex;
+      display: flex;                    /* children stretch to the padding box */
+      padding: 6.25rem 2.5rem 3.25rem;  /* 100 / 40 / 52 */
     }
-    .coming-soon_bg { object-position: 72% center; }
+    /* Matches the frame's crop: textile down the right ~45%, plain ground
+       behind the copy. */
+    .coming-soon_bg { object-position: 58% center; }
 
     .coming-soon_content {
-      flex: 1;
-      gap: 6.75rem;                   /* 108 */
+      width: 27.375rem;               /* 438 */
+      max-width: 100%;
+      gap: 4.25rem;                   /* 68 — puts the heading at y 226 as in the frame */
       margin-left: 0;
-      padding: 3.25rem 2.5rem;        /* 52 / 40 */
     }
     .coming-soon_content-block {
       flex: 1;
-      justify-content: space-between; /* region row → bottom (192 gap in Figma) */
+      justify-content: space-between; /* region row → bottom */
     }
+    .coming-soon_text { max-width: 20.125rem; }   /* 322 */
   }
 
   /* ------------------------------------------------------------------
@@ -256,6 +260,8 @@ const slides = [bg2, bg3, bg4];
   @media (max-width: 767px) {
     .coming-soon {
       flex-direction: column;
+      align-items: stretch;
+      padding: 0;
     }
     .coming-soon_bgs { display: none; }
     .coming-soon_strip {
