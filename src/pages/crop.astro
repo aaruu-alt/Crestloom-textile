@@ -1,0 +1,158 @@
+---
+/**
+ * Crop picker — DEV TOOL, not part of the site. Delete before launch.
+ * Pick an object-position for the coming-soon backgrounds at a real
+ * breakpoint width, with the copy column overlaid to check readability.
+ * http://localhost:4321/Crestloom-textile/crop
+ */
+import { getImage } from 'astro:assets';
+import bg1 from '../assets/coming-soon-bg.png';
+import bg2 from '../assets/coming-soon-bg-2.png';
+import bg3 from '../assets/coming-soon-bg-3.png';
+import bg4 from '../assets/coming-soon-bg-4.png';
+
+const scenes = await Promise.all(
+  [bg1, bg2, bg3, bg4].map((src, i) =>
+    getImage({ src, width: 1670 }).then((img) => ({ name: `Scene ${i + 1}`, src: img.src })),
+  ),
+);
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Crop picker — Crestloom</title>
+  </head>
+  <body>
+    <header>
+      <h1>Crop picker</h1>
+      <p>Drag the slider until the photo sits where you want it, then send me the X value.</p>
+    </header>
+
+    <div class="panel">
+      <label>Width <input type="number" id="w" value="768" min="320" max="1600" step="1" /></label>
+      <label>Height <input type="number" id="h" value="800" min="400" max="1400" step="1" /></label>
+      <span class="presets">
+        <button type="button" data-size="768,800">768 × 800</button>
+        <button type="button" data-size="991,768">991 × 768</button>
+        <button type="button" data-size="1024,768">1024 × 768</button>
+        <button type="button" data-size="1440,800">1440 × 800</button>
+      </span>
+      <label class="check"><input type="checkbox" id="overlay" checked /> Show copy column</label>
+    </div>
+
+    <div class="panel">
+      <label class="slider">X <input type="range" id="x" min="0" max="100" step="1" value="58" /></label>
+      <output id="xout">58%</output>
+      <label class="slider">Y <input type="range" id="y" min="0" max="100" step="1" value="50" /></label>
+      <output id="yout">50%</output>
+      <button type="button" id="copy">Copy CSS</button>
+      <code id="css">object-position: 58% 50%;</code>
+    </div>
+
+    <div class="stage">
+      <div class="frame" id="frame">
+        {scenes.map((s, i) => (
+          <img src={s.src} alt={s.name} class="shot" data-i={i} hidden={i !== 0} />
+        ))}
+        <div class="copy" id="copy-col">
+          <p class="logo">CRESTLOOM</p>
+          <div>
+            <p class="head">Connecting you to<br />better textiles</p>
+            <p class="body">Rugs, carpets, throws, cushions, bed, bath and table linen. Made in India for brands and retailers worldwide.</p>
+            <p class="small">ENQUIRIES<br />info@crestloom.in</p>
+          </div>
+          <p class="small">EUROPE · USA · JAPAN · WORLDWIDE</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel scenes">
+      {scenes.map((s, i) => (
+        <button type="button" data-scene={i} class:list={['scene', { on: i === 0 }]}>{s.name}</button>
+      ))}
+      <span class="note">Each scene crops differently — check the value works for all four.</span>
+    </div>
+
+    <style is:global>
+      :root { color-scheme: light dark; }
+      body {
+        margin: 0; padding: 24px;
+        font: 14px/1.5 ui-sans-serif, system-ui, sans-serif;
+        background: #14141a; color: #eceaf0;
+      }
+      h1 { margin: 0 0 4px; font-size: 18px; }
+      header p { margin: 0 0 20px; opacity: 0.6; }
+      .panel {
+        display: flex; flex-wrap: wrap; align-items: center; gap: 14px;
+        margin-bottom: 14px; padding: 12px 14px;
+        background: #1e1e26; border-radius: 8px;
+      }
+      label { display: inline-flex; align-items: center; gap: 8px; }
+      input[type='number'] { width: 76px; }
+      input, button { font: inherit; }
+      input[type='number'], button {
+        padding: 5px 9px; border: 1px solid #3a3a46; border-radius: 5px;
+        background: #26262f; color: inherit;
+      }
+      button { cursor: pointer; }
+      button:hover { background: #32323d; }
+      .scene.on { background: #c6a15c; border-color: #c6a15c; color: #14141a; }
+      .slider { flex: 1 1 260px; }
+      input[type='range'] { flex: 1; accent-color: #c6a15c; }
+      output { min-width: 48px; font-variant-numeric: tabular-nums; }
+      code { padding: 5px 9px; background: #26262f; border-radius: 5px; }
+      .note { opacity: 0.55; }
+      .stage { overflow: auto; padding-bottom: 20px; }
+      .frame { position: relative; overflow: hidden; background: #000; }
+      .shot { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+      /* Mirrors the tablet layout: 40px gutters, 100 top / 52 bottom, 438 column */
+      .copy {
+        position: absolute; left: 40px; top: 100px; bottom: 52px; width: 438px;
+        display: flex; flex-direction: column; justify-content: space-between;
+        color: #28282a; pointer-events: none;
+      }
+      .copy.off { display: none; }
+      .logo { margin: 0; font: 500 30px/1 'Cormorant Garamond', Georgia, serif; letter-spacing: 5.8px; }
+      .head { margin: 0 0 24px; width: 388px; font: 500 56px/1.05 'Cormorant Garamond', Georgia, serif; letter-spacing: -1.96px; }
+      .body { margin: 0 0 40px; width: 322px; font-size: 16px; letter-spacing: -0.64px; color: rgb(40 40 42 / 0.8); }
+      .small { margin: 0; font-size: 12px; letter-spacing: 2.4px; }
+    </style>
+
+    <script is:inline>
+      const $ = (id) => document.getElementById(id);
+      const frame = $('frame');
+      const shots = [...document.querySelectorAll('.shot')];
+
+      const draw = () => {
+        const pos = `${$('x').value}% ${$('y').value}%`;
+        frame.style.width = $('w').value + 'px';
+        frame.style.height = $('h').value + 'px';
+        shots.forEach((s) => (s.style.objectPosition = pos));
+        $('xout').textContent = $('x').value + '%';
+        $('yout').textContent = $('y').value + '%';
+        $('css').textContent = `object-position: ${pos};`;
+        $('copy-col').classList.toggle('off', !$('overlay').checked);
+      };
+
+      ['x', 'y', 'w', 'h', 'overlay'].forEach((id) => $(id).addEventListener('input', draw));
+      document.querySelectorAll('[data-size]').forEach((b) =>
+        b.addEventListener('click', () => {
+          const [w, h] = b.dataset.size.split(',');
+          $('w').value = w; $('h').value = h; draw();
+        }),
+      );
+      document.querySelectorAll('[data-scene]').forEach((b) =>
+        b.addEventListener('click', () => {
+          const i = +b.dataset.scene;
+          shots.forEach((s, j) => (s.hidden = j !== i));
+          document.querySelectorAll('.scene').forEach((x) => x.classList.toggle('on', x === b));
+        }),
+      );
+      $('copy').addEventListener('click', () => navigator.clipboard.writeText($('css').textContent));
+      draw();
+    </script>
+  </body>
+</html>
