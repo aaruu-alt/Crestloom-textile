@@ -1,22 +1,42 @@
 ---
 import { Image } from 'astro:assets';
 import bg from '../assets/coming-soon-bg.png';
+import bg2 from '../assets/coming-soon-bg-2.png';
+import bg3 from '../assets/coming-soon-bg-3.png';
+import bg4 from '../assets/coming-soon-bg-4.png';
 import strip from '../assets/coming-soon-mobile-strip.png';
 import Button from './Button.astro';
 import Wordmark from './Wordmark.astro';
+
+/* Desktop/tablet only: the first frame is the LCP image, the rest are lazy so
+   mobile (where they're display:none) never downloads them. */
+const slides = [bg2, bg3, bg4];
 ---
 
 <section class="coming-soon">
-  <!-- Desktop / tablet: full-bleed photo -->
-  <Image
-    src={bg}
-    alt=""
-    class="coming-soon_bg"
-    widths={[800, 1200, 1670]}
-    sizes="100vw"
-    loading="eager"
-    fetchpriority="high"
-  />
+  <!-- Desktop / tablet: full-bleed photo, cycling through four scenes -->
+  <div class="coming-soon_bgs" aria-hidden="true">
+    <Image
+      src={bg}
+      alt=""
+      class="coming-soon_bg coming-soon_bg-first"
+      widths={[800, 1200, 1670]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+    />
+    {slides.map((src) => (
+      <Image
+        src={src}
+        alt=""
+        class="coming-soon_bg"
+        widths={[800, 1200, 1670]}
+        sizes="100vw"
+        loading="lazy"
+        fetchpriority="low"
+      />
+    ))}
+  </div>
 
   <!-- Mobile: lifestyle strip above the content -->
   <Image
@@ -77,6 +97,11 @@ import Wordmark from './Wordmark.astro';
     overflow: clip;
   }
 
+  .coming-soon_bgs {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
   .coming-soon_bg {
     position: absolute;
     inset: 0;
@@ -84,8 +109,9 @@ import Wordmark from './Wordmark.astro';
     height: 100%;
     object-fit: cover;
     object-position: center;
-    z-index: 0;
   }
+  /* Only the first frame is visible until the cycle fades the next one in. */
+  .coming-soon_bg:not(.coming-soon_bg-first) { opacity: 0; }
   .coming-soon_strip { display: none; }
 
   .coming-soon_content {
@@ -169,6 +195,35 @@ import Wordmark from './Wordmark.astro';
   }
 
   /* ------------------------------------------------------------------
+     Load animation — same rack-focus as the site heroes (scale + blur),
+     copy fades up after it. CSS owns the start state, GSAP owns the motion.
+     ------------------------------------------------------------------ */
+  :global(html.js) .coming-soon_bg-first {
+    transform: scale(1.06);
+    filter: blur(5px);
+    will-change: transform, filter;
+  }
+  :global(html.js) .coming-soon.is-loaded .coming-soon_bg-first {
+    transform: none;
+    filter: none;
+    will-change: auto;
+  }
+  :global(html.js) .coming-soon_content > :global(.coming-soon_logo-block),
+  :global(html.js) .coming-soon_heading-block,
+  :global(html.js) .coming-soon_body-block,
+  :global(html.js) .coming-soon_region-block {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(html.js) .coming-soon_bg-first { transform: none; filter: none; }
+    :global(html.js) .coming-soon_content > :global(.coming-soon_logo-block),
+    :global(html.js) .coming-soon_heading-block,
+    :global(html.js) .coming-soon_body-block,
+    :global(html.js) .coming-soon_region-block { opacity: 1; transform: none; }
+  }
+
+  /* ------------------------------------------------------------------
      Tablet — Figma 1024 × 768. Content at x = 40, y = 52; region row
      pushed to the bottom. Photo cropped further right.
      ------------------------------------------------------------------ */
@@ -198,7 +253,7 @@ import Wordmark from './Wordmark.astro';
     .coming-soon {
       flex-direction: column;
     }
-    .coming-soon_bg { display: none; }
+    .coming-soon_bgs { display: none; }
     .coming-soon_strip {
       display: block;
       width: 100%;
@@ -221,3 +276,57 @@ import Wordmark from './Wordmark.astro';
     .coming-soon_text { max-width: none; }
   }
 </style>
+
+<script>
+  import { gsap, reducedMotion } from '../scripts/motion';
+
+  const HOLD = 3;        // seconds each scene is held
+  const CROSSFADE = 1.2; // seconds to fade the next one in
+
+  const section = document.querySelector<HTMLElement>('.coming-soon');
+  if (section && !reducedMotion) {
+    const first = section.querySelector('.coming-soon_bg-first');
+    const copy = [
+      section.querySelector('.coming-soon_logo-block'),
+      section.querySelector('.coming-soon_heading-block'),
+      section.querySelector('.coming-soon_body-block'),
+      section.querySelector('.coming-soon_region-block'),
+    ].filter(Boolean);
+
+    // --- Load: rack-focus on the photo, copy rises after it ---
+    gsap.timeline({
+      delay: 0.15,
+      onComplete: () => {
+        section.classList.add('is-loaded');
+        gsap.set(first, { clearProps: 'transform,filter,willChange' });
+      },
+    })
+      .to(first, { scale: 1, duration: 2.4 }, 0)
+      .to(first, { filter: 'blur(0px)', duration: 1.4 }, 0)
+      .to(copy, { y: 0, opacity: 1, duration: 1, stagger: 0.12 }, 0.35);
+
+    // --- Cycle the scenes (desktop/tablet only — mobile hides them) ---
+    const slides = [...section.querySelectorAll<HTMLElement>('.coming-soon_bg')];
+    const shown = () => getComputedStyle(section.querySelector('.coming-soon_bgs')!).display !== 'none';
+    if (slides.length > 1) {
+      let i = 0;
+      const advance = () => {
+        if (!shown()) return;                      // mobile: single photo, no cycle
+        const from = slides[i];
+        const to = slides[(i + 1) % slides.length];
+        if (!(to as HTMLImageElement).complete) return;   // not decoded yet — try again next beat
+        i = (i + 1) % slides.length;
+        gsap.set(to, { zIndex: 1 });
+        gsap.to(to, {
+          opacity: 1,
+          duration: CROSSFADE,
+          onComplete: () => gsap.set(from, { opacity: 0, zIndex: 0 }),
+        });
+      };
+      gsap.delayedCall(HOLD + 2.4, function cycle() {
+        advance();
+        gsap.delayedCall(HOLD + CROSSFADE, cycle);
+      });
+    }
+  }
+</script>
