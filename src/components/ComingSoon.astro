@@ -260,7 +260,6 @@ const slides = [bg2, bg3, bg4];
     .coming-soon {
       flex-direction: column;
       align-items: stretch;
-      min-height: auto;               /* content height, not the viewport */
       padding: 0;
     }
     .coming-soon_bgs { display: none; }
@@ -272,10 +271,17 @@ const slides = [bg2, bg3, bg4];
       object-position: center;
     }
 
+    /* Fill what's left under the strip and spread the copy into it, so the
+       region row sits on the bottom edge rather than floating mid-page. */
     .coming-soon_content {
       width: 100%;
+      flex: 1;
       gap: 2rem;                      /* 32 */
       padding: 2.25rem 1rem 1.25rem;  /* 36 / 16 / 20 */
+    }
+    .coming-soon_content-block {
+      flex: 1;
+      justify-content: space-between;
     }
     .coming-soon_content > :global(.coming-soon_logo-block) { align-self: center; }
     .coming-soon_heading-block { width: 100%; }
