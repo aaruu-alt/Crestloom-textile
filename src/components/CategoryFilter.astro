@@ -20,8 +20,12 @@ const options = [{ slug: 'all', name: 'All' }, ...categories];
 </div>
 
 <script>
-  import { gsap, ScrollTrigger } from '../scripts/motion';
+  import { gsap, ScrollTrigger, reducedMotion } from '../scripts/motion';
   import { revealNow } from '../scripts/reveal';
+
+  /** 0s when the page isn't animating. Anything that must land immediately
+      uses gsap.set instead — a 0s tween still waits for the next tick. */
+  const dur = (seconds: number) => (reducedMotion ? 0 : seconds);
 
   const bar = document.querySelector<HTMLElement>('.category-filter');
   const grid = document.getElementById('collection-grid');
@@ -36,7 +40,7 @@ const options = [{ slug: 'all', name: 'All' }, ...categories];
     const moveIndicator = (btn: HTMLElement, instant = false) => {
       const x = btn.offsetLeft;
       const w = btn.offsetWidth;
-      instant ? gsap.set(active, { x, width: w }) : gsap.to(active, { x, width: w, duration: 0.6 });
+      instant ? gsap.set(active, { x, width: w }) : gsap.to(active, { x, width: w, duration: dur(0.6) });
     };
     const setPressed = (btn: HTMLElement) => options.forEach((o) => o.setAttribute('aria-pressed', String(o === btn)));
     const syncUrl = (slug: string) => {
@@ -57,14 +61,23 @@ const options = [{ slug: 'all', name: 'All' }, ...categories];
       const from = states.find((s) => !s.hidden)!;
       const to = states.find((s) => s.dataset.category === slug)!;
       if (from === to) {                              // e.g. re-chosen mid-transition
-        tl = gsap.timeline().to(to, { opacity: 1, scale: 1, duration: 0.5 }).set(to, { clearProps: 'transform,opacity' });
+        tl = gsap.timeline().to(to, { opacity: 1, scale: 1, duration: dur(0.5) }).set(to, { clearProps: 'transform,opacity' });
+        return;
+      }
+
+      if (reducedMotion) {                           // swap outright, no pinch
+        from.hidden = true;
+        to.hidden = false;
+        revealNow(to);
+        gsap.set([from, to], { clearProps: 'transform,opacity' });
+        ScrollTrigger.refresh();
         return;
       }
 
       const zoomIn = slug !== 'all';                 // category = zoom in, All = zoom out
       const origin = '50% 0%';
       tl = gsap.timeline()
-        .to(from, { opacity: 0, scale: zoomIn ? 1.04 : 0.96, transformOrigin: origin, duration: 0.4 })
+        .to(from, { opacity: 0, scale: zoomIn ? 1.04 : 0.96, transformOrigin: origin, duration: dur(0.4) })
         .add(() => {
           from.hidden = true;
           to.hidden = false;
@@ -75,7 +88,7 @@ const options = [{ slug: 'all', name: 'All' }, ...categories];
           if (grid.getBoundingClientRect().top < 0) window.scrollTo({ top, behavior: 'instant' as ScrollBehavior });
           ScrollTrigger.refresh();
         })
-        .to(to, { opacity: 1, scale: 1, duration: 0.8 })
+        .to(to, { opacity: 1, scale: 1, duration: dur(0.8) })
         .set([from, to], { clearProps: 'transform,opacity' });
     };
 
@@ -101,7 +114,9 @@ const options = [{ slug: 'all', name: 'All' }, ...categories];
       const show = gridInView && !endInView;
       if (show === lastShow) return;               // observers fire on setup too; only tween on change
       lastShow = show;
-      gsap.to(bar, { y: show ? 0 : 24, autoAlpha: show ? 1 : 0, duration: 0.6, delay: first && show ? 1.2 : 0, overwrite: true });
+      const to = { y: show ? 0 : 24, autoAlpha: show ? 1 : 0 };
+      if (reducedMotion) gsap.set(bar, to);
+      else gsap.to(bar, { ...to, duration: 0.6, delay: first && show ? 1.2 : 0, overwrite: true });
       if (show) first = false;
     };
     new IntersectionObserver((entries) => { gridInView = entries[0].isIntersecting; update(); }, { rootMargin: '-120px 0px 0px 0px' }).observe(grid);
