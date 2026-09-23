@@ -280,8 +280,9 @@ const slides = [bg2, bg3, bg4];
 <script>
   import { gsap, reducedMotion } from '../scripts/motion';
 
-  const HOLD = 3;        // seconds each scene is held
-  const CROSSFADE = 1.2; // seconds to fade the next one in
+  const HOLD = 10;       // seconds each scene is held
+  const CROSSFADE = 2;   // seconds to dissolve into the next one
+  const FADE_EASE = 'sine.inOut';   // symmetric — a dissolve shouldn't accelerate like motion does
 
   const section = document.querySelector<HTMLElement>('.coming-soon');
   if (section && !reducedMotion) {
@@ -310,17 +311,19 @@ const slides = [bg2, bg3, bg4];
     const shown = () => getComputedStyle(section.querySelector('.coming-soon_bgs')!).display !== 'none';
     if (slides.length > 1) {
       let i = 0;
+      let layer = 1;     // always stack the incoming scene on top, including on the wrap to the first
       const advance = () => {
         if (!shown()) return;                      // mobile: single photo, no cycle
         const from = slides[i];
         const to = slides[(i + 1) % slides.length];
         if (!(to as HTMLImageElement).complete) return;   // not decoded yet — try again next beat
         i = (i + 1) % slides.length;
-        gsap.set(to, { zIndex: 1 });
+        gsap.set(to, { zIndex: ++layer });
         gsap.to(to, {
           opacity: 1,
           duration: CROSSFADE,
-          onComplete: () => gsap.set(from, { opacity: 0, zIndex: 0 }),
+          ease: FADE_EASE,
+          onComplete: () => gsap.set(from, { opacity: 0 }),
         });
       };
       gsap.delayedCall(HOLD + 2.4, function cycle() {
