@@ -13,7 +13,7 @@ import { defineConfig } from 'astro/config';
 const live = process.env.LIVE_BUILD === 'true';
 
 export default defineConfig({
-  site: live ? 'https://crestloomtextiles.com' : 'https://aaruu-alt.github.io',
+  site: live ? 'https://www.crestloomtextiles.com' : 'https://aaruu-alt.github.io',
   ...(live ? {} : { base: '/Crestloom-textile' }),
   output: 'static',
 });

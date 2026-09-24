@@ -1,5 +1,5 @@
 # Live site: the coming-soon page only, published to the crestloom-coming-soon
-# repo, which serves crestloomtextiles.com from its gh-pages branch.
+# repo, which serves www.crestloomtextiles.com from its gh-pages branch.
 # Staging (every page) keeps deploying from deploy.yml to this repo's Pages.
 name: Deploy live (coming soon)
 
@@ -28,5 +28,5 @@ jobs:
           external_repository: aaruu-alt/crestloom-coming-soon
           publish_branch: gh-pages
           publish_dir: ./dist
-          cname: crestloomtextiles.com
+          cname: www.crestloomtextiles.com
           commit_message: ${{ github.event.head_commit.message }}
