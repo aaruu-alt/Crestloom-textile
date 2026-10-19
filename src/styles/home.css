@@ -1,5 +1,5 @@
 /* Homepage responsive layouts: Figma 547:239, 547:459, 639:501. */
-.homepage .selected-works_mobile-link, .homepage .selected-works_pagination { display: none; }
+.homepage .selected-works .selected-works_mobile-link, .homepage .selected-works_pagination { display: none; }
 .homepage .collection-card_overlay { background: linear-gradient(180deg, transparent, rgb(0 0 0 / .38)); opacity: 1; }
 .homepage .collection-card_content { transform: none; }
 .homepage .collection-card_action { opacity: 1; }
@@ -36,8 +36,8 @@
   .homepage .selected-works_inner { gap: 3.5rem; }
   .homepage .selected-works_header { justify-content: center; text-align: center; }
   .homepage .selected-works_heading-block { align-items: center; }
-  .homepage .selected-works_desktop-link { display: none; }
-  .homepage .selected-works_mobile-link { display: inline-flex; }
+  .homepage .selected-works_header .selected-works_desktop-link { display: none; }
+  .homepage .selected-works .selected-works_mobile-link { display: inline-flex; }
   .homepage .selected-works_grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
   .homepage .selected-works_item { min-width: 0; }
   .homepage .selected-works_item:first-child { grid-column: 1 / -1; }
@@ -78,8 +78,8 @@
   .homepage .origin_overlay { background: linear-gradient(-44.65deg, rgb(0 0 0 / .7) 26.281%, transparent 84.655%); }
   .homepage .selected-works { padding-block: 4rem; }
   .homepage .selected-works_inner { gap: 3rem; }
-  .homepage .selected-works_header { text-align: left; justify-content: flex-start; }
-  .homepage .selected-works_heading-block { align-items: flex-start; }
+  .homepage .selected-works_header { text-align: left; justify-content: flex-start; flex-direction: column; align-items: flex-start; }
+  .homepage .selected-works_heading-block { align-items: flex-start; width: 100%; min-width: 0; }
   .homepage .selected-works_heading-block h2 { max-width: none; }
   .homepage .selected-works_grid { display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
   .homepage .selected-works_grid::-webkit-scrollbar { display: none; }
