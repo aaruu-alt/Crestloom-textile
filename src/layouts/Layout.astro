@@ -7,6 +7,10 @@ interface Props {
 }
 const { title, description = '' } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const pagePath = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
+const canonicalUrl = new URL(pagePath, Astro.site).href;
+const socialImageUrl = new URL(`${base}/og.jpg`, Astro.site).href;
+const socialImageAlt = 'Crestloom Textile — Rooted in craft. Ready for what’s next. Global sourcing for home textiles, Panipat, India.';
 ---
 
 <!doctype html>
@@ -45,6 +49,23 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     </script>
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
+    <link rel="canonical" href={canonicalUrl} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Crestloom Textile" />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={socialImageUrl} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={socialImageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageUrl} />
+    <meta name="twitter:image:alt" content={socialImageAlt} />
     <link rel="icon" href={`${base}/favicon.ico`} sizes="32x32" />
     <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
     <link rel="apple-touch-icon" href={`${base}/apple-touch-icon.png`} />
