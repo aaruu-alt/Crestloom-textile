@@ -1,16 +1,12 @@
 /** Final product photographs and public codes supplied in Figma. */
 import type { ImageMetadata } from 'astro';
-const images = import.meta.glob<ImageMetadata>('../assets/catalog/*.webp', { eager: true, import: 'default' });
+const images = import.meta.glob<ImageMetadata>(['../assets/catalog/*.webp', '!../assets/catalog/CL-CR-*.webp', '!../assets/catalog/CL-FT-*.webp'], { eager: true, import: 'default' });
 export type Category = { slug: string; name: string };
 export type Product = { id: string; category: string; label: string; code: string; alt: string; image: ImageMetadata };
 export const categories: Category[] = [
   {
     "slug": "rugs",
     "name": "Rugs"
-  },
-  {
-    "slug": "chindi-rugs",
-    "name": "Chindi rugs"
   },
   {
     "slug": "bathmats",
@@ -31,10 +27,6 @@ export const categories: Category[] = [
   {
     "slug": "poufs",
     "name": "Poufs"
-  },
-  {
-    "slug": "fouta-towels",
-    "name": "Fouta towels"
   },
   {
     "slug": "terry-towels",
@@ -74,7 +66,6 @@ export const categoryGroups = [
     "name": "Rugs & flooring",
     "slugs": [
       "rugs",
-      "chindi-rugs",
       "bathmats"
     ]
   },
@@ -90,7 +81,6 @@ export const categoryGroups = [
   {
     "name": "Bath, kitchen & table",
     "slugs": [
-      "fouta-towels",
       "terry-towels",
       "kitchen-towels",
       "shower-curtains",
@@ -203,94 +193,6 @@ const records = [
     "code": "CL-RG-012",
     "file": "CL-RG-012.webp",
     "alt": "Rugs \u2014 CL-RG-012"
-  },
-  {
-    "id": "CL-CR-001",
-    "category": "chindi-rugs",
-    "label": "Chindi Rugs",
-    "code": "CL-CR-001",
-    "file": "CL-CR-001.webp",
-    "alt": "Chindi rugs \u2014 CL-CR-001"
-  },
-  {
-    "id": "CL-CR-002",
-    "category": "chindi-rugs",
-    "label": "Chindi Rugs",
-    "code": "CL-CR-002",
-    "file": "CL-CR-002.webp",
-    "alt": "Chindi rugs \u2014 CL-CR-002"
-  },
-  {
-    "id": "CL-CR-003",
-    "category": "chindi-rugs",
-    "label": "Chindi Rugs",
-    "code": "CL-CR-003",
-    "file": "CL-CR-003.webp",
-    "alt": "Chindi rugs \u2014 CL-CR-003"
-  },
-  {
-    "id": "CL-CR-004",
-    "category": "chindi-rugs",
-    "label": "Chindi Rugs",
-    "code": "CL-CR-004",
-    "file": "CL-CR-004.webp",
-    "alt": "Chindi rugs \u2014 CL-CR-004"
-  },
-  {
-    "id": "CL-CR-005",
-    "category": "chindi-rugs",
-    "label": "Chindi Rugs",
-    "code": "CL-CR-005",
-    "file": "CL-CR-005.webp",
-    "alt": "Chindi rugs \u2014 CL-CR-005"
-  },
-  {
-    "id": "CL-CR-006",
-    "category": "chindi-rugs",
-    "label": "Chindi Rugs",
-    "code": "CL-CR-006",
-    "file": "CL-CR-006.webp",
-    "alt": "Chindi rugs \u2014 CL-CR-006"
-  },
-  {
-    "id": "CL-CR-007",
-    "category": "chindi-rugs",
-    "label": "Chindi Rugs",
-    "code": "CL-CR-007",
-    "file": "CL-CR-007.webp",
-    "alt": "Chindi rugs \u2014 CL-CR-007"
-  },
-  {
-    "id": "CL-CR-008",
-    "category": "chindi-rugs",
-    "label": "Chindi Rugs",
-    "code": "CL-CR-008",
-    "file": "CL-CR-008.webp",
-    "alt": "Chindi rugs \u2014 CL-CR-008"
-  },
-  {
-    "id": "CL-CR-009",
-    "category": "chindi-rugs",
-    "label": "Chindi Rugs",
-    "code": "CL-CR-009",
-    "file": "CL-CR-009.webp",
-    "alt": "Chindi rugs \u2014 CL-CR-009"
-  },
-  {
-    "id": "CL-CR-010",
-    "category": "chindi-rugs",
-    "label": "Chindi Rugs",
-    "code": "CL-CR-010",
-    "file": "CL-CR-010.webp",
-    "alt": "Chindi rugs \u2014 CL-CR-010"
-  },
-  {
-    "id": "CL-CR-011",
-    "category": "chindi-rugs",
-    "label": "Chindi Rugs",
-    "code": "CL-CR-011",
-    "file": "CL-CR-011.webp",
-    "alt": "Chindi rugs \u2014 CL-CR-011"
   },
   {
     "id": "CL-BM-001",
@@ -739,102 +641,6 @@ const records = [
     "code": "CL-PF-008",
     "file": "CL-PF-008.webp",
     "alt": "Poufs \u2014 CL-PF-008"
-  },
-  {
-    "id": "CL-FT-001",
-    "category": "fouta-towels",
-    "label": "Fouta Towels",
-    "code": "CL-FT-001",
-    "file": "CL-FT-001.webp",
-    "alt": "Fouta towels \u2014 CL-FT-001"
-  },
-  {
-    "id": "CL-FT-002",
-    "category": "fouta-towels",
-    "label": "Fouta Towels",
-    "code": "CL-FT-002",
-    "file": "CL-FT-002.webp",
-    "alt": "Fouta towels \u2014 CL-FT-002"
-  },
-  {
-    "id": "CL-FT-003",
-    "category": "fouta-towels",
-    "label": "Fouta Towels",
-    "code": "CL-FT-003",
-    "file": "CL-FT-003.webp",
-    "alt": "Fouta towels \u2014 CL-FT-003"
-  },
-  {
-    "id": "CL-FT-004",
-    "category": "fouta-towels",
-    "label": "Fouta Towels",
-    "code": "CL-FT-004",
-    "file": "CL-FT-004.webp",
-    "alt": "Fouta towels \u2014 CL-FT-004"
-  },
-  {
-    "id": "CL-FT-005",
-    "category": "fouta-towels",
-    "label": "Fouta Towels",
-    "code": "CL-FT-005",
-    "file": "CL-FT-005.webp",
-    "alt": "Fouta towels \u2014 CL-FT-005"
-  },
-  {
-    "id": "CL-FT-006",
-    "category": "fouta-towels",
-    "label": "Fouta Towels",
-    "code": "CL-FT-006",
-    "file": "CL-FT-006.webp",
-    "alt": "Fouta towels \u2014 CL-FT-006"
-  },
-  {
-    "id": "CL-FT-007",
-    "category": "fouta-towels",
-    "label": "Fouta Towels",
-    "code": "CL-FT-007",
-    "file": "CL-FT-007.webp",
-    "alt": "Fouta towels \u2014 CL-FT-007"
-  },
-  {
-    "id": "CL-FT-008",
-    "category": "fouta-towels",
-    "label": "Fouta Towels",
-    "code": "CL-FT-008",
-    "file": "CL-FT-008.webp",
-    "alt": "Fouta towels \u2014 CL-FT-008"
-  },
-  {
-    "id": "CL-FT-009",
-    "category": "fouta-towels",
-    "label": "Fouta Towels",
-    "code": "CL-FT-009",
-    "file": "CL-FT-009.webp",
-    "alt": "Fouta towels \u2014 CL-FT-009"
-  },
-  {
-    "id": "CL-FT-010",
-    "category": "fouta-towels",
-    "label": "Fouta Towels",
-    "code": "CL-FT-010",
-    "file": "CL-FT-010.webp",
-    "alt": "Fouta towels \u2014 CL-FT-010"
-  },
-  {
-    "id": "CL-FT-011",
-    "category": "fouta-towels",
-    "label": "Fouta Towels",
-    "code": "CL-FT-011",
-    "file": "CL-FT-011.webp",
-    "alt": "Fouta towels \u2014 CL-FT-011"
-  },
-  {
-    "id": "CL-FT-012",
-    "category": "fouta-towels",
-    "label": "Fouta Towels",
-    "code": "CL-FT-012",
-    "file": "CL-FT-012.webp",
-    "alt": "Fouta towels \u2014 CL-FT-012"
   },
   {
     "id": "CL-TT-001",

@@ -2,9 +2,9 @@
 import brand from '../assets/home/footer-brand.svg';
 import { routes } from '../lib/routes';
 const columns = [
-  { title: 'Rugs & flooring', links: ['Rugs', 'Chindi rugs', 'Bathmats'] },
+  { title: 'Rugs & flooring', links: ['Rugs', 'Bathmats'] },
   { title: 'Soft furnishings', links: ['Cushions', 'Cushion covers', 'Throws', 'Poufs'] },
-  { title: 'Bath, kitchen & table', links: ['Fouta towels', 'Terry towels', 'Table cloth', 'Shower curtains', 'Table covers'] },
+  { title: 'Bath, kitchen & table', links: ['Terry towels', 'Table cloth', 'Shower curtains', 'Table covers'] },
   { title: 'Storage & décor', links: ['Baskets', 'Wall hangings', 'Wall art', 'Halloween collection'] },
 ];
 const categorySlug = (label: string) => ({ 'Table cloth': 'table-covers', 'Table covers': 'table-covers' }[label] ?? label.toLowerCase().replaceAll(' ', '-'));
