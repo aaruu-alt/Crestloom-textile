@@ -1,6 +1,6 @@
 /** Final product photographs and public codes supplied in Figma. */
 import type { ImageMetadata } from 'astro';
-const images = import.meta.glob<ImageMetadata>('../assets/catalog/*.png', { eager: true, import: 'default' });
+const images = import.meta.glob<ImageMetadata>('../assets/catalog/*.webp', { eager: true, import: 'default' });
 export type Category = { slug: string; name: string };
 export type Product = { id: string; category: string; label: string; code: string; alt: string; image: ImageMetadata };
 export const categories: Category[] = [
@@ -113,7 +113,7 @@ const records = [
     "category": "rugs",
     "label": "Rugs",
     "code": "CL-RG-001",
-    "file": "CL-RG-001.png",
+    "file": "CL-RG-001.webp",
     "alt": "Rugs \u2014 CL-RG-001"
   },
   {
@@ -121,7 +121,7 @@ const records = [
     "category": "rugs",
     "label": "Rugs",
     "code": "CL-RG-002",
-    "file": "CL-RG-002.png",
+    "file": "CL-RG-002.webp",
     "alt": "Rugs \u2014 CL-RG-002"
   },
   {
@@ -129,7 +129,7 @@ const records = [
     "category": "rugs",
     "label": "Rugs",
     "code": "CL-RG-003",
-    "file": "CL-RG-003.png",
+    "file": "CL-RG-003.webp",
     "alt": "Rugs \u2014 CL-RG-003"
   },
   {
@@ -137,7 +137,7 @@ const records = [
     "category": "rugs",
     "label": "Rugs",
     "code": "CL-RG-004",
-    "file": "CL-RG-004.png",
+    "file": "CL-RG-004.webp",
     "alt": "Rugs \u2014 CL-RG-004"
   },
   {
@@ -145,7 +145,7 @@ const records = [
     "category": "rugs",
     "label": "Rugs",
     "code": "CL-RG-005",
-    "file": "CL-RG-005.png",
+    "file": "CL-RG-005.webp",
     "alt": "Rugs \u2014 CL-RG-005"
   },
   {
@@ -153,7 +153,7 @@ const records = [
     "category": "rugs",
     "label": "Rugs",
     "code": "CL-RG-006",
-    "file": "CL-RG-006.png",
+    "file": "CL-RG-006.webp",
     "alt": "Rugs \u2014 CL-RG-006"
   },
   {
@@ -161,7 +161,7 @@ const records = [
     "category": "rugs",
     "label": "Rugs",
     "code": "CL-RG-007",
-    "file": "CL-RG-007.png",
+    "file": "CL-RG-007.webp",
     "alt": "Rugs \u2014 CL-RG-007"
   },
   {
@@ -169,7 +169,7 @@ const records = [
     "category": "rugs",
     "label": "Rugs",
     "code": "CL-RG-008",
-    "file": "CL-RG-008.png",
+    "file": "CL-RG-008.webp",
     "alt": "Rugs \u2014 CL-RG-008"
   },
   {
@@ -177,7 +177,7 @@ const records = [
     "category": "rugs",
     "label": "Rugs",
     "code": "CL-RG-009",
-    "file": "CL-RG-009.png",
+    "file": "CL-RG-009.webp",
     "alt": "Rugs \u2014 CL-RG-009"
   },
   {
@@ -185,7 +185,7 @@ const records = [
     "category": "rugs",
     "label": "Rugs",
     "code": "CL-RG-010",
-    "file": "CL-RG-010.png",
+    "file": "CL-RG-010.webp",
     "alt": "Rugs \u2014 CL-RG-010"
   },
   {
@@ -193,7 +193,7 @@ const records = [
     "category": "rugs",
     "label": "Rugs",
     "code": "CL-RG-011",
-    "file": "CL-RG-011.png",
+    "file": "CL-RG-011.webp",
     "alt": "Rugs \u2014 CL-RG-011"
   },
   {
@@ -201,7 +201,7 @@ const records = [
     "category": "rugs",
     "label": "Rugs",
     "code": "CL-RG-012",
-    "file": "CL-RG-012.png",
+    "file": "CL-RG-012.webp",
     "alt": "Rugs \u2014 CL-RG-012"
   },
   {
@@ -209,7 +209,7 @@ const records = [
     "category": "chindi-rugs",
     "label": "Chindi Rugs",
     "code": "CL-CR-001",
-    "file": "CL-CR-001.png",
+    "file": "CL-CR-001.webp",
     "alt": "Chindi rugs \u2014 CL-CR-001"
   },
   {
@@ -217,7 +217,7 @@ const records = [
     "category": "chindi-rugs",
     "label": "Chindi Rugs",
     "code": "CL-CR-002",
-    "file": "CL-CR-002.png",
+    "file": "CL-CR-002.webp",
     "alt": "Chindi rugs \u2014 CL-CR-002"
   },
   {
@@ -225,7 +225,7 @@ const records = [
     "category": "chindi-rugs",
     "label": "Chindi Rugs",
     "code": "CL-CR-003",
-    "file": "CL-CR-003.png",
+    "file": "CL-CR-003.webp",
     "alt": "Chindi rugs \u2014 CL-CR-003"
   },
   {
@@ -233,7 +233,7 @@ const records = [
     "category": "chindi-rugs",
     "label": "Chindi Rugs",
     "code": "CL-CR-004",
-    "file": "CL-CR-004.png",
+    "file": "CL-CR-004.webp",
     "alt": "Chindi rugs \u2014 CL-CR-004"
   },
   {
@@ -241,7 +241,7 @@ const records = [
     "category": "chindi-rugs",
     "label": "Chindi Rugs",
     "code": "CL-CR-005",
-    "file": "CL-CR-005.png",
+    "file": "CL-CR-005.webp",
     "alt": "Chindi rugs \u2014 CL-CR-005"
   },
   {
@@ -249,7 +249,7 @@ const records = [
     "category": "chindi-rugs",
     "label": "Chindi Rugs",
     "code": "CL-CR-006",
-    "file": "CL-CR-006.png",
+    "file": "CL-CR-006.webp",
     "alt": "Chindi rugs \u2014 CL-CR-006"
   },
   {
@@ -257,7 +257,7 @@ const records = [
     "category": "chindi-rugs",
     "label": "Chindi Rugs",
     "code": "CL-CR-007",
-    "file": "CL-CR-007.png",
+    "file": "CL-CR-007.webp",
     "alt": "Chindi rugs \u2014 CL-CR-007"
   },
   {
@@ -265,7 +265,7 @@ const records = [
     "category": "chindi-rugs",
     "label": "Chindi Rugs",
     "code": "CL-CR-008",
-    "file": "CL-CR-008.png",
+    "file": "CL-CR-008.webp",
     "alt": "Chindi rugs \u2014 CL-CR-008"
   },
   {
@@ -273,7 +273,7 @@ const records = [
     "category": "chindi-rugs",
     "label": "Chindi Rugs",
     "code": "CL-CR-009",
-    "file": "CL-CR-009.png",
+    "file": "CL-CR-009.webp",
     "alt": "Chindi rugs \u2014 CL-CR-009"
   },
   {
@@ -281,7 +281,7 @@ const records = [
     "category": "chindi-rugs",
     "label": "Chindi Rugs",
     "code": "CL-CR-010",
-    "file": "CL-CR-010.png",
+    "file": "CL-CR-010.webp",
     "alt": "Chindi rugs \u2014 CL-CR-010"
   },
   {
@@ -289,7 +289,7 @@ const records = [
     "category": "chindi-rugs",
     "label": "Chindi Rugs",
     "code": "CL-CR-011",
-    "file": "CL-CR-011.png",
+    "file": "CL-CR-011.webp",
     "alt": "Chindi rugs \u2014 CL-CR-011"
   },
   {
@@ -297,7 +297,7 @@ const records = [
     "category": "bathmats",
     "label": "Bathmats",
     "code": "CL-BM-001",
-    "file": "CL-BM-001.png",
+    "file": "CL-BM-001.webp",
     "alt": "Bathmats \u2014 CL-BM-001"
   },
   {
@@ -305,7 +305,7 @@ const records = [
     "category": "bathmats",
     "label": "Bathmats",
     "code": "CL-BM-002",
-    "file": "CL-BM-002.png",
+    "file": "CL-BM-002.webp",
     "alt": "Bathmats \u2014 CL-BM-002"
   },
   {
@@ -313,7 +313,7 @@ const records = [
     "category": "bathmats",
     "label": "Bathmats",
     "code": "CL-BM-003",
-    "file": "CL-BM-003.png",
+    "file": "CL-BM-003.webp",
     "alt": "Bathmats \u2014 CL-BM-003"
   },
   {
@@ -321,7 +321,7 @@ const records = [
     "category": "bathmats",
     "label": "Bathmats",
     "code": "CL-BM-004",
-    "file": "CL-BM-004.png",
+    "file": "CL-BM-004.webp",
     "alt": "Bathmats \u2014 CL-BM-004"
   },
   {
@@ -329,7 +329,7 @@ const records = [
     "category": "bathmats",
     "label": "Bathmats",
     "code": "CL-BM-005",
-    "file": "CL-BM-005.png",
+    "file": "CL-BM-005.webp",
     "alt": "Bathmats \u2014 CL-BM-005"
   },
   {
@@ -337,7 +337,7 @@ const records = [
     "category": "bathmats",
     "label": "Bathmats",
     "code": "CL-BM-006",
-    "file": "CL-BM-006.png",
+    "file": "CL-BM-006.webp",
     "alt": "Bathmats \u2014 CL-BM-006"
   },
   {
@@ -345,7 +345,7 @@ const records = [
     "category": "bathmats",
     "label": "Bathmats",
     "code": "CL-BM-007",
-    "file": "CL-BM-007.png",
+    "file": "CL-BM-007.webp",
     "alt": "Bathmats \u2014 CL-BM-007"
   },
   {
@@ -353,7 +353,7 @@ const records = [
     "category": "bathmats",
     "label": "Bathmats",
     "code": "CL-BM-008",
-    "file": "CL-BM-008.png",
+    "file": "CL-BM-008.webp",
     "alt": "Bathmats \u2014 CL-BM-008"
   },
   {
@@ -361,7 +361,7 @@ const records = [
     "category": "bathmats",
     "label": "Bathmats",
     "code": "CL-BM-009",
-    "file": "CL-BM-009.png",
+    "file": "CL-BM-009.webp",
     "alt": "Bathmats \u2014 CL-BM-009"
   },
   {
@@ -369,7 +369,7 @@ const records = [
     "category": "bathmats",
     "label": "Bathmats",
     "code": "CL-BM-010",
-    "file": "CL-BM-010.png",
+    "file": "CL-BM-010.webp",
     "alt": "Bathmats \u2014 CL-BM-010"
   },
   {
@@ -377,7 +377,7 @@ const records = [
     "category": "bathmats",
     "label": "Bathmats",
     "code": "CL-BM-011",
-    "file": "CL-BM-011.png",
+    "file": "CL-BM-011.webp",
     "alt": "Bathmats \u2014 CL-BM-011"
   },
   {
@@ -385,7 +385,7 @@ const records = [
     "category": "bathmats",
     "label": "Bathmats",
     "code": "CL-BM-012",
-    "file": "CL-BM-012.png",
+    "file": "CL-BM-012.webp",
     "alt": "Bathmats \u2014 CL-BM-012"
   },
   {
@@ -393,7 +393,7 @@ const records = [
     "category": "cushions",
     "label": "Cushions",
     "code": "CL-CU-001",
-    "file": "CL-CU-001.png",
+    "file": "CL-CU-001.webp",
     "alt": "Cushions \u2014 CL-CU-001"
   },
   {
@@ -401,7 +401,7 @@ const records = [
     "category": "cushions",
     "label": "Cushions",
     "code": "CL-CU-002",
-    "file": "CL-CU-002.png",
+    "file": "CL-CU-002.webp",
     "alt": "Cushions \u2014 CL-CU-002"
   },
   {
@@ -409,7 +409,7 @@ const records = [
     "category": "cushions",
     "label": "Cushions",
     "code": "CL-CU-003",
-    "file": "CL-CU-003.png",
+    "file": "CL-CU-003.webp",
     "alt": "Cushions \u2014 CL-CU-003"
   },
   {
@@ -417,7 +417,7 @@ const records = [
     "category": "cushions",
     "label": "Cushions",
     "code": "CL-CU-004",
-    "file": "CL-CU-004.png",
+    "file": "CL-CU-004.webp",
     "alt": "Cushions \u2014 CL-CU-004"
   },
   {
@@ -425,7 +425,7 @@ const records = [
     "category": "cushions",
     "label": "Cushions",
     "code": "CL-CU-005",
-    "file": "CL-CU-005.png",
+    "file": "CL-CU-005.webp",
     "alt": "Cushions \u2014 CL-CU-005"
   },
   {
@@ -433,7 +433,7 @@ const records = [
     "category": "cushions",
     "label": "Cushions",
     "code": "CL-CU-006",
-    "file": "CL-CU-006.png",
+    "file": "CL-CU-006.webp",
     "alt": "Cushions \u2014 CL-CU-006"
   },
   {
@@ -441,7 +441,7 @@ const records = [
     "category": "cushions",
     "label": "Cushions",
     "code": "CL-CU-007",
-    "file": "CL-CU-007.png",
+    "file": "CL-CU-007.webp",
     "alt": "Cushions \u2014 CL-CU-007"
   },
   {
@@ -449,7 +449,7 @@ const records = [
     "category": "cushions",
     "label": "Cushions",
     "code": "CL-CU-008",
-    "file": "CL-CU-008.png",
+    "file": "CL-CU-008.webp",
     "alt": "Cushions \u2014 CL-CU-008"
   },
   {
@@ -457,7 +457,7 @@ const records = [
     "category": "cushions",
     "label": "Cushions",
     "code": "CL-CU-009",
-    "file": "CL-CU-009.png",
+    "file": "CL-CU-009.webp",
     "alt": "Cushions \u2014 CL-CU-009"
   },
   {
@@ -465,7 +465,7 @@ const records = [
     "category": "cushions",
     "label": "Cushions",
     "code": "CL-CU-010",
-    "file": "CL-CU-010.png",
+    "file": "CL-CU-010.webp",
     "alt": "Cushions \u2014 CL-CU-010"
   },
   {
@@ -473,7 +473,7 @@ const records = [
     "category": "cushions",
     "label": "Cushions",
     "code": "CL-CU-011",
-    "file": "CL-CU-011.png",
+    "file": "CL-CU-011.webp",
     "alt": "Cushions \u2014 CL-CU-011"
   },
   {
@@ -481,7 +481,7 @@ const records = [
     "category": "cushions",
     "label": "Cushions",
     "code": "CL-CU-012",
-    "file": "CL-CU-012.png",
+    "file": "CL-CU-012.webp",
     "alt": "Cushions \u2014 CL-CU-012"
   },
   {
@@ -489,7 +489,7 @@ const records = [
     "category": "cushion-covers",
     "label": "Cushion Covers",
     "code": "CL-CC-001",
-    "file": "CL-CC-001.png",
+    "file": "CL-CC-001.webp",
     "alt": "Cushion covers \u2014 CL-CC-001"
   },
   {
@@ -497,7 +497,7 @@ const records = [
     "category": "cushion-covers",
     "label": "Cushion Covers",
     "code": "CL-CC-002",
-    "file": "CL-CC-002.png",
+    "file": "CL-CC-002.webp",
     "alt": "Cushion covers \u2014 CL-CC-002"
   },
   {
@@ -505,7 +505,7 @@ const records = [
     "category": "cushion-covers",
     "label": "Cushion Covers",
     "code": "CL-CC-003",
-    "file": "CL-CC-003.png",
+    "file": "CL-CC-003.webp",
     "alt": "Cushion covers \u2014 CL-CC-003"
   },
   {
@@ -513,7 +513,7 @@ const records = [
     "category": "cushion-covers",
     "label": "Cushion Covers",
     "code": "CL-CC-004",
-    "file": "CL-CC-004.png",
+    "file": "CL-CC-004.webp",
     "alt": "Cushion covers \u2014 CL-CC-004"
   },
   {
@@ -521,7 +521,7 @@ const records = [
     "category": "cushion-covers",
     "label": "Cushion Covers",
     "code": "CL-CC-005",
-    "file": "CL-CC-005.png",
+    "file": "CL-CC-005.webp",
     "alt": "Cushion covers \u2014 CL-CC-005"
   },
   {
@@ -529,7 +529,7 @@ const records = [
     "category": "cushion-covers",
     "label": "Cushion Covers",
     "code": "CL-CC-006",
-    "file": "CL-CC-006.png",
+    "file": "CL-CC-006.webp",
     "alt": "Cushion covers \u2014 CL-CC-006"
   },
   {
@@ -537,7 +537,7 @@ const records = [
     "category": "cushion-covers",
     "label": "Cushion Covers",
     "code": "CL-CC-007",
-    "file": "CL-CC-007.png",
+    "file": "CL-CC-007.webp",
     "alt": "Cushion covers \u2014 CL-CC-007"
   },
   {
@@ -545,7 +545,7 @@ const records = [
     "category": "cushion-covers",
     "label": "Cushion Covers",
     "code": "CL-CC-008",
-    "file": "CL-CC-008.png",
+    "file": "CL-CC-008.webp",
     "alt": "Cushion covers \u2014 CL-CC-008"
   },
   {
@@ -553,7 +553,7 @@ const records = [
     "category": "cushion-covers",
     "label": "Cushion Covers",
     "code": "CL-CC-009",
-    "file": "CL-CC-009.png",
+    "file": "CL-CC-009.webp",
     "alt": "Cushion covers \u2014 CL-CC-009"
   },
   {
@@ -561,7 +561,7 @@ const records = [
     "category": "cushion-covers",
     "label": "Cushion Covers",
     "code": "CL-CC-010",
-    "file": "CL-CC-010.png",
+    "file": "CL-CC-010.webp",
     "alt": "Cushion covers \u2014 CL-CC-010"
   },
   {
@@ -569,7 +569,7 @@ const records = [
     "category": "cushion-covers",
     "label": "Cushion Covers",
     "code": "CL-CC-011",
-    "file": "CL-CC-011.png",
+    "file": "CL-CC-011.webp",
     "alt": "Cushion covers \u2014 CL-CC-011"
   },
   {
@@ -577,7 +577,7 @@ const records = [
     "category": "cushion-covers",
     "label": "Cushion Covers",
     "code": "CL-CC-012",
-    "file": "CL-CC-012.png",
+    "file": "CL-CC-012.webp",
     "alt": "Cushion covers \u2014 CL-CC-012"
   },
   {
@@ -585,7 +585,7 @@ const records = [
     "category": "throws",
     "label": "Throws",
     "code": "CL-TH-001",
-    "file": "CL-TH-001.png",
+    "file": "CL-TH-001.webp",
     "alt": "Throws \u2014 CL-TH-001"
   },
   {
@@ -593,7 +593,7 @@ const records = [
     "category": "throws",
     "label": "Throws",
     "code": "CL-TH-002",
-    "file": "CL-TH-002.png",
+    "file": "CL-TH-002.webp",
     "alt": "Throws \u2014 CL-TH-002"
   },
   {
@@ -601,7 +601,7 @@ const records = [
     "category": "throws",
     "label": "Throws",
     "code": "CL-TH-003",
-    "file": "CL-TH-003.png",
+    "file": "CL-TH-003.webp",
     "alt": "Throws \u2014 CL-TH-003"
   },
   {
@@ -609,7 +609,7 @@ const records = [
     "category": "throws",
     "label": "Throws",
     "code": "CL-TH-004",
-    "file": "CL-TH-004.png",
+    "file": "CL-TH-004.webp",
     "alt": "Throws \u2014 CL-TH-004"
   },
   {
@@ -617,7 +617,7 @@ const records = [
     "category": "throws",
     "label": "Throws",
     "code": "CL-TH-005",
-    "file": "CL-TH-005.png",
+    "file": "CL-TH-005.webp",
     "alt": "Throws \u2014 CL-TH-005"
   },
   {
@@ -625,7 +625,7 @@ const records = [
     "category": "throws",
     "label": "Throws",
     "code": "CL-TH-006",
-    "file": "CL-TH-006.png",
+    "file": "CL-TH-006.webp",
     "alt": "Throws \u2014 CL-TH-006"
   },
   {
@@ -633,7 +633,7 @@ const records = [
     "category": "throws",
     "label": "Throws",
     "code": "CL-TH-007",
-    "file": "CL-TH-007.png",
+    "file": "CL-TH-007.webp",
     "alt": "Throws \u2014 CL-TH-007"
   },
   {
@@ -641,7 +641,7 @@ const records = [
     "category": "throws",
     "label": "Throws",
     "code": "CL-TH-008",
-    "file": "CL-TH-008.png",
+    "file": "CL-TH-008.webp",
     "alt": "Throws \u2014 CL-TH-008"
   },
   {
@@ -649,7 +649,7 @@ const records = [
     "category": "throws",
     "label": "Throws",
     "code": "CL-TH-009",
-    "file": "CL-TH-009.png",
+    "file": "CL-TH-009.webp",
     "alt": "Throws \u2014 CL-TH-009"
   },
   {
@@ -657,7 +657,7 @@ const records = [
     "category": "throws",
     "label": "Throws",
     "code": "CL-TH-010",
-    "file": "CL-TH-010.png",
+    "file": "CL-TH-010.webp",
     "alt": "Throws \u2014 CL-TH-010"
   },
   {
@@ -665,7 +665,7 @@ const records = [
     "category": "throws",
     "label": "Throws",
     "code": "CL-TH-011",
-    "file": "CL-TH-011.png",
+    "file": "CL-TH-011.webp",
     "alt": "Throws \u2014 CL-TH-011"
   },
   {
@@ -673,7 +673,7 @@ const records = [
     "category": "throws",
     "label": "Throws",
     "code": "CL-TH-012",
-    "file": "CL-TH-012.png",
+    "file": "CL-TH-012.webp",
     "alt": "Throws \u2014 CL-TH-012"
   },
   {
@@ -681,7 +681,7 @@ const records = [
     "category": "poufs",
     "label": "Poufs",
     "code": "CL-PF-001",
-    "file": "CL-PF-001.png",
+    "file": "CL-PF-001.webp",
     "alt": "Poufs \u2014 CL-PF-001"
   },
   {
@@ -689,7 +689,7 @@ const records = [
     "category": "poufs",
     "label": "Poufs",
     "code": "CL-PF-002",
-    "file": "CL-PF-002.png",
+    "file": "CL-PF-002.webp",
     "alt": "Poufs \u2014 CL-PF-002"
   },
   {
@@ -697,7 +697,7 @@ const records = [
     "category": "poufs",
     "label": "Poufs",
     "code": "CL-PF-003",
-    "file": "CL-PF-003.png",
+    "file": "CL-PF-003.webp",
     "alt": "Poufs \u2014 CL-PF-003"
   },
   {
@@ -705,7 +705,7 @@ const records = [
     "category": "poufs",
     "label": "Poufs",
     "code": "CL-PF-004",
-    "file": "CL-PF-004.png",
+    "file": "CL-PF-004.webp",
     "alt": "Poufs \u2014 CL-PF-004"
   },
   {
@@ -713,7 +713,7 @@ const records = [
     "category": "poufs",
     "label": "Poufs",
     "code": "CL-PF-005",
-    "file": "CL-PF-005.png",
+    "file": "CL-PF-005.webp",
     "alt": "Poufs \u2014 CL-PF-005"
   },
   {
@@ -721,7 +721,7 @@ const records = [
     "category": "poufs",
     "label": "Poufs",
     "code": "CL-PF-006",
-    "file": "CL-PF-006.png",
+    "file": "CL-PF-006.webp",
     "alt": "Poufs \u2014 CL-PF-006"
   },
   {
@@ -729,7 +729,7 @@ const records = [
     "category": "poufs",
     "label": "Poufs",
     "code": "CL-PF-007",
-    "file": "CL-PF-007.png",
+    "file": "CL-PF-007.webp",
     "alt": "Poufs \u2014 CL-PF-007"
   },
   {
@@ -737,7 +737,7 @@ const records = [
     "category": "poufs",
     "label": "Poufs",
     "code": "CL-PF-008",
-    "file": "CL-PF-008.png",
+    "file": "CL-PF-008.webp",
     "alt": "Poufs \u2014 CL-PF-008"
   },
   {
@@ -745,7 +745,7 @@ const records = [
     "category": "fouta-towels",
     "label": "Fouta Towels",
     "code": "CL-FT-001",
-    "file": "CL-FT-001.png",
+    "file": "CL-FT-001.webp",
     "alt": "Fouta towels \u2014 CL-FT-001"
   },
   {
@@ -753,7 +753,7 @@ const records = [
     "category": "fouta-towels",
     "label": "Fouta Towels",
     "code": "CL-FT-002",
-    "file": "CL-FT-002.png",
+    "file": "CL-FT-002.webp",
     "alt": "Fouta towels \u2014 CL-FT-002"
   },
   {
@@ -761,7 +761,7 @@ const records = [
     "category": "fouta-towels",
     "label": "Fouta Towels",
     "code": "CL-FT-003",
-    "file": "CL-FT-003.png",
+    "file": "CL-FT-003.webp",
     "alt": "Fouta towels \u2014 CL-FT-003"
   },
   {
@@ -769,7 +769,7 @@ const records = [
     "category": "fouta-towels",
     "label": "Fouta Towels",
     "code": "CL-FT-004",
-    "file": "CL-FT-004.png",
+    "file": "CL-FT-004.webp",
     "alt": "Fouta towels \u2014 CL-FT-004"
   },
   {
@@ -777,7 +777,7 @@ const records = [
     "category": "fouta-towels",
     "label": "Fouta Towels",
     "code": "CL-FT-005",
-    "file": "CL-FT-005.png",
+    "file": "CL-FT-005.webp",
     "alt": "Fouta towels \u2014 CL-FT-005"
   },
   {
@@ -785,7 +785,7 @@ const records = [
     "category": "fouta-towels",
     "label": "Fouta Towels",
     "code": "CL-FT-006",
-    "file": "CL-FT-006.png",
+    "file": "CL-FT-006.webp",
     "alt": "Fouta towels \u2014 CL-FT-006"
   },
   {
@@ -793,7 +793,7 @@ const records = [
     "category": "fouta-towels",
     "label": "Fouta Towels",
     "code": "CL-FT-007",
-    "file": "CL-FT-007.png",
+    "file": "CL-FT-007.webp",
     "alt": "Fouta towels \u2014 CL-FT-007"
   },
   {
@@ -801,7 +801,7 @@ const records = [
     "category": "fouta-towels",
     "label": "Fouta Towels",
     "code": "CL-FT-008",
-    "file": "CL-FT-008.png",
+    "file": "CL-FT-008.webp",
     "alt": "Fouta towels \u2014 CL-FT-008"
   },
   {
@@ -809,7 +809,7 @@ const records = [
     "category": "fouta-towels",
     "label": "Fouta Towels",
     "code": "CL-FT-009",
-    "file": "CL-FT-009.png",
+    "file": "CL-FT-009.webp",
     "alt": "Fouta towels \u2014 CL-FT-009"
   },
   {
@@ -817,7 +817,7 @@ const records = [
     "category": "fouta-towels",
     "label": "Fouta Towels",
     "code": "CL-FT-010",
-    "file": "CL-FT-010.png",
+    "file": "CL-FT-010.webp",
     "alt": "Fouta towels \u2014 CL-FT-010"
   },
   {
@@ -825,7 +825,7 @@ const records = [
     "category": "fouta-towels",
     "label": "Fouta Towels",
     "code": "CL-FT-011",
-    "file": "CL-FT-011.png",
+    "file": "CL-FT-011.webp",
     "alt": "Fouta towels \u2014 CL-FT-011"
   },
   {
@@ -833,7 +833,7 @@ const records = [
     "category": "fouta-towels",
     "label": "Fouta Towels",
     "code": "CL-FT-012",
-    "file": "CL-FT-012.png",
+    "file": "CL-FT-012.webp",
     "alt": "Fouta towels \u2014 CL-FT-012"
   },
   {
@@ -841,7 +841,7 @@ const records = [
     "category": "terry-towels",
     "label": "Terry Towels",
     "code": "CL-TT-001",
-    "file": "CL-TT-001.png",
+    "file": "CL-TT-001.webp",
     "alt": "Terry towels \u2014 CL-TT-001"
   },
   {
@@ -849,7 +849,7 @@ const records = [
     "category": "terry-towels",
     "label": "Terry Towels",
     "code": "CL-TT-002",
-    "file": "CL-TT-002.png",
+    "file": "CL-TT-002.webp",
     "alt": "Terry towels \u2014 CL-TT-002"
   },
   {
@@ -857,7 +857,7 @@ const records = [
     "category": "terry-towels",
     "label": "Terry Towels",
     "code": "CL-TT-003",
-    "file": "CL-TT-003.png",
+    "file": "CL-TT-003.webp",
     "alt": "Terry towels \u2014 CL-TT-003"
   },
   {
@@ -865,7 +865,7 @@ const records = [
     "category": "terry-towels",
     "label": "Terry Towels",
     "code": "CL-TT-004",
-    "file": "CL-TT-004.png",
+    "file": "CL-TT-004.webp",
     "alt": "Terry towels \u2014 CL-TT-004"
   },
   {
@@ -873,7 +873,7 @@ const records = [
     "category": "terry-towels",
     "label": "Terry Towels",
     "code": "CL-TT-005",
-    "file": "CL-TT-005.png",
+    "file": "CL-TT-005.webp",
     "alt": "Terry towels \u2014 CL-TT-005"
   },
   {
@@ -881,7 +881,7 @@ const records = [
     "category": "terry-towels",
     "label": "Terry Towels",
     "code": "CL-TT-006",
-    "file": "CL-TT-006.png",
+    "file": "CL-TT-006.webp",
     "alt": "Terry towels \u2014 CL-TT-006"
   },
   {
@@ -889,7 +889,7 @@ const records = [
     "category": "terry-towels",
     "label": "Terry Towels",
     "code": "CL-TT-007",
-    "file": "CL-TT-007.png",
+    "file": "CL-TT-007.webp",
     "alt": "Terry towels \u2014 CL-TT-007"
   },
   {
@@ -897,7 +897,7 @@ const records = [
     "category": "terry-towels",
     "label": "Terry Towels",
     "code": "CL-TT-008",
-    "file": "CL-TT-008.png",
+    "file": "CL-TT-008.webp",
     "alt": "Terry towels \u2014 CL-TT-008"
   },
   {
@@ -905,7 +905,7 @@ const records = [
     "category": "terry-towels",
     "label": "Terry Towels",
     "code": "CL-TT-009",
-    "file": "CL-TT-009.png",
+    "file": "CL-TT-009.webp",
     "alt": "Terry towels \u2014 CL-TT-009"
   },
   {
@@ -913,7 +913,7 @@ const records = [
     "category": "terry-towels",
     "label": "Terry Towels",
     "code": "CL-TT-010",
-    "file": "CL-TT-010.png",
+    "file": "CL-TT-010.webp",
     "alt": "Terry towels \u2014 CL-TT-010"
   },
   {
@@ -921,7 +921,7 @@ const records = [
     "category": "terry-towels",
     "label": "Terry Towels",
     "code": "CL-TT-011",
-    "file": "CL-TT-011.png",
+    "file": "CL-TT-011.webp",
     "alt": "Terry towels \u2014 CL-TT-011"
   },
   {
@@ -929,7 +929,7 @@ const records = [
     "category": "terry-towels",
     "label": "Terry Towels",
     "code": "CL-TT-012",
-    "file": "CL-TT-012.png",
+    "file": "CL-TT-012.webp",
     "alt": "Terry towels \u2014 CL-TT-012"
   },
   {
@@ -937,7 +937,7 @@ const records = [
     "category": "kitchen-towels",
     "label": "Kitchen Towels",
     "code": "CL-KT-001",
-    "file": "CL-KT-001.png",
+    "file": "CL-KT-001.webp",
     "alt": "Kitchen towels \u2014 CL-KT-001"
   },
   {
@@ -945,7 +945,7 @@ const records = [
     "category": "kitchen-towels",
     "label": "Kitchen Towels",
     "code": "CL-KT-002",
-    "file": "CL-KT-002.png",
+    "file": "CL-KT-002.webp",
     "alt": "Kitchen towels \u2014 CL-KT-002"
   },
   {
@@ -953,7 +953,7 @@ const records = [
     "category": "kitchen-towels",
     "label": "Kitchen Towels",
     "code": "CL-KT-003",
-    "file": "CL-KT-003.png",
+    "file": "CL-KT-003.webp",
     "alt": "Kitchen towels \u2014 CL-KT-003"
   },
   {
@@ -961,7 +961,7 @@ const records = [
     "category": "kitchen-towels",
     "label": "Kitchen Towels",
     "code": "CL-KT-004",
-    "file": "CL-KT-004.png",
+    "file": "CL-KT-004.webp",
     "alt": "Kitchen towels \u2014 CL-KT-004"
   },
   {
@@ -969,7 +969,7 @@ const records = [
     "category": "kitchen-towels",
     "label": "Kitchen Towels",
     "code": "CL-KT-005",
-    "file": "CL-KT-005.png",
+    "file": "CL-KT-005.webp",
     "alt": "Kitchen towels \u2014 CL-KT-005"
   },
   {
@@ -977,7 +977,7 @@ const records = [
     "category": "kitchen-towels",
     "label": "Kitchen Towels",
     "code": "CL-KT-006",
-    "file": "CL-KT-006.png",
+    "file": "CL-KT-006.webp",
     "alt": "Kitchen towels \u2014 CL-KT-006"
   },
   {
@@ -985,7 +985,7 @@ const records = [
     "category": "kitchen-towels",
     "label": "Kitchen Towels",
     "code": "CL-KT-007",
-    "file": "CL-KT-007.png",
+    "file": "CL-KT-007.webp",
     "alt": "Kitchen towels \u2014 CL-KT-007"
   },
   {
@@ -993,7 +993,7 @@ const records = [
     "category": "kitchen-towels",
     "label": "Kitchen Towels",
     "code": "CL-KT-008",
-    "file": "CL-KT-008.png",
+    "file": "CL-KT-008.webp",
     "alt": "Kitchen towels \u2014 CL-KT-008"
   },
   {
@@ -1001,7 +1001,7 @@ const records = [
     "category": "kitchen-towels",
     "label": "Kitchen Towels",
     "code": "CL-KT-009",
-    "file": "CL-KT-009.png",
+    "file": "CL-KT-009.webp",
     "alt": "Kitchen towels \u2014 CL-KT-009"
   },
   {
@@ -1009,7 +1009,7 @@ const records = [
     "category": "kitchen-towels",
     "label": "Kitchen Towels",
     "code": "CL-KT-010",
-    "file": "CL-KT-010.png",
+    "file": "CL-KT-010.webp",
     "alt": "Kitchen towels \u2014 CL-KT-010"
   },
   {
@@ -1017,7 +1017,7 @@ const records = [
     "category": "kitchen-towels",
     "label": "Kitchen Towels",
     "code": "CL-KT-011",
-    "file": "CL-KT-011.png",
+    "file": "CL-KT-011.webp",
     "alt": "Kitchen towels \u2014 CL-KT-011"
   },
   {
@@ -1025,7 +1025,7 @@ const records = [
     "category": "kitchen-towels",
     "label": "Kitchen Towels",
     "code": "CL-KT-012",
-    "file": "CL-KT-012.png",
+    "file": "CL-KT-012.webp",
     "alt": "Kitchen towels \u2014 CL-KT-012"
   },
   {
@@ -1033,7 +1033,7 @@ const records = [
     "category": "shower-curtains",
     "label": "Shower Curtains",
     "code": "CL-SC-001",
-    "file": "CL-SC-001.png",
+    "file": "CL-SC-001.webp",
     "alt": "Shower curtains \u2014 CL-SC-001"
   },
   {
@@ -1041,7 +1041,7 @@ const records = [
     "category": "shower-curtains",
     "label": "Shower Curtains",
     "code": "CL-SC-002",
-    "file": "CL-SC-002.png",
+    "file": "CL-SC-002.webp",
     "alt": "Shower curtains \u2014 CL-SC-002"
   },
   {
@@ -1049,7 +1049,7 @@ const records = [
     "category": "shower-curtains",
     "label": "Shower Curtains",
     "code": "CL-SC-003",
-    "file": "CL-SC-003.png",
+    "file": "CL-SC-003.webp",
     "alt": "Shower curtains \u2014 CL-SC-003"
   },
   {
@@ -1057,7 +1057,7 @@ const records = [
     "category": "shower-curtains",
     "label": "Shower Curtains",
     "code": "CL-SC-004",
-    "file": "CL-SC-004.png",
+    "file": "CL-SC-004.webp",
     "alt": "Shower curtains \u2014 CL-SC-004"
   },
   {
@@ -1065,7 +1065,7 @@ const records = [
     "category": "shower-curtains",
     "label": "Shower Curtains",
     "code": "CL-SC-005",
-    "file": "CL-SC-005.png",
+    "file": "CL-SC-005.webp",
     "alt": "Shower curtains \u2014 CL-SC-005"
   },
   {
@@ -1073,7 +1073,7 @@ const records = [
     "category": "shower-curtains",
     "label": "Shower Curtains",
     "code": "CL-SC-006",
-    "file": "CL-SC-006.png",
+    "file": "CL-SC-006.webp",
     "alt": "Shower curtains \u2014 CL-SC-006"
   },
   {
@@ -1081,7 +1081,7 @@ const records = [
     "category": "shower-curtains",
     "label": "Shower Curtains",
     "code": "CL-SC-007",
-    "file": "CL-SC-007.png",
+    "file": "CL-SC-007.webp",
     "alt": "Shower curtains \u2014 CL-SC-007"
   },
   {
@@ -1089,7 +1089,7 @@ const records = [
     "category": "table-covers",
     "label": "Table Covers",
     "code": "CL-TC-001",
-    "file": "CL-TC-001.png",
+    "file": "CL-TC-001.webp",
     "alt": "Table covers \u2014 CL-TC-001"
   },
   {
@@ -1097,7 +1097,7 @@ const records = [
     "category": "table-covers",
     "label": "Table Covers",
     "code": "CL-TC-002",
-    "file": "CL-TC-002.png",
+    "file": "CL-TC-002.webp",
     "alt": "Table covers \u2014 CL-TC-002"
   },
   {
@@ -1105,7 +1105,7 @@ const records = [
     "category": "table-covers",
     "label": "Table Covers",
     "code": "CL-TC-003",
-    "file": "CL-TC-003.png",
+    "file": "CL-TC-003.webp",
     "alt": "Table covers \u2014 CL-TC-003"
   },
   {
@@ -1113,7 +1113,7 @@ const records = [
     "category": "table-covers",
     "label": "Table Covers",
     "code": "CL-TC-004",
-    "file": "CL-TC-004.png",
+    "file": "CL-TC-004.webp",
     "alt": "Table covers \u2014 CL-TC-004"
   },
   {
@@ -1121,7 +1121,7 @@ const records = [
     "category": "table-covers",
     "label": "Table Covers",
     "code": "CL-TC-005",
-    "file": "CL-TC-005.png",
+    "file": "CL-TC-005.webp",
     "alt": "Table covers \u2014 CL-TC-005"
   },
   {
@@ -1129,7 +1129,7 @@ const records = [
     "category": "table-covers",
     "label": "Table Covers",
     "code": "CL-TC-006",
-    "file": "CL-TC-006.png",
+    "file": "CL-TC-006.webp",
     "alt": "Table covers \u2014 CL-TC-006"
   },
   {
@@ -1137,7 +1137,7 @@ const records = [
     "category": "table-covers",
     "label": "Table Covers",
     "code": "CL-TC-007",
-    "file": "CL-TC-007.png",
+    "file": "CL-TC-007.webp",
     "alt": "Table covers \u2014 CL-TC-007"
   },
   {
@@ -1145,7 +1145,7 @@ const records = [
     "category": "table-covers",
     "label": "Table Covers",
     "code": "CL-TC-008",
-    "file": "CL-TC-008.png",
+    "file": "CL-TC-008.webp",
     "alt": "Table covers \u2014 CL-TC-008"
   },
   {
@@ -1153,7 +1153,7 @@ const records = [
     "category": "table-covers",
     "label": "Table Covers",
     "code": "CL-TC-009",
-    "file": "CL-TC-009.png",
+    "file": "CL-TC-009.webp",
     "alt": "Table covers \u2014 CL-TC-009"
   },
   {
@@ -1161,7 +1161,7 @@ const records = [
     "category": "table-covers",
     "label": "Table Covers",
     "code": "CL-TC-010",
-    "file": "CL-TC-010.png",
+    "file": "CL-TC-010.webp",
     "alt": "Table covers \u2014 CL-TC-010"
   },
   {
@@ -1169,7 +1169,7 @@ const records = [
     "category": "table-covers",
     "label": "Table Covers",
     "code": "CL-TC-011",
-    "file": "CL-TC-011.png",
+    "file": "CL-TC-011.webp",
     "alt": "Table covers \u2014 CL-TC-011"
   },
   {
@@ -1177,7 +1177,7 @@ const records = [
     "category": "table-covers",
     "label": "Table Covers",
     "code": "CL-TC-012",
-    "file": "CL-TC-012.png",
+    "file": "CL-TC-012.webp",
     "alt": "Table covers \u2014 CL-TC-012"
   },
   {
@@ -1185,7 +1185,7 @@ const records = [
     "category": "baskets",
     "label": "Baskets",
     "code": "CL-BK-001",
-    "file": "CL-BK-001.png",
+    "file": "CL-BK-001.webp",
     "alt": "Baskets \u2014 CL-BK-001"
   },
   {
@@ -1193,7 +1193,7 @@ const records = [
     "category": "baskets",
     "label": "Baskets",
     "code": "CL-BK-002",
-    "file": "CL-BK-002.png",
+    "file": "CL-BK-002.webp",
     "alt": "Baskets \u2014 CL-BK-002"
   },
   {
@@ -1201,7 +1201,7 @@ const records = [
     "category": "baskets",
     "label": "Baskets",
     "code": "CL-BK-003",
-    "file": "CL-BK-003.png",
+    "file": "CL-BK-003.webp",
     "alt": "Baskets \u2014 CL-BK-003"
   },
   {
@@ -1209,7 +1209,7 @@ const records = [
     "category": "baskets",
     "label": "Baskets",
     "code": "CL-BK-004",
-    "file": "CL-BK-004.png",
+    "file": "CL-BK-004.webp",
     "alt": "Baskets \u2014 CL-BK-004"
   },
   {
@@ -1217,7 +1217,7 @@ const records = [
     "category": "baskets",
     "label": "Baskets",
     "code": "CL-BK-005",
-    "file": "CL-BK-005.png",
+    "file": "CL-BK-005.webp",
     "alt": "Baskets \u2014 CL-BK-005"
   },
   {
@@ -1225,7 +1225,7 @@ const records = [
     "category": "baskets",
     "label": "Baskets",
     "code": "CL-BK-006",
-    "file": "CL-BK-006.png",
+    "file": "CL-BK-006.webp",
     "alt": "Baskets \u2014 CL-BK-006"
   },
   {
@@ -1233,7 +1233,7 @@ const records = [
     "category": "baskets",
     "label": "Baskets",
     "code": "CL-BK-007",
-    "file": "CL-BK-007.png",
+    "file": "CL-BK-007.webp",
     "alt": "Baskets \u2014 CL-BK-007"
   },
   {
@@ -1241,7 +1241,7 @@ const records = [
     "category": "baskets",
     "label": "Baskets",
     "code": "CL-BK-008",
-    "file": "CL-BK-008.png",
+    "file": "CL-BK-008.webp",
     "alt": "Baskets \u2014 CL-BK-008"
   },
   {
@@ -1249,7 +1249,7 @@ const records = [
     "category": "baskets",
     "label": "Baskets",
     "code": "CL-BK-009",
-    "file": "CL-BK-009.png",
+    "file": "CL-BK-009.webp",
     "alt": "Baskets \u2014 CL-BK-009"
   },
   {
@@ -1257,7 +1257,7 @@ const records = [
     "category": "baskets",
     "label": "Baskets",
     "code": "CL-BK-010",
-    "file": "CL-BK-010.png",
+    "file": "CL-BK-010.webp",
     "alt": "Baskets \u2014 CL-BK-010"
   },
   {
@@ -1265,7 +1265,7 @@ const records = [
     "category": "baskets",
     "label": "Baskets",
     "code": "CL-BK-011",
-    "file": "CL-BK-011.png",
+    "file": "CL-BK-011.webp",
     "alt": "Baskets \u2014 CL-BK-011"
   },
   {
@@ -1273,7 +1273,7 @@ const records = [
     "category": "baskets",
     "label": "Baskets",
     "code": "CL-BK-012",
-    "file": "CL-BK-012.png",
+    "file": "CL-BK-012.webp",
     "alt": "Baskets \u2014 CL-BK-012"
   },
   {
@@ -1281,7 +1281,7 @@ const records = [
     "category": "wall-hangings",
     "label": "Wall Hangings",
     "code": "CL-WH-001",
-    "file": "CL-WH-001.png",
+    "file": "CL-WH-001.webp",
     "alt": "Wall hangings \u2014 CL-WH-001"
   },
   {
@@ -1289,7 +1289,7 @@ const records = [
     "category": "wall-hangings",
     "label": "Wall Hangings",
     "code": "CL-WH-002",
-    "file": "CL-WH-002.png",
+    "file": "CL-WH-002.webp",
     "alt": "Wall hangings \u2014 CL-WH-002"
   },
   {
@@ -1297,7 +1297,7 @@ const records = [
     "category": "wall-hangings",
     "label": "Wall Hangings",
     "code": "CL-WH-003",
-    "file": "CL-WH-003.png",
+    "file": "CL-WH-003.webp",
     "alt": "Wall hangings \u2014 CL-WH-003"
   },
   {
@@ -1305,7 +1305,7 @@ const records = [
     "category": "wall-hangings",
     "label": "Wall Hangings",
     "code": "CL-WH-004",
-    "file": "CL-WH-004.png",
+    "file": "CL-WH-004.webp",
     "alt": "Wall hangings \u2014 CL-WH-004"
   },
   {
@@ -1313,7 +1313,7 @@ const records = [
     "category": "wall-hangings",
     "label": "Wall Hangings",
     "code": "CL-WH-005",
-    "file": "CL-WH-005.png",
+    "file": "CL-WH-005.webp",
     "alt": "Wall hangings \u2014 CL-WH-005"
   },
   {
@@ -1321,7 +1321,7 @@ const records = [
     "category": "wall-art",
     "label": "Wall Art",
     "code": "CL-WA-001",
-    "file": "CL-WA-001.png",
+    "file": "CL-WA-001.webp",
     "alt": "Wall art \u2014 CL-WA-001"
   },
   {
@@ -1329,7 +1329,7 @@ const records = [
     "category": "wall-art",
     "label": "Wall Art",
     "code": "CL-WA-002",
-    "file": "CL-WA-002.png",
+    "file": "CL-WA-002.webp",
     "alt": "Wall art \u2014 CL-WA-002"
   },
   {
@@ -1337,7 +1337,7 @@ const records = [
     "category": "wall-art",
     "label": "Wall Art",
     "code": "CL-WA-003",
-    "file": "CL-WA-003.png",
+    "file": "CL-WA-003.webp",
     "alt": "Wall art \u2014 CL-WA-003"
   },
   {
@@ -1345,7 +1345,7 @@ const records = [
     "category": "wall-art",
     "label": "Wall Art",
     "code": "CL-WA-004",
-    "file": "CL-WA-004.png",
+    "file": "CL-WA-004.webp",
     "alt": "Wall art \u2014 CL-WA-004"
   },
   {
@@ -1353,7 +1353,7 @@ const records = [
     "category": "wall-art",
     "label": "Wall Art",
     "code": "CL-WA-005",
-    "file": "CL-WA-005.png",
+    "file": "CL-WA-005.webp",
     "alt": "Wall art \u2014 CL-WA-005"
   },
   {
@@ -1361,7 +1361,7 @@ const records = [
     "category": "wall-art",
     "label": "Wall Art",
     "code": "CL-WA-006",
-    "file": "CL-WA-006.png",
+    "file": "CL-WA-006.webp",
     "alt": "Wall art \u2014 CL-WA-006"
   },
   {
@@ -1369,7 +1369,7 @@ const records = [
     "category": "wall-art",
     "label": "Wall Art",
     "code": "CL-WA-007",
-    "file": "CL-WA-007.png",
+    "file": "CL-WA-007.webp",
     "alt": "Wall art \u2014 CL-WA-007"
   },
   {
@@ -1377,7 +1377,7 @@ const records = [
     "category": "wall-art",
     "label": "Wall Art",
     "code": "CL-WA-008",
-    "file": "CL-WA-008.png",
+    "file": "CL-WA-008.webp",
     "alt": "Wall art \u2014 CL-WA-008"
   },
   {
@@ -1385,7 +1385,7 @@ const records = [
     "category": "wall-art",
     "label": "Wall Art",
     "code": "CL-WA-009",
-    "file": "CL-WA-009.png",
+    "file": "CL-WA-009.webp",
     "alt": "Wall art \u2014 CL-WA-009"
   },
   {
@@ -1393,7 +1393,7 @@ const records = [
     "category": "wall-art",
     "label": "Wall Art",
     "code": "CL-WA-010",
-    "file": "CL-WA-010.png",
+    "file": "CL-WA-010.webp",
     "alt": "Wall art \u2014 CL-WA-010"
   },
   {
@@ -1401,7 +1401,7 @@ const records = [
     "category": "wall-art",
     "label": "Wall Art",
     "code": "CL-WA-011",
-    "file": "CL-WA-011.png",
+    "file": "CL-WA-011.webp",
     "alt": "Wall art \u2014 CL-WA-011"
   },
   {
@@ -1409,7 +1409,7 @@ const records = [
     "category": "wall-art",
     "label": "Wall Art",
     "code": "CL-WA-012",
-    "file": "CL-WA-012.png",
+    "file": "CL-WA-012.webp",
     "alt": "Wall art \u2014 CL-WA-012"
   },
   {
@@ -1417,7 +1417,7 @@ const records = [
     "category": "halloween-collection",
     "label": "Halloween",
     "code": "CL-HW-001",
-    "file": "CL-HW-001.png",
+    "file": "CL-HW-001.webp",
     "alt": "Halloween collection \u2014 CL-HW-001"
   },
   {
@@ -1425,7 +1425,7 @@ const records = [
     "category": "halloween-collection",
     "label": "Halloween",
     "code": "CL-HW-002",
-    "file": "CL-HW-002.png",
+    "file": "CL-HW-002.webp",
     "alt": "Halloween collection \u2014 CL-HW-002"
   },
   {
@@ -1433,7 +1433,7 @@ const records = [
     "category": "halloween-collection",
     "label": "Halloween",
     "code": "CL-HW-003",
-    "file": "CL-HW-003.png",
+    "file": "CL-HW-003.webp",
     "alt": "Halloween collection \u2014 CL-HW-003"
   },
   {
@@ -1441,7 +1441,7 @@ const records = [
     "category": "halloween-collection",
     "label": "Halloween",
     "code": "CL-HW-004",
-    "file": "CL-HW-004.png",
+    "file": "CL-HW-004.webp",
     "alt": "Halloween collection \u2014 CL-HW-004"
   },
   {
@@ -1449,7 +1449,7 @@ const records = [
     "category": "halloween-collection",
     "label": "Halloween",
     "code": "CL-HW-005",
-    "file": "CL-HW-005.png",
+    "file": "CL-HW-005.webp",
     "alt": "Halloween collection \u2014 CL-HW-005"
   },
   {
@@ -1457,7 +1457,7 @@ const records = [
     "category": "halloween-collection",
     "label": "Halloween",
     "code": "CL-HW-006",
-    "file": "CL-HW-006.png",
+    "file": "CL-HW-006.webp",
     "alt": "Halloween collection \u2014 CL-HW-006"
   },
   {
@@ -1465,7 +1465,7 @@ const records = [
     "category": "halloween-collection",
     "label": "Halloween",
     "code": "CL-HW-007",
-    "file": "CL-HW-007.png",
+    "file": "CL-HW-007.webp",
     "alt": "Halloween collection \u2014 CL-HW-007"
   },
   {
@@ -1473,7 +1473,7 @@ const records = [
     "category": "halloween-collection",
     "label": "Halloween",
     "code": "CL-HW-008",
-    "file": "CL-HW-008.png",
+    "file": "CL-HW-008.webp",
     "alt": "Halloween collection \u2014 CL-HW-008"
   },
   {
@@ -1481,7 +1481,7 @@ const records = [
     "category": "halloween-collection",
     "label": "Halloween",
     "code": "CL-HW-009",
-    "file": "CL-HW-009.png",
+    "file": "CL-HW-009.webp",
     "alt": "Halloween collection \u2014 CL-HW-009"
   },
   {
@@ -1489,7 +1489,7 @@ const records = [
     "category": "halloween-collection",
     "label": "Halloween",
     "code": "CL-HW-010",
-    "file": "CL-HW-010.png",
+    "file": "CL-HW-010.webp",
     "alt": "Halloween collection \u2014 CL-HW-010"
   },
   {
@@ -1497,7 +1497,7 @@ const records = [
     "category": "halloween-collection",
     "label": "Halloween",
     "code": "CL-HW-011",
-    "file": "CL-HW-011.png",
+    "file": "CL-HW-011.webp",
     "alt": "Halloween collection \u2014 CL-HW-011"
   },
   {
@@ -1505,7 +1505,7 @@ const records = [
     "category": "halloween-collection",
     "label": "Halloween",
     "code": "CL-HW-012",
-    "file": "CL-HW-012.png",
+    "file": "CL-HW-012.webp",
     "alt": "Halloween collection \u2014 CL-HW-012"
   }
 ];
