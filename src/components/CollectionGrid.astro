@@ -1,138 +1,17 @@
 ---
-/**
- * CollectionGrid — Figma "All Filter / Infinite Grid" (162:111) and the
- * filtered grid (144:250). Every state is rendered at build; the filter
- * script shows one at a time. "All" is split into batches of 14 that reveal
- * as you scroll (images are lazy, so hidden batches cost nothing).
- */
 import ProductCard from './ProductCard.astro';
-import { categories, products, lifestyle, type Product, type Lifestyle } from '../data/collection';
-
-import CollectionEnd from './CollectionEnd.astro';
-
-const LIFESTYLE_WIDTHS = [644, 872, 1288, 1744];
-const LIFESTYLE_SIZES = '(min-width: 992px) 45vw, 100vw';
-
-/* ---- "All": repeating 4 · L+2 · 2+L · 4 (12 products + 2 lifestyle per batch) ---- */
-const largeLifestyle = lifestyle.filter((l) => /-l\d$/.test(l.id));
-type AllBatch = { rows: Array<{ kind: 'four' | 'lifestyle-left' | 'lifestyle-right'; items: (Product | Lifestyle)[] }> };
-const allBatches: AllBatch[] = [];
-{
-  const ps = [...products];
-  const ls = [...largeLifestyle];
-  while (ps.length) {
-    const take = (n: number) => ps.splice(0, n);
-    const life = () => ls.shift() ?? largeLifestyle[0];
-    const rows: AllBatch['rows'] = [];
-    rows.push({ kind: 'four', items: take(4) });
-    if (ps.length) rows.push({ kind: 'lifestyle-left', items: [life(), ...take(2)] });
-    if (ps.length) rows.push({ kind: 'lifestyle-right', items: [...take(2), life()] });
-    if (ps.length) rows.push({ kind: 'four', items: take(4) });
-    allBatches.push({ rows });
-  }
-}
-
-/* ---- Per category: 3 · L + 2 small · 3 · 3 ---- */
-type CategoryRow =
-  | { kind: 'three-500' | 'three'; items: Product[] }
-  | { kind: 'feature'; large?: Lifestyle; small: Lifestyle[] };
-const byCategory = categories.map((c) => {
-  const ps = products.filter((p) => p.category === c.slug);
-  const ls = lifestyle.filter((l) => l.category === c.slug);
-  const rows: CategoryRow[] = [
-    { kind: 'three-500', items: ps.slice(0, 3) },
-    { kind: 'feature', large: ls.find((l) => /-l\d$/.test(l.id)), small: ls.filter((l) => /-s\d$/.test(l.id)).slice(0, 2) },
-    { kind: 'three', items: ps.slice(3, 6) },
-    { kind: 'three', items: ps.slice(6, 9) },
-  ];
-  return { ...c, rows };
-});
+import { products } from '../data/collection';
+const orderedProducts = [...products.filter(p => p.code.endsWith('-001')), ...products.filter(p => !p.code.endsWith('-001'))];
 ---
-
-<div class="collection-grid" id="collection-grid">
-  <!-- All -->
-  <div class="collection-grid_state" data-category="all">
-    {allBatches.map((batch, b) => (
-      <div class="collection-grid_batch" data-batch={b} hidden={b > 0}>
-        {batch.rows.map((row) => (
-          <div class:list={['collection-grid_row', `is-${row.kind}`]} data-reveal-group>
-            {row.items.map((item) => (
-              <ProductCard
-                image={item.image} alt={item.alt} label={item.label} category={item.category}
-                widths={'id' in item && /-l\d$/.test(item.id) ? LIFESTYLE_WIDTHS : undefined}
-                sizes={'id' in item && /-l\d$/.test(item.id) ? LIFESTYLE_SIZES : undefined}
-              />
-            ))}
-          </div>
-        ))}
-      </div>
-    ))}
-    <div class="collection-grid_sentinel" aria-hidden="true"></div>
-    <CollectionEnd />
-  </div>
-
-  <!-- Per category -->
-  {byCategory.map((c) => (
-    <div class="collection-grid_state" data-category={c.slug} hidden>
-      {c.rows.map((row) =>
-        row.kind === 'feature' ? (
-          <div class="collection-grid_row is-feature" data-reveal-group>
-            {row.large && <ProductCard {...row.large} widths={LIFESTYLE_WIDTHS} sizes={LIFESTYLE_SIZES} class="is-feature-large" />}
-            <div class="collection-grid_stack">
-              {row.small.map((s) => <ProductCard {...s} />)}
-            </div>
-          </div>
-        ) : (
-          <div class:list={['collection-grid_row', `is-${row.kind}`]} data-reveal-group>
-            {row.items.map((item) => <ProductCard {...item} />)}
-          </div>
-        )
-      )}
-      <CollectionEnd />
-    </div>
-  ))}
+<div class="collection-grid" id="collection-grid" aria-label="Collection products">
+  {orderedProducts.map(product => <ProductCard {...product} overview={product.code.endsWith('-001')} />)}
 </div>
-
+<div class="collection-grid_sentinel" aria-hidden="true"></div>
 <style>
-  .collection-grid { --gap: 1.5rem; }   /* 24 — every gap and derived width follows this */
-
-  .collection-grid_state,
-  .collection-grid_batch {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap);
-  }
-  .collection-grid_state[hidden],
-  .collection-grid_batch[hidden] { display: none; }
-
-  .collection-grid_row {
-    display: flex;
-    gap: var(--gap);
-  }
-  .collection-grid_row > :global(.product-card) { flex: 1 1 0; }
-
-  /* --- All: 4 products (320) · lifestyle 644 + 2 (420) · 2 + lifestyle (420) --- */
-  .is-four            { height: 20rem; }     /* 320 */
-  .is-lifestyle-left,
-  .is-lifestyle-right { height: 26.25rem; }  /* 420 */
-  /* lifestyle = two of the four product columns + one gap, so edges line up with the row above */
-  .is-lifestyle-left  > :global(.product-card:first-child),
-  .is-lifestyle-right > :global(.product-card:last-child) {
-    flex: 0 0 calc((100% - 3 * var(--gap)) / 2 + var(--gap));
-  }
-
-  /* --- Category: 3 (500) · 872 + stack of 300s · 3 (520) --- */
-  .is-three-500 { height: 31.25rem; }        /* 500 */
-  .is-three     { height: 32.5rem; }         /* 520 */
-  .is-feature   { height: 40rem; }           /* 640 */
-  /* feature tile 765 + gap + 539 stack (Figma 144:247) */
-  .is-feature > :global(.is-feature-large) { flex: 0 0 47.8125rem; }   /* 765 */
-  .collection-grid_stack {
-    flex: 1 1 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap);
-  }
-  .collection-grid_stack > :global(.product-card) { flex: 1 1 0; }
-
+  .collection-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; }
+  .collection-grid.is-filtered { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .collection-grid_sentinel { height: 1px; margin-top: -5rem; }
+  .collection-grid_sentinel[hidden] { display: none; }
+  @media (max-width: 991px) { .collection-grid, .collection-grid.is-filtered { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 767px) { .collection-grid { gap: .96rem; } }
 </style>

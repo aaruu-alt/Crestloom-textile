@@ -1,0 +1,128 @@
+/* Homepage responsive layouts: Figma 547:239, 547:459, 639:501. */
+.homepage .selected-works_mobile-link, .homepage .selected-works_pagination { display: none; }
+.homepage .collection-card_overlay { background: linear-gradient(180deg, transparent, rgb(0 0 0 / .38)); opacity: 1; }
+.homepage .collection-card_content { transform: none; }
+.homepage .collection-card_action { opacity: 1; }
+.homepage .selected-works_caption { gap: .75rem; }
+.homepage .collections_heading-block { gap: .75rem; }
+@media (max-width: 991px) {
+  .homepage .padding-section-large { padding-block: 4.5rem; }
+  .homepage .heading-style-h2 { font-size: 3rem; }
+  .homepage .collections_header { flex-direction: column; align-items: center; gap: 1.5rem; text-align: center; }
+  .homepage .collections_heading-block { width: 100%; align-items: center; }
+  .homepage .collections_intro { width: 100%; max-width: 32rem; font-size: 1rem; }
+  .homepage .collections_grid { flex-direction: column; height: auto; }
+  .homepage .collections_grid > .collection-card { flex: auto; height: 31.25rem; }
+  .homepage .collections_column { width: 100%; flex-direction: row; }
+  .homepage .collections_column > .collection-card { height: 19.375rem; }
+  .homepage .collection-card_title { font-size: 2.125rem; }
+  .homepage .collections_inner { gap: 3.5rem; }
+  .homepage .sourcing_inner { flex-direction: column; gap: 3rem; }
+  .homepage .sourcing_copy, .homepage .sourcing_steps { width: 100%; }
+  .homepage .sourcing_intro { max-width: 100%; font-size: 1rem; }
+  .homepage .sourcing_heading-block h2 { font-size: 3.5rem; }
+  .homepage .sourcing_step { gap: 3.4375rem; }
+  .homepage .sourcing_step-title { font-size: 1.625rem; }
+  .homepage .sourcing_step:nth-child(2) .sourcing_step-title { max-width: none; }
+  .homepage .origin { height: 57.375rem; }
+  .homepage .origin_content { align-items: flex-end; padding-bottom: 2.5rem; }
+  .homepage .origin_inner { justify-content: flex-start; }
+  .homepage .origin_copy { width: 100%; max-width: 43rem; gap: 1.125rem; }
+  .homepage .origin_heading { font-size: 2.625rem; }
+  .homepage .origin_intro { font-size: .9375rem; max-width: 36.375rem; }
+  .homepage .origin_overlay { background: linear-gradient(180deg, transparent 30%, rgb(0 0 0 / .7)); }
+  .homepage .origin_copy > .button { margin-top: .375rem; }
+  .homepage .selected-works { padding-block: 4.5rem; }
+  .homepage .selected-works_inner { gap: 3.5rem; }
+  .homepage .selected-works_header { justify-content: center; text-align: center; }
+  .homepage .selected-works_heading-block { align-items: center; }
+  .homepage .selected-works_desktop-link { display: none; }
+  .homepage .selected-works_mobile-link { display: inline-flex; }
+  .homepage .selected-works_grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .homepage .selected-works_item { min-width: 0; }
+  .homepage .selected-works_item:first-child { grid-column: 1 / -1; }
+  .homepage .selected-works_item:not(:first-child) .selected-works_frame { height: 25.8125rem; }
+  .homepage .selected-works_caption { gap: 1rem; }
+  .homepage .selected-works_caption h3 { font-size: 1.625rem; }
+  .homepage .partnerships { padding-block: 4.5rem; }
+  .homepage .partnerships_inner { gap: 3.5rem; }
+  .homepage .partnerships_heading { font-size: 3.5rem; }
+  .homepage .partnerships_regions { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 0 1.5rem; }
+  .homepage .partnerships_regions::after { content: ""; position: absolute; inset-inline: 0; top: 50%; height: 1px; background: rgb(40 40 42 / .28); pointer-events: none; }
+  .homepage .partnerships_region:nth-child(2) { border-right: 0; }
+  .homepage .partnerships_region h3 { font-size: 2.125rem; }
+}
+@media (max-width: 767px) {
+  .homepage { font-size: 1rem; }
+  .homepage .padding-global { padding-inline: 1rem; }
+  .homepage .padding-section-large { padding-block: 4rem; }
+  .homepage .heading-style-h2 { font-size: 2.25rem; }
+  .homepage .collections_header { text-align: left; align-items: flex-start; }
+  .homepage .collections_heading-block { align-items: flex-start; }
+  .homepage .collections_intro { font-size: .9375rem; }
+  .homepage .collections_inner, .homepage .collections_body { gap: 3rem; }
+  .homepage .collections_grid, .homepage .collections_column { gap: 1rem; }
+  .homepage .collections_column { flex-direction: column; }
+  .homepage .collections_grid > .collection-card, .homepage .collections_column > .collection-card { height: 26.25rem; flex: auto; }
+  .homepage .collection-card_title { font-size: 1.75rem; }
+  .homepage .sourcing_copy { gap: 1.5rem; }
+  .homepage .sourcing_heading-block h2 { font-size: 2.75rem; max-width: none; }
+  .homepage .sourcing_steps { gap: 1rem; }
+  .homepage .sourcing_step { gap: 1.5rem; padding-top: 1.5rem; padding-bottom: 1.125rem; }
+  .homepage .sourcing_step-title { font-size: 1.375rem; }
+  .homepage .origin { height: 38.4375rem; }
+  .homepage .origin_content { padding-bottom: 2.5rem; }
+  .homepage .origin_copy { gap: 1rem; }
+  .homepage .origin_heading { font-size: 2.125rem; }
+  .homepage .origin_intro { font-size: .875rem; }
+  .homepage .origin_overlay { background: linear-gradient(-44.65deg, rgb(0 0 0 / .7) 26.281%, transparent 84.655%); }
+  .homepage .selected-works { padding-block: 4rem; }
+  .homepage .selected-works_inner { gap: 3rem; }
+  .homepage .selected-works_header { text-align: left; justify-content: flex-start; }
+  .homepage .selected-works_heading-block { align-items: flex-start; }
+  .homepage .selected-works_heading-block h2 { max-width: none; }
+  .homepage .selected-works_grid { display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .homepage .selected-works_grid::-webkit-scrollbar { display: none; }
+  .homepage .selected-works_item { flex: 0 0 100%; scroll-snap-align: start; }
+  .homepage .selected-works_frame, .homepage .selected-works_item:not(:first-child) .selected-works_frame { height: 23.75rem; }
+  .homepage .selected-works_caption { gap: .75rem; }
+  .homepage .selected-works_caption h3 { font-size: 1.375rem; }
+  .homepage .selected-works_pagination { display: flex; align-self: center; gap: .5rem; margin-top: -1.5rem; }
+  .homepage .selected-works_pagination button { width: .5rem; height: .5rem; border-radius: 50%; background: var(--color--charcoal-black); opacity: .25; }
+  .homepage .selected-works_pagination button[aria-pressed='true'] { opacity: 1; }
+  .homepage .partnerships { padding-block: 4rem; }
+  .homepage .partnerships_inner { gap: 3rem; }
+  .homepage .partnerships_heading { font-size: 2.5rem; }
+  .homepage .partnerships_intro { width: 100%; font-size: .9375rem; }
+  .homepage .partnerships_regions { display: flex; flex-direction: column; border: 0; gap: 0; }
+  .homepage .partnerships_regions::after { display: none; }
+  .homepage .partnerships_region { flex: auto; height: 5.75rem; padding-block: 1.5rem; flex-direction: row; align-items: center; justify-content: space-between; border: 0; border-bottom: 1px solid rgb(23 23 22 / .14); }
+  .homepage .partnerships_region:last-child { border-bottom: 0; }
+  .homepage .partnerships_region h3 { font-size: 1.75rem; }
+  .homepage .partnerships_footer { display: none; }
+}
+
+@media (max-width: 767px) {
+  .homepage .padding-global { padding-inline: .96rem; }
+  .homepage .hero_heading, .homepage .partnerships_heading { font-size: 2.4rem; }
+  .homepage .heading-style-h2 { font-size: 2.16rem; }
+  .homepage .sourcing_heading-block h2 { font-size: 2.64rem; }
+  .homepage .origin_heading { font-size: 2.04rem; }
+  .homepage .text-style-tagline { font-size: .9rem; }
+  .homepage .text-style-tagline-xs { font-size: .72rem; }
+  .homepage .text-style-button { font-size: .84rem; }
+  .homepage .collections_intro, .homepage .partnerships_intro { font-size: .9rem; }
+  .homepage .sourcing_intro { font-size: .96rem; }
+  .homepage .origin_intro { font-size: .84rem; }
+}
+
+/* One heading per section; line wrapping follows its available width. */
+.homepage .origin_heading { max-width: 21.375rem; }
+@media (max-width: 991px) {
+  .homepage .origin_heading { max-width: 35.75rem; }
+}
+@media (max-width: 767px) {
+  .homepage .origin_heading { max-width: 100%; }
+  .homepage .partnerships_heading .lines_mask,
+  .homepage .partnerships_heading .lines_inner { display: inline; }
+}

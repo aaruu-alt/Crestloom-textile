@@ -3,6 +3,9 @@
  * Footer — Figma "Footer" component (144:254), 1440 × 406.
  */
 import Wordmark from './Wordmark.astro';
+import FooterDirectory from './FooterDirectory.astro';
+interface Props { directory?: boolean; }
+const { directory = false } = Astro.props;
 import { routes } from '../lib/routes';
 const year = new Date().getFullYear();
 
@@ -18,7 +21,7 @@ const columns = [
 ];
 ---
 
-<footer class="footer padding-global" data-reveal-section>
+{directory ? <FooterDirectory /> : <footer class="footer padding-global" data-reveal-section>
   <div class="container-large footer_inner">
     <div class="footer_top" data-reveal-group>
       <Wordmark href={routes.home} class="footer_brand" data-reveal />
@@ -45,7 +48,7 @@ const columns = [
       </div>
     </div>
   </div>
-</footer>
+</footer>}
 
 <style>
   .footer {

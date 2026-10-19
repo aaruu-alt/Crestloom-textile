@@ -14,7 +14,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const left = [
   { label: 'Collections', href: routes.collections },
-  { label: 'Sourcing', href: routes.sourcing },
   { label: 'Our process', href: routes.process },
 ];
 const right = [
@@ -43,16 +42,19 @@ const isActive = (href: string) => {
   </nav>
 
   <button class="text-style-nav navbar_toggle" type="button" aria-expanded="false" aria-controls="navbar-menu">
-    Menu
+    <span class="navbar_toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+    <span class="navbar_toggle-label">Menu</span>
   </button>
 
   <div class="navbar_menu" id="navbar-menu" hidden>
+    <p class="navbar_explore">Explore</p>
     {[...left, ...right].map((l) => <a href={l.href} class="text-style-nav text-link navbar_link" aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
+    <a href="mailto:info@crestloom.in" class="navbar_email">info@crestloom.in</a>
   </div>
 </header>
 
 <script>
-  import { gsap, ScrollTrigger } from '../scripts/motion';
+  import { gsap, ScrollTrigger, reducedMotion } from '../scripts/motion';
 
   const nav = document.querySelector<HTMLElement>('.navbar');
   if (nav) {
@@ -78,10 +80,11 @@ const isActive = (href: string) => {
     const tweenIn  = { duration: 0.7, ease: 'apple', overwrite: 'auto' as const };
     const tweenOut = { duration: 0.5, ease: 'apple', overwrite: 'auto' as const };
 
-    const setSolid = (on: boolean, instant = false) =>
-      instant
-        ? gsap.set(nav, on ? solid : transparent)
-        : gsap.to(nav, on ? { ...solid, ...tweenIn } : { ...transparent, ...tweenOut });
+    const setSolid = (on: boolean, instant = false) => {
+      const state = on || nav.classList.contains('is-menu-open') || nav.classList.contains('is-menu-closing') ? solid : transparent;
+      gsap.killTweensOf(nav, 'backgroundColor,color,--wordmark-color,--wordmark-accent');
+      return instant ? gsap.set(nav, state) : gsap.to(nav, { ...state, ...(on ? tweenIn : tweenOut) });
+    };
 
     const trigger = ScrollTrigger.create({
       start: 20,                      // switch once the page has scrolled 20px
@@ -90,6 +93,9 @@ const isActive = (href: string) => {
       onLeaveBack: () => setSolid(false),
     });
     setSolid(trigger.isActive, true);
+    const syncScrolled = () => nav.classList.toggle('is-scrolled', window.scrollY > 20);
+    window.addEventListener('scroll', syncScrolled, { passive: true });
+    syncScrolled();
 
     // --- Load: drop in (the hero timeline does this on pages that have one) ---
     if (!document.querySelector('.hero')) {
@@ -116,15 +122,54 @@ const isActive = (href: string) => {
       });
     });
 
-    // --- Mobile menu toggle ---
+    // Navigation remains operable independently of animation preferences.
     const toggle = nav.querySelector<HTMLButtonElement>('.navbar_toggle');
     const menu = nav.querySelector<HTMLElement>('.navbar_menu');
-    toggle?.addEventListener('click', () => {
-      const open = toggle.getAttribute('aria-expanded') === 'true';
-      toggle.setAttribute('aria-expanded', String(!open));
-      toggle.textContent = open ? 'Menu' : 'Close';
-      if (menu) menu.hidden = open;
-    });
+    let menuAnimation: Animation | undefined;
+    let previousOverflow = '';
+    const setOpen = (open: boolean) => {
+      toggle?.setAttribute('aria-expanded', String(open));
+      toggle?.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+      const label = toggle?.querySelector('.navbar_toggle-label');
+      if (label) label.textContent = open ? 'Close' : 'Menu';
+      const currentOpacity = menu && !menu.hidden ? getComputedStyle(menu).opacity : '0';
+      const currentTransform = menu && !menu.hidden ? getComputedStyle(menu).transform : 'translateY(-1rem)';
+      menuAnimation?.cancel();
+      if (open) {
+        if (!nav.classList.contains('is-menu-open') && !nav.classList.contains('is-menu-closing')) {
+          previousOverflow = document.body.style.overflow;
+        }
+        nav.classList.remove('is-menu-closing');
+        nav.classList.add('is-menu-open');
+        document.body.style.overflow = 'hidden';
+        if (menu) { menu.hidden = false; menu.inert = false; }
+      } else {
+        nav.classList.remove('is-menu-open');
+        nav.classList.toggle('is-menu-closing', !!menu && !menu.hidden);
+        if (menu) menu.inert = true;
+      }
+      setSolid(open || window.scrollY > 20, true);
+      const finish = () => {
+        if (!open) {
+          if (menu) menu.hidden = true;
+          nav.classList.remove('is-menu-closing');
+          document.body.style.overflow = previousOverflow;
+          setSolid(window.scrollY > 20, true);
+        }
+      };
+      if (menu && !menu.hidden) {
+        menuAnimation = menu.animate([
+          { opacity: currentOpacity, transform: currentTransform },
+          { opacity: open ? 1 : 0, transform: open ? 'translateY(0)' : 'translateY(-1rem)' },
+        ], { duration: reducedMotion ? 0 : open ? 1000 : 800, easing: token('--ease--apple'), fill: 'both' });
+        menuAnimation.onfinish = finish;
+      } else finish();
+    };
+    toggle?.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+    menu?.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setOpen(false)));
+    nav.addEventListener('keydown', event => { if (event.key === 'Escape') { setOpen(false); toggle?.focus(); } });
+    matchMedia('(min-width: 992px)').addEventListener('change', event => { if (event.matches) setOpen(false); });
+
   }
 </script>
 
@@ -193,5 +238,56 @@ const isActive = (href: string) => {
       color: var(--color--offwhite);
     }
     .navbar_menu[hidden] { display: none; }
+  }
+  :global(.site-responsive) .navbar_toggle-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  @media (max-width: 991px) {
+    :global(.site-responsive) .navbar_left, :global(.site-responsive) .navbar_right { display: none; }
+    :global(.site-responsive) .navbar_toggle { display: block; padding: .625rem 0 .625rem .625rem; }
+    :global(.site-responsive) .navbar_toggle-icon { display: flex; flex-direction: column; align-items: flex-end; gap: .3125rem; }
+    :global(.site-responsive) .navbar_toggle-icon span { width: 1.625rem; height: .09375rem; background: currentColor; }
+    :global(.site-responsive) .navbar_toggle-icon span:nth-child(2) { width: 1.25rem; }
+    :global(.site-responsive) .navbar_menu:not([hidden]) { position: absolute; top: 100%; left: 0; right: 0; display: flex; flex-direction: column; gap: 2rem; padding: 2rem 2.5rem 3rem; background: var(--color--offwhite); color: var(--color--charcoal-black); align-items: center; justify-content: center; height: calc(100svh - 5.875rem); border-top: 1px solid rgb(23 23 22 / .18); overflow-y: auto; }
+    :global(.site-responsive) :global(.navbar_brand) { width: 13.929rem; }
+  }
+  @media (max-width: 767px) {
+    :global(.site-responsive) .navbar { padding: .75rem 1rem; height: 4.75rem; }
+    :global(.site-responsive) :global(.navbar_brand) { width: 11.4375rem; height: 3.25rem; }
+    :global(.site-responsive) .navbar_menu:not([hidden]) { padding-inline: 1rem; }
+  }
+  :global(.site-responsive) .navbar_explore { font: 500 .6875rem/120% var(--font--accent); letter-spacing: .24em; text-transform: uppercase; color: var(--color--sandy-brown); }
+  :global(.site-responsive) .navbar_email { font: 500 .75rem/120% var(--font--accent); letter-spacing: .12em; text-transform: uppercase; }
+  @media (max-width: 991px) {
+    :global(.site-responsive) .navbar_menu .navbar_link { font: 500 2.5rem/100% var(--font--heading); letter-spacing: .01em; }
+    :global(.site-responsive) .navbar_menu:not([hidden]) { gap: 1.125rem; }
+    :global(.site-responsive) .navbar_explore { margin-bottom: .625rem; }
+    :global(.site-responsive) .navbar_email { margin-top: .625rem; }
+    :global(.site-responsive) .is-menu-open .navbar_toggle-icon span:first-child { transform: translateY(.40625rem) rotate(45deg); }
+    :global(.site-responsive) .is-menu-open .navbar_toggle-icon span:nth-child(2) { opacity: 0; }
+    :global(.site-responsive) .is-menu-open .navbar_toggle-icon span:last-child { transform: translateY(-.40625rem) rotate(-45deg); }
+  }
+  @media (max-width: 767px) {
+    :global(.site-responsive) .navbar_menu:not([hidden]) { height: calc(100svh - 4.75rem); gap: 1.375rem; }
+    :global(.site-responsive) .navbar_menu .navbar_link { font-size: 2.125rem; }
+    :global(.site-responsive) .navbar_email { font-size: .6875rem; }
+  }
+  :global(.site-responsive) .navbar.is-scrolled,
+  :global(.site-responsive) .navbar.is-menu-open,
+  :global(.site-responsive) .navbar.is-menu-closing {
+    background-color: var(--color--offwhite) !important;
+    color: var(--color--charcoal-black) !important;
+    --wordmark-color: var(--color--charcoal-black) !important;
+    --wordmark-accent: var(--color--sandy-brown) !important;
+  }
+  :global(.site-responsive) .navbar_toggle-icon span {
+    transition: transform 800ms var(--ease--apple), opacity 600ms var(--ease--apple);
+  }
+  :global(.site-responsive) .navbar_link[aria-current] { color: var(--color--sandy-brown); }
+  @media (max-width: 991px) {
+    :global(.site-responsive) .navbar { height: 5.875rem; }
+    :global(.site-responsive) .navbar_menu:not([hidden]) { justify-content: safe center; }
+  }
+  @media (max-width: 767px) { :global(.site-responsive) .navbar { height: 4.75rem; } }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.site-responsive) .navbar_toggle-icon span { transition: none; }
   }
 </style>

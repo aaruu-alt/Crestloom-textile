@@ -5,20 +5,25 @@
 import { Image } from 'astro:assets';
 import Button from './Button.astro';
 import Badge from './Badge.astro';
-import heroImage from '../assets/hero-living.png';
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+import heroImage from '../assets/home/hero-living.png';
+import bathImage from '../assets/home/hero-bath.png';
+import rugsImage from '../assets/home/hero-rugs.png';
+import { routes } from '../lib/routes';
+const slides = [
+  { image: heroImage, label: 'Living', alt: 'Floral throw and cushions on a sunlit linen sofa' },
+  { image: bathImage, label: 'Bath', alt: 'Coordinated bath textiles in a warm bathroom' },
+  { image: rugsImage, label: 'Rugs', alt: 'Woven rug in a sunlit interior' },
+];
 ---
 
 <section class="hero">
-  <Image
-    src={heroImage}
-    alt="Blue floral throw draped over a linen sofa"
-    class="hero_image"
-    widths={[800, 1200, 1672]}
-    sizes="100vw"
-    loading="eager"
-    fetchpriority="high"
-  />
+  {slides.map((slide, i) => <Image
+    src={slide.image} alt={slide.alt}
+    class:list={['hero_image', { 'is-active': i === 0 }]}
+    data-hero-image={i} aria-hidden={i !== 0 ? 'true' : undefined}
+    widths={[750, 1200, 1920]} sizes="100vw"
+    loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : 'auto'}
+  />)}
   <div class="hero_overlay-bottom" aria-hidden="true"></div>
   <div class="hero_overlay-diagonal" aria-hidden="true"></div>
 
@@ -34,13 +39,18 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         </span>
       </p>
       <h1 class="heading-style-h1 hero_heading">
-        <span class="hero_mask"><span class="hero_mask-inner">Rooted in craft.</span></span>
-        <span class="hero_mask"><span class="hero_mask-inner"><em>Ready for what’s next.</em></span></span>
+        <span class="hero_mask"><span class="hero_mask-inner">Connecting you to</span></span>
+        <span class="hero_mask"><span class="hero_mask-inner"><em>better textiles.</em></span></span>
       </h1>
-      <Button href={`${base}/#collections`} variant="outline" class="hero_button">Explore collections</Button>
+      <Button href={routes.collections} variant="outline" class="hero_button">Explore collections</Button>
     </div>
 
-    <Badge class="hero_badge">01 / Living</Badge>
+    <button class="hero_badge" type="button" aria-label="Show next hero image"><Badge><span class="hero_badge-progress" aria-hidden="true"></span><span class="hero_badge-label" data-hero-label>01 / Living</span></Badge></button>
+    <div class="hero_controls">
+      <div class="hero_pagination" aria-label="Hero images">
+        {slides.map((slide, i) => <button type="button" data-hero-slide={i} aria-label={`Show ${slide.label}`} aria-pressed={i === 0 ? 'true' : 'false'}></button>)}
+      </div>
+    </div>
   </div>
 </section>
 
@@ -64,6 +74,10 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     height: 100%;
     object-fit: cover;
     object-position: center;
+    opacity: 0;
+    transition: opacity 1.4s ease;
+  }
+  .hero_image.is-active { opacity: 1;
   }
 
   /* Figma "overlay/bottom" — full-height fade to black */
@@ -103,11 +117,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 1rem;                        /* 16 eyebrow → heading */
+    gap: .75rem;
     max-width: 38.125rem;             /* 610 */
   }
   .hero_copy > :global(.hero_button) {
-    margin-top: 1rem;                 /* 16 + 16 = 32 heading → button */
+    margin-top: 1.25rem;                 /* 16 + 16 = 32 heading → button */
   }
 
   .hero_tagline {
@@ -172,20 +186,35 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   /* --- Tablet --- */
   @media (max-width: 991px) {
-    .hero_heading { font-size: 3.5rem; }   /* 56 */
+    .hero_heading { font-size: 3.5rem; }
+    .hero_content { padding-bottom: 2.5rem; }   /* 56 */
   }
 
   /* --- Mobile (no design yet — sensible default) --- */
   @media (max-width: 767px) {
-    .hero { min-height: 36rem; }
+    .hero { min-height: 40rem; }
+    .hero_image { object-position: 71% center; }
     .hero_content {
       flex-direction: column;
       align-items: flex-start;
-      padding-bottom: 2rem;
+      padding-bottom: 1.5rem;
     }
-    .hero_heading { font-size: 2.75rem; }  /* 44 */
-    .hero_content > :global(.hero_badge) { align-self: flex-end; }
+    .hero_heading { font-size: 2.5rem; }  /* 44 */
+    .hero_badge { display: none; }
+    .hero_content { gap: 1.25rem; }
+    .hero_controls { position: static; }
   }
+  .hero_badge { position: relative; overflow: hidden; }
+  .hero_badge-progress { position: absolute; inset: 0; background: var(--color--sandy-brown); transform: scaleX(var(--hero-progress, 0)); transform-origin: left; pointer-events: none; }
+  .hero_badge-label { position: relative; z-index: 1; }
+  .hero_controls { display: none; gap: .75rem; align-items: center; }
+  .hero_pagination { display: flex; gap: .5rem; align-items: center; }
+  .hero_pagination button { width: 1rem; height: .1875rem; background: var(--color--offwhite); opacity: .4; transition: width .4s, opacity .4s; position: relative; }
+  .hero_pagination button::after { content: ''; position: absolute; inset: -.625rem 0; }
+  .hero_pagination button[aria-pressed='true'] { width: 1.75rem; opacity: 1; }
+  .hero_pause { font-size: .75rem; line-height: 1; padding: .375rem; }
+  @media (max-width: 767px) { .hero_controls { display: flex; position: static; } }
+  @media (prefers-reduced-motion: reduce) { .hero_image { transition: none; } }
 </style>
 
 <script>
@@ -213,5 +242,48 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       .to(button, { opacity: 1, duration: 0.9 }, 0.95)
       .fromTo(button, { y: 12 }, { y: 0, duration: 0.9 }, 0.95)
       .to(badge, { opacity: 1, duration: 0.9 }, 1.05);
+  }
+</script>
+
+<script>
+  const slideshow = document.querySelector<HTMLElement>('.hero');
+  if (slideshow) {
+    const images = [...slideshow.querySelectorAll<HTMLImageElement>('[data-hero-image]')];
+    const dots = [...slideshow.querySelectorAll<HTMLButtonElement>('[data-hero-slide]')];
+    const label = slideshow.querySelector<HTMLElement>('[data-hero-label]');
+    const names = ['Living', 'Bath', 'Rugs'];
+    const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
+    let active = 0;
+    let paused = motionPreference.matches;
+    const duration = 6500;
+    let elapsed = 0;
+    let lastTime: number | undefined;
+    const progress = () => slideshow.style.setProperty('--hero-progress', String(elapsed / duration));
+    const show = (index: number) => {
+      active = index;
+      elapsed = 0;
+      lastTime = undefined;
+      progress();
+      images.forEach((image, i) => {
+        image.classList.toggle('is-active', i === index);
+        if (i === index) image.removeAttribute('aria-hidden'); else image.setAttribute('aria-hidden', 'true');
+      });
+      dots.forEach((dot, i) => dot.setAttribute('aria-pressed', String(i === index)));
+      if (label) label.textContent = `0${index + 1} / ${names[index]}`;
+    };
+    const tick = (now: number) => {
+      if (!paused && !document.hidden) {
+        if (lastTime !== undefined) elapsed += now - lastTime;
+        if (elapsed >= duration) show((active + 1) % images.length);
+        progress();
+        lastTime = now;
+      } else lastTime = undefined;
+      requestAnimationFrame(tick);
+    };
+    dots.forEach((dot, i) => dot.addEventListener('click', () => { show(i); }));
+    slideshow.querySelector('.hero_badge')?.addEventListener('click', () => { show((active + 1) % images.length); });
+    document.addEventListener('visibilitychange', () => { lastTime = undefined; });
+    motionPreference.addEventListener('change', () => { paused = motionPreference.matches; lastTime = undefined; });
+    requestAnimationFrame(tick);
   }
 </script>

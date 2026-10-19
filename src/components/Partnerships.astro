@@ -5,11 +5,9 @@ import Lines from './Lines.astro';
  * Figma's region cells are 321 wide and overflow the container by 28px;
  * here they're equal-width fills.
  */
-import Button from './Button.astro';
-import { routes } from '../lib/routes';
 
 const regions = ['Europe', 'USA', 'Japan', 'Worldwide'];
-const audiences = ['For brands', 'Retailers', 'Interior projects'];
+const audiences = ['For brands', 'Retailers', 'Importer'];
 ---
 
 <section class="partnerships padding-global padding-section-medium" id="contact" data-reveal-section>
@@ -17,7 +15,7 @@ const audiences = ['For brands', 'Retailers', 'Interior projects'];
     <header class="partnerships_header" data-reveal-group>
       <Lines tag="h2" class="heading-style-h1 partnerships_heading" lines={['Made in India.', 'Ready to work worldwide.']} />
       <p class="text-size-large partnerships_intro" data-reveal="fade">
-        Crestloom is being built to support brands, retailers and interior partners across Europe, the USA, Japan and beyond—with clear communication from brief to delivery.
+        Crestloom is being built to support brands and retailers across the world clear communication from brief to delivery.
       </p>
     </header>
 
@@ -40,7 +38,6 @@ const audiences = ['For brands', 'Retailers', 'Interior projects'];
             </>
           ))}
         </p>
-        <Button href={routes.contact} variant="ghost-black" data-reveal>Start a conversation</Button>
       </div>
     </div>
   </div>
@@ -66,7 +63,7 @@ const audiences = ['For brands', 'Retailers', 'Interior projects'];
   }
   .partnerships_heading { text-align: center; }
   .partnerships_intro {
-    width: 42.875rem;                 /* 686 */
+    width: 31.25rem;                 /* 686 */
     opacity: 0.85;
   }
 

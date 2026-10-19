@@ -1,22 +1,20 @@
 ---
 /**
- * Contact page — Figma "Contact Page" (144:277).
+ * Contact page — Figma 682:2925, with tablet and mobile layouts.
  */
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Lines from '../components/Lines.astro';
 import ContactForm from '../components/ContactForm.astro';
 import Footer from '../components/Footer.astro';
-import SmallScreenNotice from '../components/SmallScreenNotice.astro';
+
 ---
 
 <Layout
   title="Contact — Crestloom Textile"
   description="Share the product category, intended quantities, target market and timeline. We’ll begin with the right questions and shape the next steps together."
 >
-  <SmallScreenNotice />
-
-  <div class="desktop-only">
+  <div class="contact-page site-responsive">
     <Navbar theme="dark" />
 
     <section class="contact padding-global" id="contact" data-reveal-section>
@@ -35,7 +33,7 @@ import SmallScreenNotice from '../components/SmallScreenNotice.astro';
       </div>
     </section>
 
-    <Footer />
+    <Footer directory />
   </div>
 </Layout>
 
@@ -43,7 +41,7 @@ import SmallScreenNotice from '../components/SmallScreenNotice.astro';
   .contact {
     background-color: var(--color--offwhite);
     padding-top: 12.5rem;             /* 100 navbar + 100 */
-    padding-bottom: 7.5rem;           /* 120 */
+    padding-bottom: 6.25rem;
   }
   .contact_inner {
     display: flex;
@@ -54,13 +52,31 @@ import SmallScreenNotice from '../components/SmallScreenNotice.astro';
   .contact_copy {
     display: flex;
     flex-direction: column;
-    gap: 3rem;                        /* 48 */
+    gap: 2rem;
     width: 32.5rem;                   /* 520 */
   }
   .contact_heading-block {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;                      /* 24 */
+    gap: 0.75rem;
   }
   .contact_intro { width: 30rem; }    /* 480 */
+  @media (max-width: 991px) {
+    .contact { padding-top: 10.375rem; padding-bottom: 4.5rem; }
+    .contact_inner { gap: 3rem; }
+    .contact_copy { width: calc((100% - 3rem) * 0.4125); flex-shrink: 0; gap: 1.5rem; }
+    .contact_heading-block { gap: 0.625rem; }
+    .contact_copy :global(h1) { font-size: 3rem; }
+    .contact_intro { width: 100%; font-size: 1rem; }
+  }
+  @media (max-width: 767px) {
+    .contact { padding-top: 8.4rem; padding-bottom: 3.84rem; }
+    .contact-page :global(.padding-global) { padding-left: 0.96rem; padding-right: 0.96rem; }
+    .contact_inner { flex-direction: column; gap: 2.88rem; }
+    .contact_copy { width: 100%; gap: 1.44rem; }
+    .contact_heading-block { gap: 0.72rem; }
+    .contact_copy :global(h1) { font-size: 2.4rem; }
+    .contact_copy :global(.text-style-tagline) { font-size: 0.9rem; }
+    .contact_intro { font-size: 0.9rem; }
+  }
 </style>

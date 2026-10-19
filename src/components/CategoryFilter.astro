@@ -1,178 +1,163 @@
 ---
-/**
- * CategoryFilter — Figma "Collection Page / Category Filter" (140:209).
- * Fixed to the viewport bottom while the grid is on screen. Switches the
- * rendered grid state and mirrors the choice in ?category=.
- */
-import { categories } from '../data/collection';
-const options = [{ slug: 'all', name: 'All' }, ...categories];
+import { categories, categoryGroups } from '../data/collection';
+import chevron from '../assets/catalog-filter-chevron.svg';
 ---
-
-<div class="category-filter_dock">
-<nav class="category-filter" aria-label="Filter by category">
-  <span class="category-filter_active" aria-hidden="true"></span>
-  {options.map((o, i) => (
-    <button type="button" class="text-style-button category-filter_option" data-category={o.slug} aria-pressed={i === 0 ? 'true' : 'false'}>
-      {o.name}
-    </button>
-  ))}
-</nav>
+<div class="category-filter" id="collection-filter">
+  <div class="category-filter_controls">
+    <button type="button" class="category-filter_all text-style-button" aria-pressed="true">All products</button>
+    <button type="button" class="category-filter_toggle text-style-button" aria-expanded="false" aria-controls="category-picker">Category <span class="category-filter_chevron" style={`--chevron: url("${chevron.src}")`} aria-hidden="true"></span></button>
+  </div>
+  <p class="category-filter_selected text-style-button" aria-live="polite">All collections</p>
+  <dialog class="category-picker" id="category-picker" aria-labelledby="category-picker-title">
+    <div class="category-picker_header">
+      <p id="category-picker-title">Browse <span class="category-picker_desktop-title">by category</span><span class="category-picker_mobile-title">categories</span></p>
+      <button type="button" class="category-picker_close" aria-label="Close categories">×</button>
+    </div>
+    <div class="category-picker_groups">
+      {categoryGroups.map(group => <section class="category-picker_group">
+        <h2>{group.name}</h2>
+        <div class="category-picker_options">{group.slugs.map(slug => {
+          const category = categories.find(c => c.slug === slug)!;
+          return <button type="button" class="category-picker_option" data-category={slug} aria-pressed="false">{category.name}</button>;
+        })}</div>
+      </section>)}
+    </div>
+  </dialog>
 </div>
-
 <script>
-  import { gsap, ScrollTrigger, reducedMotion } from '../scripts/motion';
-  import { revealNow } from '../scripts/reveal';
-
-  /** 0s when the page isn't animating. Anything that must land immediately
-      uses gsap.set instead — a 0s tween still waits for the next tick. */
-  const dur = (seconds: number) => (reducedMotion ? 0 : seconds);
-
-  const bar = document.querySelector<HTMLElement>('.category-filter');
+  import { gsap, reducedMotion, ScrollTrigger } from '../scripts/motion';
+  const filter = document.querySelector<HTMLElement>('.category-filter');
+  const picker = document.querySelector<HTMLDialogElement>('.category-picker');
   const grid = document.getElementById('collection-grid');
-  if (bar && grid) {
-    const options = [...bar.querySelectorAll<HTMLButtonElement>('.category-filter_option')];
-    const active = bar.querySelector<HTMLElement>('.category-filter_active')!;
-    const states = [...grid.querySelectorAll<HTMLElement>('.collection-grid_state')];
-    const nav = document.querySelector<HTMLElement>('.navbar');
-    let tl: gsap.core.Timeline | null = null;
-
-    // --- Active indicator follows the selected option ---
-    const moveIndicator = (btn: HTMLElement, instant = false) => {
-      const x = btn.offsetLeft;
-      const w = btn.offsetWidth;
-      instant ? gsap.set(active, { x, width: w }) : gsap.to(active, { x, width: w, duration: dur(0.6) });
+  if (filter && picker && grid) {
+    const toggle = filter.querySelector<HTMLButtonElement>('.category-filter_toggle')!;
+    const all = filter.querySelector<HTMLButtonElement>('.category-filter_all')!;
+    const selected = filter.querySelector<HTMLElement>('.category-filter_selected')!;
+    const options = [...picker.querySelectorAll<HTMLButtonElement>('[data-category]')];
+    const cards = [...grid.querySelectorAll<HTMLElement>('.product-card')];
+    const sentinel = document.querySelector<HTMLElement>('.collection-grid_sentinel')!;
+    const end = document.querySelector<HTMLElement>('.collection-end')!;
+    let activeCategory = 'all';
+    let visibleCount = 16;
+    const syncPagination = () => {
+      const more = activeCategory === 'all' && visibleCount < cards.length;
+      sentinel.hidden = !more;
+      end.hidden = more;
     };
-    const setPressed = (btn: HTMLElement) => options.forEach((o) => o.setAttribute('aria-pressed', String(o === btn)));
-    const syncUrl = (slug: string) => {
-      const url = new URL(location.href);
-      slug === 'all' ? url.searchParams.delete('category') : url.searchParams.set('category', slug);
-      history.replaceState(null, '', url);
+    const loadMore = () => {
+      if (activeCategory !== 'all' || visibleCount >= cards.length) return;
+      const next = Math.min(visibleCount + 16, cards.length);
+      cards.slice(visibleCount, next).forEach(card => { card.hidden = false; });
+      visibleCount = next;
+      syncPagination();
+      ScrollTrigger.refresh();
+      requestAnimationFrame(() => {
+        if (!sentinel.hidden && sentinel.getBoundingClientRect().top < innerHeight + 600) loadMore();
+      });
     };
-
-    // --- Pinch transition between grid states (a new choice mid-flight retargets) ---
-    const switchTo = (slug: string) => {
-      const btn = options.find((o) => o.dataset.category === slug) ?? options[0];
-      slug = btn.dataset.category!;
-      setPressed(btn);
-      moveIndicator(btn);
-      syncUrl(slug);
-
-      tl?.kill();
-      const from = states.find((s) => !s.hidden)!;
-      const to = states.find((s) => s.dataset.category === slug)!;
-      if (from === to) {                              // e.g. re-chosen mid-transition
-        tl = gsap.timeline().to(to, { opacity: 1, scale: 1, duration: dur(0.5) }).set(to, { clearProps: 'transform,opacity' });
-        return;
-      }
-
-      if (reducedMotion) {                           // swap outright, no pinch
-        from.hidden = true;
-        to.hidden = false;
-        revealNow(to);
-        gsap.set([from, to], { clearProps: 'transform,opacity' });
+    new IntersectionObserver(entries => { if (entries.some(entry => entry.isIntersecting)) loadMore(); }, { rootMargin: '600px 0px' }).observe(sentinel);
+    let opener: HTMLElement | null = null;
+    let previousOverflow = '';
+    let transition: gsap.core.Timeline | undefined;
+    let closeTween: gsap.core.Tween | undefined;
+    const position = () => {
+      const rect = filter.getBoundingClientRect();
+      picker.style.setProperty('--filter-top', `${Math.max(16, Math.min(rect.bottom + 16, innerHeight - 320))}px`);
+      picker.style.setProperty('--filter-left', `${rect.left}px`);
+    };
+    const open = () => {
+      closeTween?.kill(); position(); opener = toggle;
+      previousOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      picker.showModal(); toggle.setAttribute('aria-expanded', 'true');
+      gsap.fromTo(picker, { opacity: 0, y: -12 }, { opacity: 1, y: 0, duration: reducedMotion ? 0 : 1, ease: 'apple' });
+    };
+    const close = () => {
+      if (!picker.open) return;
+      closeTween = gsap.to(picker, { opacity: 0, y: -8, duration: reducedMotion ? 0 : .8, ease: 'apple', overwrite: true, onComplete: () => {
+        picker.close(); toggle.setAttribute('aria-expanded', 'false'); document.body.style.overflow = previousOverflow; opener?.focus({ preventScroll: true });
+      }});
+    };
+    const apply = (requested: string, animate = true, updateUrl = true) => {
+      const option = options.find(o => o.dataset.category === requested);
+      const slug = option?.dataset.category ?? 'all';
+      const swap = () => {
+        activeCategory = slug;
+        visibleCount = 16;
+        grid.classList.toggle('is-filtered', slug !== 'all');
+        cards.forEach((card, index) => card.hidden = slug === 'all' ? index >= visibleCount : card.dataset.category !== slug);
+        syncPagination();
+        options.forEach(o => o.setAttribute('aria-pressed', String(o === option)));
+        all.setAttribute('aria-pressed', String(slug === 'all'));
+        toggle.classList.toggle('has-selection', slug !== 'all');
+        selected.textContent = option?.textContent ?? 'All collections';
+        if (updateUrl) { const url = new URL(location.href); slug === 'all' ? url.searchParams.delete('category') : url.searchParams.set('category', slug); history.replaceState(null, '', url); }
         ScrollTrigger.refresh();
-        return;
+      };
+      transition?.kill();
+      if (!animate || reducedMotion) { swap(); gsap.set(grid, { clearProps: 'opacity,transform' }); }
+      else {
+        const zoomIn = slug !== 'all';
+        transition = gsap.timeline()
+          .to(grid, { opacity: 0, scale: zoomIn ? 1.04 : .96, transformOrigin: '50% 0%', duration: .4, ease: 'apple' })
+          .add(swap)
+          .fromTo(grid, { opacity: 0, scale: zoomIn ? .96 : 1.04, transformOrigin: '50% 0%' }, { opacity: 1, scale: 1, duration: 1, ease: 'apple' })
+          .set(grid, { clearProps: 'opacity,transform,transformOrigin' });
       }
-
-      const zoomIn = slug !== 'all';                 // category = zoom in, All = zoom out
-      const origin = '50% 0%';
-      tl = gsap.timeline()
-        .to(from, { opacity: 0, scale: zoomIn ? 1.04 : 0.96, transformOrigin: origin, duration: dur(0.4) })
-        .add(() => {
-          from.hidden = true;
-          to.hidden = false;
-          revealNow(to);                            // incoming cards are simply there
-          gsap.set(to, { opacity: 0, scale: zoomIn ? 0.96 : 1.04, transformOrigin: origin });
-          // keep the top of the grid in view while it's invisible
-          const top = grid.getBoundingClientRect().top + scrollY - (nav?.offsetHeight ?? 0) - 40;
-          if (grid.getBoundingClientRect().top < 0) window.scrollTo({ top, behavior: 'instant' as ScrollBehavior });
-          ScrollTrigger.refresh();
-        })
-        .to(to, { opacity: 1, scale: 1, duration: dur(0.8) })
-        .set([from, to], { clearProps: 'transform,opacity' });
     };
-
-    options.forEach((o) => o.addEventListener('click', () => switchTo(o.dataset.category!)));
-
-    // Initial state from the URL (no transition)
-    {
-      const slug = new URLSearchParams(location.search).get('category') ?? 'all';
-      const btn = options.find((o) => o.dataset.category === slug) ?? options[0];
-      setPressed(btn);
-      moveIndicator(btn, true);
-      states.forEach((s) => (s.hidden = s.dataset.category !== btn.dataset.category));
-    }
-    window.addEventListener('resize', () => moveIndicator(options.find((o) => o.getAttribute('aria-pressed') === 'true')!, true));
-
-    // --- Visible while the grid is on screen and the end block is not ---
-    gsap.set(bar, { y: 24, autoAlpha: 0 });
-    let gridInView = false;
-    let endInView = false;
-    let first = true;
-    let lastShow: boolean | null = null;
-    const update = () => {
-      const show = gridInView && !endInView;
-      if (show === lastShow) return;               // observers fire on setup too; only tween on change
-      lastShow = show;
-      const to = { y: show ? 0 : 24, autoAlpha: show ? 1 : 0 };
-      if (reducedMotion) gsap.set(bar, to);
-      else gsap.to(bar, { ...to, duration: 0.6, delay: first && show ? 1.2 : 0, overwrite: true });
-      if (show) first = false;
-    };
-    new IntersectionObserver((entries) => { gridInView = entries[0].isIntersecting; update(); }, { rootMargin: '-120px 0px 0px 0px' }).observe(grid);
-    const endObserver = new IntersectionObserver((entries) => { endInView = entries.some((e) => e.isIntersecting); update(); });
-    grid.querySelectorAll('.collection-end').forEach((el) => endObserver.observe(el));
-
-    // --- Infinite grid: reveal the next batch of 14 as the sentinel approaches ---
-    const sentinel = grid.querySelector('.collection-grid_sentinel');
-    const batches = [...grid.querySelectorAll<HTMLElement>('.collection-grid_batch')];
-    if (sentinel && batches.length > 1) {
-      const io = new IntersectionObserver((entries) => {
-        if (!entries[0].isIntersecting) return;
-        const next = batches.find((b) => b.hidden);
-        if (next) { next.hidden = false; ScrollTrigger.refresh(); }
-        else io.disconnect();
-      }, { rootMargin: '600px 0px' });
-      io.observe(sentinel);
-    }
+    toggle.addEventListener('click', () => picker.open ? close() : open());
+    picker.querySelector('.category-picker_close')?.addEventListener('click', close);
+    picker.addEventListener('cancel', e => { e.preventDefault(); close(); });
+    picker.addEventListener('click', e => { const r = picker.getBoundingClientRect(); if (e.target === picker && (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom)) close(); });
+    options.forEach(o => o.addEventListener('click', () => { apply(o.dataset.category!); close(); }));
+    all.addEventListener('click', () => { apply('all'); close(); });
+    window.addEventListener('resize', () => { if (picker.open) position(); });
+    window.addEventListener('popstate', () => apply(new URLSearchParams(location.search).get('category') ?? 'all', false, false));
+    apply(new URLSearchParams(location.search).get('category') ?? 'all', false, false);
   }
 </script>
-
 <style>
-  /* Zero-height sticky dock at the end of the grid box: takes no space in the
-     flow, sticks while the grid is on screen, can never reach the footer. */
-  .category-filter_dock {
-    position: sticky;
-    bottom: calc(2rem + 3.5625rem);   /* 32 gap + 57 bar height */
-    height: 0;
-    z-index: 20;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;          /* don't stretch the bar to the dock's 0 height */
+  .category-filter { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .category-filter_controls { display: flex; gap: .75rem; }
+  .category-filter_all, .category-filter_toggle { padding: 1rem 1.25rem; border: 1px solid var(--color--cyan-blue); display: inline-flex; align-items: center; justify-content: center; gap: .75rem; }
+  .category-filter_all { background: var(--color--cyan-blue); color: var(--color--offwhite); }
+  .category-filter_all[aria-pressed='false'] { background: transparent; color: var(--color--text); }
+  .category-filter_toggle.has-selection { background: var(--color--cyan-blue); color: var(--color--offwhite); }
+  .category-filter_selected { text-transform: uppercase; }
+  .category-filter_chevron { display: block; width: .75rem; height: .75rem; flex-shrink: 0; background-color: currentColor; mask: var(--chevron) center / contain no-repeat; -webkit-mask: var(--chevron) center / contain no-repeat; }
+  .category-picker { position: fixed; top: var(--filter-top, 10rem); left: var(--filter-left, 3.5rem); margin: 0; padding: 1.75rem 2rem 2rem; width: 70rem; max-width: calc(100vw - 7rem); max-height: calc(100svh - var(--filter-top, 10rem) - 1rem); border: 1px solid rgb(40 40 42 / .14); background: var(--color--offwhite); color: var(--color--text); box-shadow: 0 .75rem 2rem rgb(40 40 42 / .08); }
+  .category-picker::backdrop { background: rgb(40 40 42 / .12); }
+  .category-picker_header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.75rem; }
+  .category-picker_header p, .category-picker_group h2 { font: 500 .75rem/120% var(--font--accent); letter-spacing: .18em; text-transform: uppercase; }
+  .category-picker_close { font-size: 1.5rem; line-height: 1; width: 2rem; height: 1.5rem; }
+  .category-picker_mobile-title { display: none; }
+  .category-picker_groups { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 2rem; }
+  .category-picker_group { display: flex; flex-direction: column; gap: 1.5rem; }
+  .category-picker_group h2 { color: var(--color--sandy-brown); }
+  .category-picker_options { display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .category-picker_option { font: 500 .875rem/120% var(--font--accent); letter-spacing: .1em; text-align: left; }
+  .category-picker_option[aria-pressed='true'] { color: var(--color--cyan-blue); text-decoration: underline; text-underline-offset: .3rem; }
+  @media (max-width: 991px) {
+    .category-picker { width: calc(100vw - 5rem); max-width: none; padding: 1.5rem; }
+    .category-picker_groups { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .category-picker_group { gap: 1rem; }
+    .category-picker_options { gap: 0; }
+    .category-picker_option { min-height: 2.75rem; display: flex; align-items: center; }
   }
-  .category-filter {
-    position: relative;             /* containing block for the indicator */
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;                      /* 24 */
-    padding: 0.5rem;                  /* 8 */
-    border-radius: 2px;
-    background-color: var(--color--cyan-blue);
+  @media (max-width: 767px) {
+    .category-filter { flex-direction: column; align-items: stretch; gap: .96rem; }
+    .category-filter_controls { flex-direction: column; gap: .72rem; }
+    .category-filter_all, .category-filter_toggle { width: 100%; padding: .96rem 1.2rem; font-size: .84rem; }
+    .category-filter_selected { font-size: .84rem; }
+    .category-picker { inset: 0; width: 100vw; height: 100svh; max-width: none; max-height: none; padding: 0; border: 0; box-shadow: none; }
+    .category-picker_header { height: 4.56rem; padding-inline: .96rem; margin: 0; position: sticky; top: 0; background: var(--color--offwhite); }
+    .category-picker_header p { font-size: .72rem; color: var(--color--sandy-brown); }
+    .category-picker_close { width: 2.64rem; height: 2.64rem; }
+    .category-picker_mobile-title { display: inline; }
+    .category-picker_desktop-title { display: none; }
+    .category-picker_groups { grid-template-columns: 1fr; padding: 1.44rem .96rem; gap: 1.92rem; }
+    .category-picker_group { gap: .96rem; }
+    .category-picker_group h2 { font-size: .72rem; }
+    .category-picker_option { font-size: .84rem; min-height: 2.64rem; }
   }
-  .category-filter_active {
-    position: absolute;
-    top: 0.5rem;
-    left: 0;
-    height: calc(100% - 1rem);
-    width: 5.75rem;
-    background-color: var(--color--offwhite);
-  }
-  .category-filter_option {
-    position: relative;
-    width: 5.75rem;                   /* 92 */
-    padding: 0.75rem 0.875rem;        /* 12 / 14 */
-    color: var(--color--offwhite);
-    transition: color 500ms var(--ease--apple);
-  }
-  .category-filter_option[aria-pressed='true'] { color: var(--color--charcoal-black); }
 </style>

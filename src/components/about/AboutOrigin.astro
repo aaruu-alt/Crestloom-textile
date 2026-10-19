@@ -1,53 +1,30 @@
 ---
-/** About / Origin — Figma 146:332, 1440 × 729. */
+import { Image } from 'astro:assets';
 import Lines from '../Lines.astro';
+import textileStudy from '../../assets/about-textile-study.png';
+const statements = [
+  { title: 'Textile Expertise', body: 'We understand your requirements in details and recommend the right fit for you.' },
+  { title: 'Trusted Supplier Network', body: 'Long lasting relationships with factory in and around Panipat, India where Industry is based.' },
+  { title: 'Product Development', body: 'Products developed to your specifications from samples to bulk productions.' },
+  { title: 'Full Transparency', body: 'Clear Communication at every stage, with regular updates so you always where your order stands all through one point of contact.' },
+  { title: 'Close Monitoring', body: 'We follow your order from the factory floor through final inspection.' },
+  { title: 'Our Aim', body: 'We aim to become your long term sourcing partner and grow together' },
+];
 ---
-
-<section class="about-origin padding-global padding-section-large" data-reveal-section>
+<section class="about-origin padding-global" data-reveal-section>
   <div class="container-large about-origin_inner">
-    <div class="about-origin_block" data-reveal-group>
-      <Lines class="text-style-tagline text-color-sandy-brown" lines={['Our ground']} />
-      <div class="about-origin_row">
-        <Lines tag="h2" class="heading-style-h1" lines={['Textile knowledge', 'belongs to the place.']} />
-        <p class="text-size-large about-origin_body" data-reveal="fade">
-          Crestloom begins in Panipat, where textiles are not treated as a trend or an abstraction. They are part of the city’s working rhythm—understood through materials, making, and the practical decisions behind every finished piece.
-        </p>
+    <Lines tag="h2" class="heading-style-h1 about-origin_heading" lines={['Why Crestloom']} />
+    <div class="about-origin_spread">
+      <Image src={textileStudy} alt="Textile samples and woven rugs arranged on a studio table" class="about-origin_image" widths={[496, 688, 992, 1376]} sizes="(max-width: 991px) 100vw, 35vw" />
+      <div class="about-origin_statements" data-reveal-group>
+        {statements.map(statement => (
+          <article class="about-origin_statement" data-reveal>
+            <span class="about-origin_mark" aria-hidden="true"></span>
+            <h3>{statement.title}</h3>
+            <p>{statement.body}</p>
+          </article>
+        ))}
       </div>
-    </div>
-
-    <div class="about-origin_rule" role="presentation" data-reveal></div>
-
-    <div class="about-origin_row" data-reveal-group>
-      <Lines tag="p" class="heading-style-h2 about-origin_statement" lines={['The company is new.', 'The understanding behind it is not.']} />
-      <p class="text-size-large about-origin_body" data-reveal="fade">
-        Our perspective is informed by a family familiar with textile manufacturing and the realities behind production. Crestloom brings that knowledge into a clearer, more considered sourcing partnership.
-      </p>
     </div>
   </div>
 </section>
-
-<style>
-  .about-origin { background-color: var(--color--offwhite); }
-  .about-origin_inner {
-    display: flex;
-    flex-direction: column;
-    gap: 5rem;                        /* 80 */
-  }
-  .about-origin_block {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;                        /* 32 */
-  }
-  .about-origin_row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
-  }
-  .about-origin_body { width: 33.125rem; }        /* 530 */
-  .about-origin_statement { width: 34.0625rem; }  /* 545 */
-  .about-origin_rule {
-    height: 1px;
-    background-color: var(--color--text);
-  }
-</style>

@@ -15,50 +15,52 @@ import Button from './Button.astro';
     <form class="catalog-popup_form" novalidate>
       <div class="catalog-popup_head">
         <div class="catalog-popup_bar">
-          <p class="text-style-tagline-xs text-color-sandy-brown">View the catalogue</p>
+          <p class="text-style-tagline-xs text-color-sandy-brown">Collection enquiry</p>
           <button type="button" class="catalog-popup_close" aria-label="Close" data-close>×</button>
         </div>
-        <h2 id="catalog-popup-title" class="heading-style-h2">Discover the collection.</h2>
+        <h2 id="catalog-popup-title" class="heading-style-h2">Request the collection.</h2>
       </div>
-      <p class="text-size-regular catalog-popup_body">Leave your details to view the latest Crestloom catalogue.</p>
+      <p class="text-size-regular catalog-popup_body">Add your details to prepare an email enquiry. Your email app will open so you can review and send it.</p>
 
       <div class="catalog-popup_fields">
         <div class="catalog-popup_field">
-          <label for="catalog-name">Name</label>
-          <input id="catalog-name" name="name" type="text" placeholder="Your name" autocomplete="name" required />
+          <label for="catalog-name">First name</label>
+          <input id="catalog-name" name="firstName" type="text" placeholder="Your first name" autocomplete="given-name" required />
         </div>
         <div class="catalog-popup_field">
           <label for="catalog-email">Email</label>
           <input id="catalog-email" name="email" type="email" placeholder="name@company.com" autocomplete="email" required />
         </div>
         <input type="hidden" name="category" value="" />
+        <input type="hidden" name="product" value="" />
         <div class="catalog-popup_hp" aria-hidden="true">
           <label for="catalog-website">Website</label>
-          <input id="catalog-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+          <input id="catalog-website" name="_honey" type="text" tabindex="-1" autocomplete="off" />
         </div>
       </div>
 
       <p class="text-size-small catalog-popup_error" role="alert" hidden></p>
-      <Button variant="filled-gold" icon={false} class="catalog-popup_submit">View catalog</Button>
+      <Button variant="filled-gold" icon={false} class="catalog-popup_submit">Prepare email</Button>
     </form>
 
     <!-- Success state -->
     <div class="catalog-popup_success" hidden>
       <div class="catalog-popup_head is-success">
         <div class="catalog-popup_bar">
-          <p class="text-style-tagline-xs text-color-sandy-brown">Request received</p>
+          <p class="text-style-tagline-xs text-color-sandy-brown">Email enquiry</p>
           <button type="button" class="catalog-popup_close" aria-label="Close" data-close>×</button>
         </div>
-        <h2 class="heading-style-h2">Thank you.</h2>
+        <h2 class="heading-style-h2">Ready to send.</h2>
       </div>
-      <p class="text-size-regular catalog-popup_body">We’ll get back to you within 2 working days with the catalogue.</p>
+      <p class="text-size-regular catalog-popup_body">Finish sending in your email app. If it didn’t open, use the link below or email info@crestloom.in directly.</p>
+      <a class="text-style-nav text-link enquiry-draft-link" href="mailto:info@crestloom.in">Open email draft</a>
       <Button variant="filled-gold" icon={false} class="catalog-popup_submit" data-close>Close</Button>
     </div>
   </div>
 </dialog>
 
 <script>
-  import { gsap } from '../scripts/motion';
+  import { gsap, reducedMotion } from '../scripts/motion';
   import { submitCatalogRequest } from '../lib/enquiry';
 
   const dialog = document.querySelector<HTMLDialogElement>('.catalog-popup');
@@ -84,14 +86,15 @@ import Button from './Button.astro';
     const open = (category: string, from: HTMLElement) => {
       reset();
       categoryInput.value = category;
+      form.querySelector<HTMLInputElement>('input[name=product]')!.value = from.dataset.product ?? '';
       opener = from;
       startedAt = Date.now();
       dialog.showModal();
       document.documentElement.style.overflow = 'hidden';
       gsap.timeline()
-        .fromTo(scrim, { opacity: 0 }, { opacity: 1, duration: 0.5 }, 0)
-        .fromTo(surface, { opacity: 0, y: 16, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.7 }, 0.05);
-      form.querySelector<HTMLInputElement>('input[name=name]')?.focus({ preventScroll: true });
+        .fromTo(scrim, { opacity: 0 }, { opacity: 1, duration: reducedMotion ? 0 : 0.5 }, 0)
+        .fromTo(surface, { opacity: 0, y: 16, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: reducedMotion ? 0 : 0.7 }, 0.05);
+      form.querySelector<HTMLInputElement>('input[name=firstName]')?.focus({ preventScroll: true });
     };
 
     const close = () => {
@@ -102,8 +105,8 @@ import Button from './Button.astro';
           opener?.focus({ preventScroll: true });
         },
       })
-        .to(surface, { opacity: 0, y: 8, scale: 0.98, duration: 0.35 }, 0)
-        .to(scrim, { opacity: 0, duration: 0.4 }, 0.05);
+        .to(surface, { opacity: 0, y: 8, scale: 0.98, duration: reducedMotion ? 0 : 0.35 }, 0)
+        .to(scrim, { opacity: 0, duration: reducedMotion ? 0 : 0.4 }, 0.05);
     };
 
     // Openers: any card with data-catalog
@@ -117,19 +120,21 @@ import Button from './Button.astro';
       e.preventDefault();
       error.hidden = true;
       form.querySelectorAll('.is-invalid').forEach((el) => el.classList.remove('is-invalid'));
-      const invalid = [...form.querySelectorAll<HTMLInputElement>('[required]')].filter((el) => !el.checkValidity());
+      const invalid = [...form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[required]')].filter((el) => !el.checkValidity());
       if (invalid.length) {
         invalid.forEach((el) => el.closest('.catalog-popup_field')?.classList.add('is-invalid'));
-        error.textContent = invalid.some((el) => el.type === 'email' && el.value) ? 'Please enter a valid email address.' : 'Please fill in your name and email.';
+        error.textContent = invalid.some((el) => el.type === 'email' && el.value) ? 'Please enter a valid email address.' : 'Please fill in your first name and email.';
         error.hidden = false;
         invalid[0].focus();
         return;
       }
       const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
       submit.disabled = true;
-      const { ok } = await submitCatalogRequest({ name: data.name, email: data.email, category: data.category, website: data.website, startedAt });
+      const { ok, error: submissionError, mailto } = await submitCatalogRequest({ firstName: data.firstName, email: data.email, category: data.category, product: data.product, website: data._honey, startedAt });
       submit.disabled = false;
-      if (!ok) { error.textContent = 'Something went wrong — please try again.'; error.hidden = false; return; }
+      if (!ok) { error.textContent = submissionError ?? 'Something went wrong — please try again.'; error.hidden = false; return; }
+      const draftLink = success.querySelector<HTMLAnchorElement>('.enquiry-draft-link');
+      if (draftLink && mailto) draftLink.href = mailto;
       gsap.timeline()
         .to(form, { opacity: 0, duration: 0.3 })
         .add(() => { form.hidden = true; success.hidden = false; gsap.set(form, { clearProps: 'opacity' }); })
@@ -231,7 +236,8 @@ import Button from './Button.astro';
     letter-spacing: 0.16em;           /* 1.92px */
     text-transform: uppercase;
   }
-  .catalog-popup_field input {
+  .catalog-popup_field input,
+  .catalog-popup_field textarea {
     flex: 1;
     width: 100%;
     padding: 0 0 0.375rem;
@@ -246,10 +252,14 @@ import Button from './Button.astro';
     outline: none;
     transition: border-color 500ms var(--ease--apple);
   }
+  .catalog-popup_field textarea::placeholder,
   .catalog-popup_field input::placeholder { color: rgb(40 40 42 / 0.5); }
+  .catalog-popup_field textarea:focus,
   .catalog-popup_field input:focus { border-bottom-color: var(--color--text); }
+  .catalog-popup_field.is-invalid textarea,
   .catalog-popup_field.is-invalid input { border-bottom-color: var(--color--sandy-brown); }
 
+  .catalog-popup_field textarea { min-height: 4rem; resize: vertical; }
   .catalog-popup_hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
   .catalog-popup_error { color: var(--color--sandy-brown); margin-top: 1rem; }
 
@@ -258,4 +268,16 @@ import Button from './Button.astro';
     margin-top: 2.5rem;               /* 40 */
   }
   .catalog-popup_success :global(.catalog-popup_submit) { margin-top: 2.25rem; }   /* 36 */
+  .catalog-popup_surface { max-height: calc(100svh - 2rem); overflow-y: auto; }
+  @media (max-width: 991px) {
+    .catalog-popup_surface { width: 40rem; max-width: calc(100vw - 5rem); }
+  }
+  @media (max-width: 767px) {
+    .catalog-popup_surface { width: calc(100vw - 1.92rem); max-width: none; padding: 1.44rem; }
+    .catalog-popup_head .heading-style-h2 { font-size: 2.4rem; line-height: 110%; }
+    .catalog-popup_head .text-style-tagline-xs { font-size: .72rem; }
+    .catalog-popup_body, .catalog-popup_field input { font-size: .96rem; }
+    .catalog-popup_field label { font-size: .72rem; }
+    .catalog-popup_surface :global(.catalog-popup_submit) { margin-top: 1.68rem; font-size: .84rem; }
+  }
 </style>

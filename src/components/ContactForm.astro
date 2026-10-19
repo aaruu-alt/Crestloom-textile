@@ -1,6 +1,6 @@
 ---
 /**
- * ContactForm — Figma "Contact" (144:290) right column.
+ * ContactForm — Figma Contact right column and responsive form.
  * Labels sit above a 1px rule; the input lives between them.
  */
 import Lines from './Lines.astro';
@@ -33,7 +33,7 @@ import Button from './Button.astro';
       <!-- honeypot: hidden from people, filled by bots -->
       <div class="contact-form_hp" aria-hidden="true">
         <label for="website">Website</label>
-        <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+        <input id="website" name="_honey" type="text" tabindex="-1" autocomplete="off" />
       </div>
     </div>
 
@@ -43,23 +43,16 @@ import Button from './Button.astro';
     <Button variant="filled-cyan" class="contact-form_submit">Send enquiry</Button>
   </form>
 
-  <div class="contact-form_success" hidden>
-    <h3 class="heading-style-h3">Thank you — we’ve received your brief.</h3>
-    <p class="text-size-regular">We’ll come back to you with the right questions within two working days.</p>
-  </div>
+
 </div>
 
 <script>
-  import { submitEnquiry } from '../lib/enquiry';
-  import { gsap } from '../scripts/motion';
+  import { messageContainsLink } from '../lib/enquiry';
 
   const root = document.querySelector<HTMLElement>('.contact-form');
   const form = root?.querySelector<HTMLFormElement>('form');
   if (root && form) {
     const error = form.querySelector<HTMLElement>('.contact-form_error')!;
-    const success = root.querySelector<HTMLElement>('.contact-form_success')!;
-    const submit = form.querySelector<HTMLButtonElement>('.contact-form_submit')!;
-    const startedAt = Date.now();
 
     const showError = (msg: string) => { error.textContent = msg; error.hidden = false; };
 
@@ -78,18 +71,13 @@ import Button from './Button.astro';
         return;
       }
 
-      submit.disabled = true;
-      const { ok } = await submitEnquiry({
-        firstName: data.firstName, company: data.company, email: data.email, message: data.message,
-        website: data.website, startedAt,
-      });
-      submit.disabled = false;
-      if (!ok) { showError('Something went wrong — please email us at info@crestloom.in.'); return; }
-
-      gsap.timeline()
-        .to(form, { opacity: 0, y: -8, duration: 0.4 })
-        .add(() => { form.hidden = true; success.hidden = false; })
-        .from(success, { opacity: 0, y: 12, duration: 0.8 });
+      if (data._honey?.trim()) return;
+      if (messageContainsLink(data.message)) {
+        showError('Please remove links from your message and try again.');
+        return;
+      }
+      // Delivery setup is deferred; never open an email app or claim this was sent.
+      showError('Email delivery is not connected yet. Please email info@crestloom.in directly.');
     });
   }
 </script>
@@ -98,7 +86,7 @@ import Button from './Button.astro';
   .contact-form {
     display: flex;
     flex-direction: column;
-    gap: 3.75rem;                     /* 60 */
+    gap: 4rem;
     width: 40rem;                     /* 640 */
   }
   .contact-form_form {
@@ -130,7 +118,7 @@ import Button from './Button.astro';
   .contact-form_field input,
   .contact-form_field textarea {
     width: 100%;
-    height: 2.25rem;                  /* 36 */
+    height: 2.3125rem;
     padding: 0.5rem 0 0.25rem;
     border: 0;
     border-bottom: 1px solid rgb(40 40 42 / 0.28);
@@ -145,7 +133,7 @@ import Button from './Button.astro';
     resize: none;
     transition: border-color 500ms var(--ease--apple);
   }
-  .is-message textarea { height: 4.5rem; }   /* 72: label→rule gap in Figma */
+  .is-message textarea { height: 4.5625rem; }   /* 72: label→rule gap in Figma */
   .contact-form_field input:focus,
   .contact-form_field textarea:focus { border-bottom-color: var(--color--text); }
   .contact-form_field.is-invalid input,
@@ -174,4 +162,24 @@ import Button from './Button.astro';
   .contact-form_form[hidden],
   .contact-form_success[hidden],
   .contact-form_error[hidden] { display: none; }
+  @media (max-width: 991px) {
+    .contact-form { width: 100%; min-width: 0; gap: 3.5rem; }
+    .contact-form :global(h2) { font-size: 2.125rem; }
+    .contact-form_form { gap: 1.5rem; width: 100%; }
+    .contact-form_row { gap: 1.5rem; }
+    .contact-form_row > .contact-form_field { flex: 1 1 0; min-width: 0; }
+    .contact-form_note { margin-top: 0; }
+    .contact-form :global(.contact-form_submit) { width: 100%; justify-content: center; }
+  }
+  @media (max-width: 767px) {
+    .contact-form { gap: 2.88rem; }
+    .contact-form :global(h2) { font-size: 1.8rem; }
+    .contact-form_form { gap: 1.44rem; }
+    .contact-form_fields { gap: 4.32rem; }
+    .contact-form_row { flex-direction: column; gap: 1.92rem; }
+    .contact-form_field label { font-size: 0.84rem; }
+    .contact-form_field input, .contact-form_field textarea { height: 2.22rem; font-size: 0.96rem; }
+    .is-message textarea { height: 4.38rem; }
+    .contact-form_note, .contact-form_error { font-size: 0.84rem; }
+  }
 </style>

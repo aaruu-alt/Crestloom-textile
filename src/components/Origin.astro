@@ -1,67 +1,37 @@
 ---
 import Lines from './Lines.astro';
-/**
- * Origin — Figma "Origin" (123:63), 1440 × 685.
- * Full-bleed image; copy block right-aligned to the container, 134 from top.
- */
-import BlurImage from './BlurImage.astro';
-import panipat from '../assets/origin-panipat.png';
+import Button from './Button.astro';
+import { routes } from '../lib/routes';
+import textile from '../assets/home/origin.png';
+import desktopTextile from '../assets/home/origin-desktop.png';
+import { Image, getImage } from 'astro:assets';
+const desktopImage = await getImage({ src: desktopTextile, width: 1920, format: 'webp' });
 ---
-
 <section class="origin" id="about" data-reveal-section>
-  <BlurImage
-    src={panipat}
-    alt="Historic domed monument in Panipat at sunrise"
-    class="origin_image"
-    widths={[800, 1200, 1820]}
-    sizes="100vw"
-  />
-
+  <picture class="origin_image">
+    <source media="(min-width: 992px)" srcset={desktopImage.src} />
+    <Image src={textile} alt="Natural woven textiles, yarn and folded fabrics" widths={[375, 750, 1147]} sizes="100vw" loading="lazy" />
+  </picture>
+  <div class="origin_overlay" aria-hidden="true"></div>
   <div class="origin_content padding-global">
     <div class="container-large origin_inner">
       <div class="origin_copy" data-reveal-group>
-        <Lines tag="h2" class="heading-style-h2 origin_heading" lines={['Rooted in a city', 'woven through craft.']} />
-        <p class="text-size-large origin_intro" data-reveal="fade">
-          Crestloom Textile begins in Panipat, where textiles are part of the city’s working rhythm. While the company is new, it is informed by a family familiar with manufacturing and the practical decisions behind making.
-        </p>
+        <Lines tag="h2" class="heading-style-h2 origin_heading" lines={['Crafted in India, with purpose.']} />
+        <p class="text-size-large origin_intro" data-reveal="fade">Crestloom was built to make sourcing easier and reliable for international clients. Looking for a dependable sourcing partner in India click the link tell us what you’re looking for?</p>
+        <Button href={routes.contact} variant="filled-gold" data-reveal>Start a conversation</Button>
       </div>
     </div>
   </div>
 </section>
-
 <style>
-  .origin {
-    position: relative;
-    height: 42.8125rem;               /* 685 */
-    background-color: var(--color--charcoal-black);
-    color: var(--color--offwhite);
-    overflow: clip;
-  }
-  .origin > :global(.origin_image) {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-  }
-
-  .origin_content {
-    position: relative;
-    z-index: 1;
-    padding-top: 8.375rem;            /* 134 */
-  }
-  .origin_inner {
-    display: flex;
-    justify-content: flex-end;
-  }
-  .origin_copy {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;                        /* 32 */
-    width: 28.3125rem;                /* 453 */
-  }
+  .origin { position: relative; height: 42.8125rem; background: var(--color--charcoal-black); color: var(--color--offwhite); overflow: clip; }
+  .origin > :global(.origin_image) { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .origin_image img { width: 100%; height: 100%; object-fit: cover; }
+  .origin_overlay { position: absolute; inset: 0; background: linear-gradient(90deg, transparent 30%, rgb(0 0 0 / .7) 100%); }
+  .origin_content { position: relative; z-index: 1; height: 100%; display: flex; align-items: center; }
+  .origin_inner { display: flex; justify-content: flex-end; }
+  .origin_copy { display: flex; flex-direction: column; align-items: flex-start; gap: 1.5rem; width: 25rem; }
   .origin_heading { color: var(--color--offwhite); }
-  .origin_intro {
-    width: 25rem;                     /* 400 */
-    opacity: 0.86;
-  }
+  .origin_intro { opacity: .86; }
+  .origin_copy > :global(.button) { margin-top: 1rem; }
 </style>

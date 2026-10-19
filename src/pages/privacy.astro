@@ -1,14 +1,12 @@
 ---
 /**
- * Privacy page — no Figma frame; typographic page in the site system.
- * Copy reflects the site as built: enquiry + catalogue forms (Supabase), no analytics, no cookies.
- * DRAFT — review with legal counsel before launch.
+ * Privacy page — Figma 323:111, 457:224 and 461:224.
+ * Supplied policy copy; storage details need aligning once form delivery is connected.
  */
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Lines from '../components/Lines.astro';
 import Footer from '../components/Footer.astro';
-import SmallScreenNotice from '../components/SmallScreenNotice.astro';
 
 const updated = '19 September 2026';
 
@@ -24,8 +22,8 @@ const sections = [
     title: 'What we collect',
     body: [
       'We only collect information you choose to give us through two forms on this site:',
-      '<strong>Enquiry form</strong> — your first name, company, email address and message.',
-      '<strong>Catalogue request</strong> — your name, email address and the product category you were viewing.',
+      'Enquiry form — your first name, company, email address and message.',
+      'Catalogue request — your name, email address and the product category you were viewing.',
       'Alongside each submission we record the date and time, and technical signals used to filter automated spam (for example, how quickly the form was completed). We do not collect payment details, government identifiers or any special categories of personal data.',
     ],
   },
@@ -79,16 +77,16 @@ const sections = [
 ---
 
 <Layout title="Privacy — Crestloom Textile" description="How Crestloom Textile collects, uses and protects the information you share through this website.">
-  <SmallScreenNotice />
-
-  <div class="desktop-only">
+  <div class="privacy-page site-responsive">
     <Navbar theme="dark" />
 
     <section class="privacy padding-global" data-reveal-section>
       <div class="container-large privacy_inner">
         <header class="privacy_header" data-reveal-group>
-          <Lines class="text-style-tagline text-color-sandy-brown" lines={['Privacy']} />
-          <Lines tag="h1" class="heading-style-h1" lines={['How we handle', 'your information.']} />
+          <div class="privacy_heading-block">
+            <Lines class="text-style-tagline text-color-sandy-brown" lines={['Privacy']} />
+            <Lines tag="h1" class="heading-style-h1" lines={['How we handle', 'your information.']} />
+          </div>
           <p class="text-size-small privacy_updated" data-reveal="fade">Last updated {updated}</p>
         </header>
 
@@ -105,7 +103,7 @@ const sections = [
       </div>
     </section>
 
-    <Footer />
+    <Footer directory />
   </div>
 </Layout>
 
@@ -113,7 +111,7 @@ const sections = [
   .privacy {
     background-color: var(--color--offwhite);
     padding-top: 12.5rem;             /* 100 navbar + 100 */
-    padding-bottom: 7.5rem;           /* 120 */
+    padding-bottom: 6.25rem;
   }
   .privacy_inner {
     display: flex;
@@ -126,7 +124,7 @@ const sections = [
     gap: 1.5rem;                      /* 24 */
     width: 45rem;                     /* 720 */
   }
-  .privacy_updated { opacity: 0.7; }
+  .privacy_heading-block { display: flex; flex-direction: column; gap: .75rem; }
 
   .privacy_body {
     display: flex;
@@ -138,15 +136,14 @@ const sections = [
   .privacy_section {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;                     /* 20 */
+    gap: 1.5rem;
     padding-top: 2rem;                /* 32 */
-    border-top: 1px solid rgb(40 40 42 / 0.18);
+    border-top: 1px solid var(--color--charcoal-black);
   }
   .privacy_text {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    opacity: 0.85;
   }
   .privacy_text :global(a) {
     text-decoration: underline;
@@ -154,4 +151,28 @@ const sections = [
     transition: opacity 400ms var(--ease--apple);
   }
   .privacy_text :global(a:hover) { opacity: 0.6; }
+  @media (max-width: 991px) {
+    .privacy { padding-top: 10.375rem; padding-bottom: 4.5rem; }
+    .privacy_inner { gap: 3.5rem; }
+    .privacy_header { width: 30rem; max-width: 100%; }
+    .privacy_heading-block { gap: .625rem; }
+    .privacy_heading-block :global(h1) { font-size: 3.5rem; }
+    .privacy_body { width: 100%; margin-left: 0; gap: 3.5rem; }
+    .privacy_section h2 { font-size: 1.625rem; }
+  }
+  @media (max-width: 767px) {
+    .privacy { padding-top: 8.4rem; padding-bottom: 3.84rem; }
+    .privacy-page :global(.padding-global) { padding-inline: .96rem; }
+    .privacy_inner { gap: 2.88rem; }
+    .privacy_header { width: 100%; gap: 1.44rem; }
+    .privacy_heading-block { gap: .72rem; }
+    .privacy_heading-block :global(.text-style-tagline) { font-size: .9rem; }
+    .privacy_heading-block :global(h1) { font-size: 2.4rem; }
+    .privacy_updated { font-size: .84rem; }
+    .privacy_body { gap: 2.88rem; }
+    .privacy_section { gap: 1.44rem; padding-top: 1.92rem; }
+    .privacy_section h2 { font-size: 1.44rem; }
+    .privacy_text { gap: .96rem; }
+    .privacy_text p { font-size: .9rem; }
+  }
 </style>

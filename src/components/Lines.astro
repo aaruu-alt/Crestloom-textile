@@ -18,8 +18,11 @@ const Tag = tag;
 ---
 
 <Tag class:list={['lines', className]} data-reveal="lines" {...rest}>
-  {lines.map((line) => (
+  {lines.map((line, index) => (
+    <>
     <span class="lines_mask"><span class="lines_inner" set:html={line} /></span>
+    {index < lines.length - 1 && ' '}
+    </>
   ))}
 </Tag>
 
