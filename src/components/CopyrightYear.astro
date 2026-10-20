@@ -1,0 +1,16 @@
+<span data-copyright-year>{new Date().getUTCFullYear()}</span>
+
+<script>
+  function updateCopyrightYear() {
+    const year = String(new Date().getUTCFullYear());
+    document.querySelectorAll('[data-copyright-year]').forEach(element => {
+      element.textContent = year;
+    });
+  }
+
+  updateCopyrightYear();
+  document.addEventListener('astro:page-load', updateCopyrightYear);
+  document.addEventListener('visibilitychange', updateCopyrightYear);
+  // Also update pages left open across the UTC new year.
+  setInterval(updateCopyrightYear, 60_000);
+</script>

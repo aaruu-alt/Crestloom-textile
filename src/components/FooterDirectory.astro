@@ -1,5 +1,6 @@
 ---
 import brand from '../assets/home/footer-brand.svg';
+import CopyrightYear from './CopyrightYear.astro';
 import { routes } from '../lib/routes';
 const columns = [
   { title: 'Rugs & flooring', links: ['Rugs', 'Bathmats'] },
@@ -26,7 +27,7 @@ const site = [{ label: 'About', href: routes.about }, { label: 'Sourcing', href:
     </div>
     <div class="directory-footer_bottom">
       <div class="directory-footer_rule"></div>
-      <div class="directory-footer_meta"><p class="directory-footer_place">Panipat <span aria-hidden="true">·</span> India</p><p>© {new Date().getFullYear()} Crestloom Textile · All rights reserved</p></div>
+      <div class="directory-footer_meta"><p class="directory-footer_place">Panipat <span aria-hidden="true">·</span> India</p><p>© <CopyrightYear /> Crestloom Textile · All rights reserved</p></div>
     </div>
   </div>
 </footer>

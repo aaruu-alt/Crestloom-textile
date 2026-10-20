@@ -4,10 +4,10 @@
  */
 import Wordmark from './Wordmark.astro';
 import FooterDirectory from './FooterDirectory.astro';
+import CopyrightYear from './CopyrightYear.astro';
 interface Props { directory?: boolean; }
 const { directory = false } = Astro.props;
 import { routes } from '../lib/routes';
-const year = new Date().getFullYear();
 
 const columns = [
   [
@@ -39,7 +39,7 @@ const columns = [
     <div class="footer_bottom" data-reveal-group>
       <div class="footer_rule" role="presentation" data-reveal></div>
       <div class="footer_meta" data-reveal>
-        <p class="footer_small">© {year} Crestloom Textile</p>
+        <p class="footer_small">© <CopyrightYear /> Crestloom Textile</p>
         <a href="mailto:info@crestloom.in" class="footer_small text-link">info@crestloom.in</a>
         <div class="footer_legal">
           <p class="footer_small">All rights reserved</p>
