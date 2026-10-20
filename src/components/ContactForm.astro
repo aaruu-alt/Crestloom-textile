@@ -39,6 +39,7 @@ import Button from './Button.astro';
 
     <p class="text-size-small contact-form_note">Include the category, approximate quantity and desired timeline if known.</p>
     <p class="text-size-small contact-form_error" role="alert" hidden></p>
+    <p class="text-size-small contact-form_status" role="status" hidden></p>
 
     <Button variant="filled-cyan" class="contact-form_submit">Send enquiry</Button>
   </form>
@@ -53,17 +54,22 @@ import Button from './Button.astro';
   const form = root?.querySelector<HTMLFormElement>('form');
   if (root && form) {
     const error = form.querySelector<HTMLElement>('.contact-form_error')!;
+    const status = form.querySelector<HTMLElement>('.contact-form_status')!;
+    const submit = form.querySelector<HTMLButtonElement>('.contact-form_submit')!;
+    let sending = false;
 
     const showError = (msg: string) => { error.textContent = msg; error.hidden = false; };
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      if (sending) return;
       error.hidden = true;
+      status.hidden = true;
       form.querySelectorAll('.is-invalid').forEach((el) => el.classList.remove('is-invalid'));
 
       const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
       const invalid = [...form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[required]')]
-        .filter((el) => !el.checkValidity());
+        .filter((el) => !el.checkValidity() || !el.value.trim());
       if (invalid.length) {
         invalid.forEach((el) => el.closest('.contact-form_field')?.classList.add('is-invalid'));
         showError(invalid.some((el) => el.type === 'email' && el.value) ? 'Please enter a valid email address.' : 'Please fill in the highlighted fields.');
@@ -76,8 +82,38 @@ import Button from './Button.astro';
         showError('Please remove links from your message and try again.');
         return;
       }
-      // Delivery setup is deferred; never open an email app or claim this was sent.
-      showError('Email delivery is not connected yet. Please email info@crestloom.in directly.');
+      sending = true;
+      submit.disabled = true;
+      form.setAttribute('aria-busy', 'true');
+      status.textContent = 'Sending your enquiry…';
+      status.hidden = false;
+      try {
+        // Explicit fields only: the honeypot never leaves the browser.
+        const response = await fetch('https://formsubmit.co/ajax/info@crestloom.in', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            firstName: data.firstName.trim(),
+            email: data.email.trim(),
+            company: data.company.trim(),
+            message: data.message.trim(),
+            _subject: 'Crestloom website enquiry',
+            _template: 'table',
+          }),
+          signal: AbortSignal.timeout(20_000),
+        });
+        const result = await response.json();
+        if (!response.ok || ![true, 'true'].includes(result.success)) throw new Error('Submission failed');
+        form.reset();
+        status.textContent = 'Thank you. Your enquiry has been submitted.';
+      } catch {
+        status.hidden = true;
+        showError('We couldn’t submit your enquiry. Please try again or email info@crestloom.in.');
+      } finally {
+        sending = false;
+        submit.disabled = false;
+        form.removeAttribute('aria-busy');
+      }
     });
   }
 </script>
@@ -161,7 +197,8 @@ import Button from './Button.astro';
   }
   .contact-form_form[hidden],
   .contact-form_success[hidden],
-  .contact-form_error[hidden] { display: none; }
+  .contact-form_error[hidden],
+  .contact-form_status[hidden] { display: none; }
   @media (max-width: 991px) {
     .contact-form { width: 100%; min-width: 0; gap: 3.5rem; }
     .contact-form :global(h2) { font-size: 2.125rem; }
