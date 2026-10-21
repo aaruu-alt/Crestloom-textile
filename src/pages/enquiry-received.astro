@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="referrer" content="no-referrer" />
+    <title>Enquiry confirmation — Crestloom Textile</title>
+  </head>
+  <body>
+    <script>
+      const token = new URLSearchParams(location.search).get('token');
+      if (window.parent !== window && token) {
+        window.parent.postMessage({ type: 'crestloom:enquiry-submitted', token }, location.origin);
+      }
+    </script>
+  </body>
+</html>

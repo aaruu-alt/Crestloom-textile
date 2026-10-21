@@ -65,11 +65,11 @@ Both build commands write to `dist/`. Rebuild the intended target before preview
 
 ## Contact form
 
-The contact form submits to FormSubmit through its standard POST endpoint, addressed to `info@crestloom.in`. Visitors complete the provider’s spam verification and return to the contact page; no email application opens. The AJAX endpoint was replaced after repeated timeouts.
+The contact form posts to FormSubmit in an isolated background frame, addressed to `info@crestloom.in`. Visitors remain on the Crestloom contact page throughout. FormSubmit’s documented `_captcha=false` setting avoids an external challenge; the browser honeypot and message-link checks remain. The AJAX endpoint was replaced after repeated timeouts.
 
 The payload includes first name, email, optional company and message. Required fields and email format are checked in the browser, messages containing links are rejected, and a populated honeypot stops submission. The honeypot is excluded from the outgoing payload. Browser checks can be bypassed and are not server-side spam protection.
 
-The form prevents duplicate submissions while transferring to the provider and shows a confirmation when the provider redirects back after submission. FormSubmit must activate the recipient address before delivery works. Activation uses the confirmation email sent to that inbox; verify actual receipt after activation. A successful HTTP response alone does not prove inbox delivery.
+Sending, error and success states follow the approved Figma designs. The form locks duplicate submissions while sending, preserves details on failure, and supports retry and sending another enquiry. Success requires the provider to redirect the background frame to `/enquiry-received/`, with a matching per-attempt token, same-origin message and frame identity. Missing confirmation times out after 30 seconds; merely loading a frame never counts as success. The confirmation page is excluded from search indexing. FormSubmit must activate the recipient address before delivery works. Activation uses the confirmation email sent to that inbox; verify actual receipt after activation. A successful HTTP response alone does not prove inbox delivery.
 
 The collection enquiry popup is no longer mounted. Legacy popup and mail-draft utilities remain in the source but are not the active contact form.
 
@@ -87,5 +87,7 @@ The main-domain workflow requires the repository secret `LIVE_DEPLOY_TOKEN`. Nev
 Check [GitHub Actions](https://github.com/aaruu-alt/Crestloom-textile/actions) for completion and verify the published pages before calling a deployment live. Review design changes locally before pushing.
 
 The homepage is served at `/` on the main domain. Old `/home` URLs redirect to the homepage. The hosting repository retains its original `crestloom-coming-soon` name.
+
+Run delivery isolation and confirmation tests with `node --experimental-strip-types --test tests/contact-delivery.test.mjs`. Browser validation is not a replacement for provider-side spam controls.
 
 Framework reference: [Astro documentation](https://docs.astro.build).

@@ -5,13 +5,15 @@
  */
 import Lines from './Lines.astro';
 import Button from './Button.astro';
-const returnUrl = new URL(`${import.meta.env.BASE_URL.replace(/\/$/, '')}/contact/?submitted=true`, Astro.site).href;
+import sendingIcon from '../assets/contact-sending.svg';
+const callbackPath = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/enquiry-received/`;
 ---
 
 <div class="contact-form" data-reveal-group>
+  <div class="contact-form_entry">
   <Lines tag="h2" class="heading-style-h3" lines={['Tell us what you’re looking for.']} />
 
-  <form class="contact-form_form" action="https://formsubmit.co/info@crestloom.in" method="POST" data-return-url={returnUrl} novalidate data-reveal>
+  <form class="contact-form_form" data-callback-path={callbackPath} novalidate data-reveal>
     <div class="contact-form_fields">
       <div class="contact-form_row">
         <div class="contact-form_field is-first-name">
@@ -39,92 +41,96 @@ const returnUrl = new URL(`${import.meta.env.BASE_URL.replace(/\/$/, '')}/contac
     </div>
 
     <p class="text-size-small contact-form_note">Include the category, approximate quantity and desired timeline if known.</p>
-    <p class="text-size-small contact-form_error" role="alert" hidden></p>
-    <p class="text-size-small contact-form_status" role="status" hidden></p>
+    <div class="contact-form_feedback is-sending" role="status" hidden>
+      <p class="contact-form_feedback-title"><img src={sendingIcon.src} width="16" height="16" alt="" class="contact-form_spinner" />Sending your enquiry</p>
+      <p>Please keep this page open. Your details will stay in the form.</p>
+    </div>
+    <div class="contact-form_feedback is-error" role="alert" hidden>
+      <p class="contact-form_feedback-title"><span class="contact-form_error-mark" aria-hidden="true">!</span><span>We couldn’t send your enquiry.</span></p>
+      <p class="contact-form_error-detail">Your details are still here. Please try again, or email <a href="mailto:info@crestloom.in">info@crestloom.in</a>.</p>
+    </div>
 
-    <Button variant="filled-cyan" class="contact-form_submit">Send enquiry</Button>
+    <Button type="submit" variant="filled-cyan" class="contact-form_submit" disabled>Send enquiry</Button>
   </form>
-
-
+  <noscript><p>Please enable JavaScript to send an enquiry from this page.</p></noscript>
+  </div>
+  <div class="contact-form_success" role="status" hidden>
+    <p class="contact-form_success-tag">Enquiry received</p>
+    <h2 class="heading-style-h3" tabindex="-1">Thank you for getting in touch.</h2>
+    <p class="text-size-regular">Your enquiry has been submitted. Our team will be in touch by email.</p>
+    <Button type="button" variant="filled-cyan" class="contact-form_again">Send another enquiry</Button>
+  </div>
 </div>
 
 <script>
   import { messageContainsLink } from '../lib/enquiry';
-
+  import { sendContactEnquiry } from '../lib/contact-delivery';
+  import { ScrollTrigger } from '../scripts/motion';
   const root = document.querySelector<HTMLElement>('.contact-form');
   const form = root?.querySelector<HTMLFormElement>('form');
   if (root && form) {
-    const error = form.querySelector<HTMLElement>('.contact-form_error')!;
-    const status = form.querySelector<HTMLElement>('.contact-form_status')!;
+    const entry = root.querySelector<HTMLElement>('.contact-form_entry')!;
+    const success = root.querySelector<HTMLElement>('.contact-form_success')!;
+    const sendingPanel = form.querySelector<HTMLElement>('.is-sending')!;
+    const errorPanel = form.querySelector<HTMLElement>('.is-error')!;
+    const errorDetail = errorPanel.querySelector<HTMLElement>('.contact-form_error-detail')!;
     const submit = form.querySelector<HTMLButtonElement>('.contact-form_submit')!;
+    const note = form.querySelector<HTMLElement>('.contact-form_note')!;
+    const fields = [...form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input, textarea')];
+    const setLabel = (label: string) => submit.querySelectorAll('.button_label-text').forEach(n => { n.textContent = label; });
     let sending = false;
-    if (new URLSearchParams(location.search).get('submitted') === 'true') {
-      status.textContent = 'Thank you. Your enquiry has been submitted.';
-      status.hidden = false;
-      history.replaceState(null, '', location.pathname + location.hash);
-    }
-
-    window.addEventListener('pageshow', (event) => {
-      if (!event.persisted) return;
-      sending = false;
-      submit.disabled = false;
-      form.removeAttribute('aria-busy');
-      status.hidden = true;
-    });
-
-    const showError = (msg: string) => { error.textContent = msg; error.hidden = false; };
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (sending) return;
-      error.hidden = true;
-      status.hidden = true;
-      form.querySelectorAll('.is-invalid').forEach((el) => el.classList.remove('is-invalid'));
-
-      const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
-      const invalid = [...form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[required]')]
-        .filter((el) => !el.checkValidity() || !el.value.trim());
-      if (invalid.length) {
-        invalid.forEach((el) => el.closest('.contact-form_field')?.classList.add('is-invalid'));
-        showError(invalid.some((el) => el.type === 'email' && el.value) ? 'Please enter a valid email address.' : 'Please fill in the highlighted fields.');
-        invalid[0].focus();
-        return;
+    submit.disabled = false;
+    const refresh = () => requestAnimationFrame(() => ScrollTrigger.refresh());
+    const setSending = (value: boolean) => {
+      sending = value; submit.disabled = value;
+      form.setAttribute('aria-busy', String(value));
+      fields.forEach(field => { field.readOnly = value; });
+      sendingPanel.hidden = !value; note.hidden = value || !errorPanel.hidden;
+      root.dataset.state = value ? 'sending' : 'idle';
+      setLabel(value ? 'Sending…' : 'Send enquiry');
+      refresh();
+    };
+    const showError = (message?: string) => {
+      errorPanel.hidden = false; note.hidden = true;
+      if (message) errorDetail.textContent = message;
+      else {
+        errorDetail.replaceChildren('Your details are still here. Please try again, or email ');
+        const email = document.createElement('a');
+        email.href = 'mailto:info@crestloom.in'; email.textContent = 'info@crestloom.in';
+        errorDetail.append(email, '.');
       }
-
+      root.dataset.state = 'error'; setLabel('Try again'); refresh();
+    };
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (sending) return;
+      errorPanel.hidden = true;
+      form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+      fields.forEach(field => field.removeAttribute('aria-invalid'));
+      const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
       if (data._honey?.trim()) return;
+      const invalid = fields.filter(field => field.required && (!field.checkValidity() || !field.value.trim()));
+      if (invalid.length) {
+        invalid.forEach(field => { field.setAttribute('aria-invalid', 'true'); field.closest('.contact-form_field')?.classList.add('is-invalid'); });
+        showError(invalid.some(field => field.type === 'email' && field.value) ? 'Please enter a valid email address.' : 'Please fill in the highlighted fields.');
+        invalid[0].focus(); return;
+      }
       if (messageContainsLink(data.message)) {
         showError('Please remove links from your message and try again.');
-        return;
+        form.querySelector<HTMLTextAreaElement>('#message')?.focus(); return;
       }
-      sending = true;
-      submit.disabled = true;
-      form.setAttribute('aria-busy', 'true');
-      status.textContent = 'Opening secure spam verification…';
-      status.hidden = false;
-      // Use the provider's standard route, including its spam verification.
-      // Construct an allowlisted payload so the honeypot never leaves the browser.
-      const deliveryForm = document.createElement('form');
-      deliveryForm.method = 'POST';
-      deliveryForm.action = form.action;
-      deliveryForm.hidden = true;
-      const fields = {
-        firstName: data.firstName.trim(),
-        email: data.email.trim(),
-        company: data.company.trim(),
-        message: data.message.trim(),
-        _subject: 'Crestloom website enquiry',
-        _template: 'table',
-        _next: form.dataset.returnUrl!,
-      };
-      for (const [name, value] of Object.entries(fields)) {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = name;
-        input.value = value;
-        deliveryForm.append(input);
+      setSending(true);
+      try {
+        await sendContactEnquiry({ firstName: data.firstName, company: data.company, email: data.email, message: data.message }, form.dataset.callbackPath!);
+        setSending(false); form.reset(); entry.hidden = true; success.hidden = false;
+        root.dataset.state = 'success'; success.querySelector<HTMLElement>('h2')?.focus({ preventScroll: true }); refresh();
+      } catch {
+        setSending(false); showError();
       }
-      document.body.append(deliveryForm);
-      deliveryForm.submit();
+    });
+    root.querySelector('.contact-form_again')?.addEventListener('click', () => {
+      success.hidden = true; entry.hidden = false; errorPanel.hidden = true; note.hidden = false;
+      root.dataset.state = 'idle'; setLabel('Send enquiry'); fields[0].focus({ preventScroll: true }); refresh();
     });
   }
 </script>
@@ -136,6 +142,7 @@ const returnUrl = new URL(`${import.meta.env.BASE_URL.replace(/\/$/, '')}/contac
     gap: 4rem;
     width: 40rem;                     /* 640 */
   }
+  .contact-form_entry { display: flex; flex-direction: column; gap: 4rem; width: 100%; }
   .contact-form_form {
     display: flex;
     flex-direction: column;
@@ -198,20 +205,37 @@ const returnUrl = new URL(`${import.meta.env.BASE_URL.replace(/\/$/, '')}/contac
     margin-top: -0.75rem;             /* 28 from the rule instead of 40 */
     opacity: 0.7;
   }
-  .contact-form_error { color: var(--color--sandy-brown); margin-top: -1.5rem; }
+  .contact-form_feedback { display: flex; flex-direction: column; gap: .5rem; padding: 1rem; width: 100%; margin-top: -.75rem; font: 400 .875rem/150% var(--font--body); letter-spacing: -.04em; }
+  .contact-form_feedback-title { display: flex; align-items: center; gap: .625rem; font: 500 .875rem/120% var(--font--accent); letter-spacing: 0; }
+  .is-sending .contact-form_feedback-title { color: var(--color--cyan-blue); }
+  .contact-form_spinner { width: 1rem; height: 1rem; flex-shrink: 0; animation: contact-spin 1s linear infinite; }
+  .contact-form_error-mark { width: 1rem; flex-shrink: 0; font-size: 1.125rem; }
+  .contact-form_feedback a { text-decoration: underline; text-underline-offset: .15em; }
+  .contact-form :global(.contact-form_submit:disabled) { opacity: 1; cursor: progress; }
+  .contact-form[data-state='sending'] :global(.button_icon), .contact-form[data-state='error'] :global(.contact-form_submit .button_icon) { display: none; }
+  .contact-form :global(.contact-form_submit) { min-width: 10.6875rem; justify-content: center; }
+  @keyframes contact-spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .contact-form_spinner { animation: none; } }
+  .contact-form_success-tag { font: 500 .75rem/120% var(--font--accent); letter-spacing: .18em; text-transform: uppercase; color: var(--color--sandy-brown); }
 
   .contact-form_success {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    max-width: 30rem;
+    width: 100%;
+    padding-top: 3.5rem;
+    align-items: flex-start;
   }
+  .contact-form_entry[hidden],
+  .contact-form_feedback[hidden],
+  .contact-form_note[hidden],
   .contact-form_form[hidden],
   .contact-form_success[hidden],
   .contact-form_error[hidden],
   .contact-form_status[hidden] { display: none; }
   @media (max-width: 991px) {
     .contact-form { width: 100%; min-width: 0; gap: 3.5rem; }
+    .contact-form_entry { gap: 3.5rem; }
     .contact-form :global(h2) { font-size: 2.125rem; }
     .contact-form_form { gap: 1.5rem; width: 100%; }
     .contact-form_row { gap: 1.5rem; }
@@ -221,6 +245,11 @@ const returnUrl = new URL(`${import.meta.env.BASE_URL.replace(/\/$/, '')}/contac
   }
   @media (max-width: 767px) {
     .contact-form { gap: 2.88rem; }
+    .contact-form_entry { gap: 2.88rem; }
+    .contact-form_feedback { font-size: .84rem; padding: .96rem; margin-top: 0; }
+    .contact-form_success { padding-top: 1.92rem; gap: 1.44rem; }
+    .contact-form_success :global(h2) { font-size: 1.92rem; line-height: 110%; }
+    .contact-form_success :global(.button) { width: 100%; justify-content: center; }
     .contact-form :global(h2) { font-size: 1.8rem; }
     .contact-form_form { gap: 1.44rem; }
     .contact-form_fields { gap: 4.32rem; }
