@@ -1,14 +1,11 @@
-/**
- * Site routes. HOME points at /home while the coming-soon page holds `/`;
- * change it to `${base}/` at launch.
- */
+/** Base-aware links for the public site. */
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 export const routes = {
-  home: `${base}/home`,
+  home: `${base}/`,
   collections: `${base}/collections`,
-  sourcing: `${base}/home#sourcing`,
-  process: `${base}/home#process`,
+  sourcing: `${base}/#sourcing`,
+  process: `${base}/#process`,
   about: `${base}/about`,
   contact: `${base}/contact`,
   privacy: `${base}/privacy`,

@@ -1,7 +1,7 @@
-# Live site: the coming-soon page only, published to the crestloom-coming-soon
+# Full live site, published to the existing crestloom-coming-soon hosting
 # repo, which serves www.crestloomtextiles.com from its gh-pages branch.
 # Staging (every page) keeps deploying from deploy.yml to this repo's Pages.
-name: Deploy live (coming soon)
+name: Deploy live site
 
 on:
   push:

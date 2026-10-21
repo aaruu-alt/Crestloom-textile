@@ -11,7 +11,7 @@ npm ci
 npm run astro -- dev --background
 ```
 
-Open [the local homepage](http://localhost:4321/Crestloom-textile/home). The development site uses the `/Crestloom-textile` base path.
+Open [the local homepage](http://localhost:4321/Crestloom-textile/). The development site uses the `/Crestloom-textile` base path.
 
 Manage the background server with:
 
@@ -26,7 +26,7 @@ npm run astro -- dev stop
 | `npm run astro -- check` | Check Astro and TypeScript diagnostics |
 | `npm run build` | Build all development-site pages into `dist/` |
 | `npm run preview` | Preview the generated build locally |
-| `npm run build:live` | Build and prune the main-domain coming-soon site |
+| `npm run build:live` | Build the full main-domain site |
 
 Both build commands write to `dist/`. Rebuild the intended target before previewing or publishing.
 
@@ -34,8 +34,8 @@ Both build commands write to `dist/`. Rebuild the intended target before preview
 
 | Location | Contents |
 | --- | --- |
-| `src/pages/index.astro` | Coming-soon page at the site root |
-| `src/pages/home.astro` | Full homepage |
+| `src/pages/index.astro` | Full homepage at the site root |
+| `src/pages/home.astro` | Redirect for old homepage links |
 | `src/pages/collections.astro` | Product collections and category filter |
 | `src/pages/about.astro` | About Crestloom |
 | `src/pages/contact.astro` | Contact details and enquiry form |
@@ -48,7 +48,7 @@ Both build commands write to `dist/`. Rebuild the intended target before preview
 | `src/lib/routes.ts` | Base-aware links and homepage section routes |
 | `src/lib/enquiry.ts` | Shared enquiry utilities and message-link validation |
 | `public/og.jpg` | Shared Open Graph artwork |
-| `scripts/prune-live.mjs` | Keeps only the coming-soon build and its assets for the main domain |
+| `scripts/prepare-live.mjs` | Excludes the internal crop tool from the main-domain build |
 
 “All collections” shows one curated thumbnail per category, with an Explore overlay on hover or keyboard focus. Cushion covers are included within Cushions; their footer link opens that combined category. Collection cards select their category. Once a category is selected, cards retain their hover zoom but do not open a popup. Chindi rugs and Fouta towels are excluded from the current collection and footer.
 
@@ -79,13 +79,13 @@ Pushes to `main` trigger two GitHub Actions workflows:
 
 | Target | Workflow | Result |
 | --- | --- | --- |
-| [Development site](https://aaruu-alt.github.io/Crestloom-textile/home/) | `.github/workflows/deploy.yml` | Full site published to this repository’s GitHub Pages |
-| [Main domain](https://www.crestloomtextiles.com/) | `.github/workflows/deploy-live.yml` | Coming-soon page only, published to `aaruu-alt/crestloom-coming-soon` on `gh-pages` |
+| [Development site](https://aaruu-alt.github.io/Crestloom-textile/) | `.github/workflows/deploy.yml` | Full site published to this repository’s GitHub Pages |
+| [Main domain](https://www.crestloomtextiles.com/) | `.github/workflows/deploy-live.yml` | Full website, published to `aaruu-alt/crestloom-coming-soon` on `gh-pages` |
 
 The main-domain workflow requires the repository secret `LIVE_DEPLOY_TOKEN`. Never commit credentials. Target URLs and base paths are configured in `astro.config.mjs` using `LIVE_BUILD=true` for the main-domain build.
 
 Check [GitHub Actions](https://github.com/aaruu-alt/Crestloom-textile/actions) for completion and verify the published pages before calling a deployment live. Review design changes locally before pushing.
 
-Before launching the full site on the main domain, update the deployment/pruning setup and the homepage route in `src/lib/routes.ts`; it currently points to `/home` while `/` holds the coming-soon page.
+The homepage is served at `/` on the main domain. Old `/home` URLs redirect to the homepage. The hosting repository retains its original `crestloom-coming-soon` name.
 
 Framework reference: [Astro documentation](https://docs.astro.build).
