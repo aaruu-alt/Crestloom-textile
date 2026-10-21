@@ -1,17 +1,24 @@
 ---
 import ProductCard from './ProductCard.astro';
 import { products } from '../data/collection';
-const orderedProducts = [...products.filter(p => p.code.endsWith('-001')), ...products.filter(p => !p.code.endsWith('-001'))];
+// User-selected category covers; product images remain unchanged inside each category.
+const coverCodes = new Set(['CL-RG-001', 'CL-BM-008', 'CL-CU-005', 'CL-TH-002', 'CL-PF-003', 'CL-TT-005', 'CL-KT-005', 'CL-SC-004', 'CL-TC-011', 'CL-BK-009', 'CL-WH-003', 'CL-WA-007', 'CL-HW-012']);
+const orderedProducts = [...products.filter(p => coverCodes.has(p.code)), ...products.filter(p => !coverCodes.has(p.code))];
 ---
 <div class="collection-grid" id="collection-grid" aria-label="Collection products">
-  {orderedProducts.map(product => <ProductCard {...product} overview={product.code.endsWith('-001')} />)}
+  <h2 class="collection-grid_heading" data-cushion-heading="cushions" hidden>Cushions</h2>
+  <h2 class="collection-grid_heading" data-cushion-heading="covers" hidden>Cushion covers</h2>
+  {orderedProducts.map(product => <ProductCard {...product} overview={coverCodes.has(product.code)} />)}
 </div>
-<div class="collection-grid_sentinel" aria-hidden="true"></div>
+
 <style>
   .collection-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; }
   .collection-grid.is-filtered { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .collection-grid_sentinel { height: 1px; margin-top: -5rem; }
-  .collection-grid_sentinel[hidden] { display: none; }
+  .collection-grid_heading { grid-column: 1 / -1; font: 500 1rem/120% var(--font--accent); letter-spacing: .18em; text-transform: uppercase; }
+  .collection-grid_heading[data-cushion-heading="covers"] { margin-top: 1.5rem; }
+  .collection-grid_heading[hidden] { display: none; }
+  .collection-grid.is-cushions :global(.product-card_caption > span:first-child),
+  .collection-grid.is-cushions :global(.product-card_separator) { display: none; }
   @media (max-width: 991px) { .collection-grid, .collection-grid.is-filtered { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (max-width: 767px) { .collection-grid { gap: .96rem; } }
+  @media (max-width: 767px) { .collection-grid { gap: .96rem; } .collection-grid_heading { font-size: .96rem; } }
 </style>

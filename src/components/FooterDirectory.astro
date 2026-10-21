@@ -8,7 +8,7 @@ const columns = [
   { title: 'Bath, kitchen & table', links: ['Terry towels', 'Table cloth', 'Shower curtains', 'Table covers'] },
   { title: 'Storage & décor', links: ['Baskets', 'Wall hangings', 'Wall art', 'Halloween collection'] },
 ];
-const categorySlug = (label: string) => ({ 'Table cloth': 'table-covers', 'Table covers': 'table-covers' }[label] ?? label.toLowerCase().replaceAll(' ', '-'));
+const categorySlug = (label: string) => ({ 'Cushion covers': 'cushions', 'Table cloth': 'table-covers', 'Table covers': 'table-covers' }[label] ?? label.toLowerCase().replaceAll(' ', '-'));
 const site = [{ label: 'About', href: routes.about }, { label: 'Sourcing', href: routes.sourcing }, { label: 'Contact', href: routes.contact }, { label: 'Privacy', href: routes.privacy }];
 ---
 <footer class="directory-footer padding-global">

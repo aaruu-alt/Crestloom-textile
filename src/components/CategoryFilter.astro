@@ -4,7 +4,7 @@ import chevron from '../assets/catalog-filter-chevron.svg';
 ---
 <div class="category-filter" id="collection-filter">
   <div class="category-filter_controls">
-    <button type="button" class="category-filter_all text-style-button" aria-pressed="true">All products</button>
+    <button type="button" class="category-filter_all text-style-button" aria-pressed="true">All collections</button>
     <button type="button" class="category-filter_toggle text-style-button" aria-expanded="false" aria-controls="category-picker">Category <span class="category-filter_chevron" style={`--chevron: url("${chevron.src}")`} aria-hidden="true"></span></button>
   </div>
   <p class="category-filter_selected text-style-button" aria-live="polite">All collections</p>
@@ -35,27 +35,10 @@ import chevron from '../assets/catalog-filter-chevron.svg';
     const selected = filter.querySelector<HTMLElement>('.category-filter_selected')!;
     const options = [...picker.querySelectorAll<HTMLButtonElement>('[data-category]')];
     const cards = [...grid.querySelectorAll<HTMLButtonElement>('.product-card')];
-    const sentinel = document.querySelector<HTMLElement>('.collection-grid_sentinel')!;
-    const end = document.querySelector<HTMLElement>('.collection-end')!;
+    const initialGridNodes = [...grid.childNodes];
+    const cushionHeading = grid.querySelector<HTMLElement>('[data-cushion-heading="cushions"]')!;
+    const coverHeading = grid.querySelector<HTMLElement>('[data-cushion-heading="covers"]')!;
     let activeCategory = 'all';
-    let visibleCount = 16;
-    const syncPagination = () => {
-      const more = activeCategory === 'all' && visibleCount < cards.length;
-      sentinel.hidden = !more;
-      end.hidden = more;
-    };
-    const loadMore = () => {
-      if (activeCategory !== 'all' || visibleCount >= cards.length) return;
-      const next = Math.min(visibleCount + 16, cards.length);
-      cards.slice(visibleCount, next).forEach(card => { card.hidden = false; });
-      visibleCount = next;
-      syncPagination();
-      ScrollTrigger.refresh();
-      requestAnimationFrame(() => {
-        if (!sentinel.hidden && sentinel.getBoundingClientRect().top < innerHeight + 600) loadMore();
-      });
-    };
-    new IntersectionObserver(entries => { if (entries.some(entry => entry.isIntersecting)) loadMore(); }, { rootMargin: '600px 0px' }).observe(sentinel);
     let opener: HTMLElement | null = null;
     let previousOverflow = '';
     let transition: gsap.core.Timeline | undefined;
@@ -79,25 +62,33 @@ import chevron from '../assets/catalog-filter-chevron.svg';
       }});
     };
     const apply = (requested: string, animate = true, updateUrl = true) => {
-      const option = options.find(o => o.dataset.category === requested);
+      const category = requested === 'cushion-covers' ? 'cushions' : requested;
+      const option = options.find(o => o.dataset.category === category);
       const slug = option?.dataset.category ?? 'all';
       const swap = () => {
         activeCategory = slug;
-        visibleCount = 16;
         grid.classList.toggle('is-filtered', slug !== 'all');
+        grid.classList.toggle('is-cushions', slug === 'cushions');
+        cushionHeading.hidden = coverHeading.hidden = slug !== 'cushions';
+        if (slug === 'cushions') {
+          const byCode = (a: HTMLButtonElement, b: HTMLButtonElement) => a.dataset.product!.localeCompare(b.dataset.product!);
+          grid.append(cushionHeading, ...cards.filter(c => c.dataset.product?.startsWith('CL-CU-')).sort(byCode), coverHeading, ...cards.filter(c => c.dataset.product?.startsWith('CL-CC-')).sort(byCode));
+        } else {
+          grid.replaceChildren(...initialGridNodes);
+        }
         const focusedCard = cards.find(card => card === document.activeElement);
-        cards.forEach((card, index) => {
-          card.hidden = slug === 'all' ? index >= visibleCount : card.dataset.category !== slug;
+        cards.forEach(card => {
+          card.hidden = slug === 'all' ? card.dataset.overview !== 'true' : card.dataset.category !== slug;
           card.disabled = slug !== 'all';
           if (slug === 'all') card.setAttribute('aria-label', `View all ${card.querySelector('.product-card_caption > span')?.textContent ?? 'products'}`);
           else card.removeAttribute('aria-label');
         });
         if (focusedCard?.disabled) all.focus({ preventScroll: true });
-        syncPagination();
         options.forEach(o => o.setAttribute('aria-pressed', String(o === option)));
         all.setAttribute('aria-pressed', String(slug === 'all'));
         toggle.classList.toggle('has-selection', slug !== 'all');
         selected.textContent = option?.textContent ?? 'All collections';
+        selected.hidden = slug === 'cushions';
         if (updateUrl) { const url = new URL(location.href); slug === 'all' ? url.searchParams.delete('category') : url.searchParams.set('category', slug); history.replaceState(null, '', url); }
         ScrollTrigger.refresh();
       };
@@ -132,6 +123,7 @@ import chevron from '../assets/catalog-filter-chevron.svg';
   .category-filter_all[aria-pressed='false'] { background: transparent; color: var(--color--text); }
   .category-filter_toggle.has-selection { background: var(--color--cyan-blue); color: var(--color--offwhite); }
   .category-filter_selected { text-transform: uppercase; }
+  .category-filter_selected[hidden] { display: none; }
   .category-filter_chevron { display: block; width: .75rem; height: .75rem; flex-shrink: 0; background-color: currentColor; mask: var(--chevron) center / contain no-repeat; -webkit-mask: var(--chevron) center / contain no-repeat; }
   .category-picker { position: fixed; top: var(--filter-top, 10rem); left: var(--filter-left, 3.5rem); margin: 0; padding: 1.75rem 2rem 2rem; width: 70rem; max-width: calc(100vw - 7rem); max-height: calc(100svh - var(--filter-top, 10rem) - 1rem); border: 1px solid rgb(40 40 42 / .14); background: var(--color--offwhite); color: var(--color--text); box-shadow: 0 .75rem 2rem rgb(40 40 42 / .08); }
   .category-picker::backdrop { background: rgb(40 40 42 / .12); opacity: var(--backdrop-opacity, 0); }

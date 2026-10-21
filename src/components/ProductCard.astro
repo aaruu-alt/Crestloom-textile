@@ -7,23 +7,29 @@ const { image, alt, label, category, code, overview = false } = Astro.props;
 <button type="button" class="product-card" data-product={code} data-category={category} data-overview={overview ? 'true' : 'false'} hidden={!overview} aria-label={`View all ${label}`}>
   <span class="product-card_frame">
     <Image src={image} alt={alt} class:list={['product-card_image', { 'is-cover': code === 'CL-RG-001' }]} widths={[320,640]} sizes="(min-width: 992px) 30vw, 44vw" loading="lazy" />
+    <span class="product-card_overlay" aria-hidden="true"><span>Explore {label.toLowerCase()} <span aria-hidden="true">→</span></span></span>
   </span>
-  <span class="product-card_caption"><span>{label}</span><span class="product-card_separator" aria-hidden="true"> / </span><span>{code}</span></span>
+  <span class="product-card_caption"><span>{label}</span><span class="product-card_separator" aria-hidden="true"> / </span><span class="product-card_code">{code}</span></span>
 </button>
 <style>
   .product-card { display: flex; flex-direction: column; align-items: stretch; gap: .75rem; min-width: 0; width: 100%; text-align: left; }
   .product-card:disabled { cursor: default; opacity: 1; }
   .product-card[hidden] { display: none; }
   .product-card_frame { display: block; position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: white; }
-  .product-card_image { width: 100%; height: 100%; object-fit: contain; transition: transform 1000ms var(--ease--apple); }
+  /* Gentle display-only correction matching the approved white-background direction. */
+  .product-card_image { width: 100%; height: 100%; object-fit: contain; filter: brightness(1.06) contrast(1.06); transition: transform 1000ms var(--ease--apple); }
   .product-card_image.is-cover { object-fit: cover; }
   .product-card:hover .product-card_image, .product-card:focus-visible .product-card_image { transform: scale(1.025); }
+  .product-card_overlay { position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 1.25rem; background: linear-gradient(transparent 70%, color-mix(in srgb, var(--color--cyan-blue) 92%, transparent)); color: var(--color--offwhite); font: 500 .875rem/140% var(--font--accent); letter-spacing: .08em; text-transform: uppercase; opacity: 0; transition: opacity 700ms var(--ease--apple); }
+  .product-card:not(:disabled):hover .product-card_overlay, .product-card:not(:disabled):focus-visible .product-card_overlay { opacity: 1; }
+  .product-card:disabled .product-card_overlay { display: none; }
+  .product-card:not(:disabled) .product-card_separator, .product-card:not(:disabled) .product-card_code { display: none; }
   .product-card_caption { font: 500 .875rem/120% var(--font--accent); letter-spacing: .1em; }
   .product-card:focus-visible { outline: 1px solid var(--color--cyan-blue); outline-offset: .25rem; }
   @media (max-width: 767px) {
     .product-card { gap: .6rem; }
-    .product-card_caption { display: flex; flex-direction: column; font-size: .72rem; line-height: 150%; }
+  .product-card_caption { display: flex; flex-direction: column; font-size: .72rem; line-height: 150%; }
     .product-card_separator { display: none; }
   }
-  @media (prefers-reduced-motion: reduce) { .product-card_image { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .product-card_image, .product-card_overlay { transition: none; } }
 </style>

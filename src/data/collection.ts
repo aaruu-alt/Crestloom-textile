@@ -17,10 +17,6 @@ export const categories: Category[] = [
     "name": "Cushions"
   },
   {
-    "slug": "cushion-covers",
-    "name": "Cushion covers"
-  },
-  {
     "slug": "throws",
     "name": "Throws"
   },
@@ -73,7 +69,6 @@ export const categoryGroups = [
     "name": "Soft furnishings",
     "slugs": [
       "cushions",
-      "cushion-covers",
       "throws",
       "poufs"
     ]
@@ -388,7 +383,7 @@ const records = [
   },
   {
     "id": "CL-CC-001",
-    "category": "cushion-covers",
+    "category": "cushions",
     "label": "Cushion Covers",
     "code": "CL-CC-001",
     "file": "CL-CC-001.webp",
@@ -396,7 +391,7 @@ const records = [
   },
   {
     "id": "CL-CC-002",
-    "category": "cushion-covers",
+    "category": "cushions",
     "label": "Cushion Covers",
     "code": "CL-CC-002",
     "file": "CL-CC-002.webp",
@@ -404,7 +399,7 @@ const records = [
   },
   {
     "id": "CL-CC-003",
-    "category": "cushion-covers",
+    "category": "cushions",
     "label": "Cushion Covers",
     "code": "CL-CC-003",
     "file": "CL-CC-003.webp",
@@ -412,7 +407,7 @@ const records = [
   },
   {
     "id": "CL-CC-004",
-    "category": "cushion-covers",
+    "category": "cushions",
     "label": "Cushion Covers",
     "code": "CL-CC-004",
     "file": "CL-CC-004.webp",
@@ -420,7 +415,7 @@ const records = [
   },
   {
     "id": "CL-CC-005",
-    "category": "cushion-covers",
+    "category": "cushions",
     "label": "Cushion Covers",
     "code": "CL-CC-005",
     "file": "CL-CC-005.webp",
@@ -428,7 +423,7 @@ const records = [
   },
   {
     "id": "CL-CC-006",
-    "category": "cushion-covers",
+    "category": "cushions",
     "label": "Cushion Covers",
     "code": "CL-CC-006",
     "file": "CL-CC-006.webp",
@@ -436,7 +431,7 @@ const records = [
   },
   {
     "id": "CL-CC-007",
-    "category": "cushion-covers",
+    "category": "cushions",
     "label": "Cushion Covers",
     "code": "CL-CC-007",
     "file": "CL-CC-007.webp",
@@ -444,7 +439,7 @@ const records = [
   },
   {
     "id": "CL-CC-008",
-    "category": "cushion-covers",
+    "category": "cushions",
     "label": "Cushion Covers",
     "code": "CL-CC-008",
     "file": "CL-CC-008.webp",
@@ -452,7 +447,7 @@ const records = [
   },
   {
     "id": "CL-CC-009",
-    "category": "cushion-covers",
+    "category": "cushions",
     "label": "Cushion Covers",
     "code": "CL-CC-009",
     "file": "CL-CC-009.webp",
@@ -460,7 +455,7 @@ const records = [
   },
   {
     "id": "CL-CC-010",
-    "category": "cushion-covers",
+    "category": "cushions",
     "label": "Cushion Covers",
     "code": "CL-CC-010",
     "file": "CL-CC-010.webp",
@@ -468,7 +463,7 @@ const records = [
   },
   {
     "id": "CL-CC-011",
-    "category": "cushion-covers",
+    "category": "cushions",
     "label": "Cushion Covers",
     "code": "CL-CC-011",
     "file": "CL-CC-011.webp",
@@ -476,7 +471,7 @@ const records = [
   },
   {
     "id": "CL-CC-012",
-    "category": "cushion-covers",
+    "category": "cushions",
     "label": "Cushion Covers",
     "code": "CL-CC-012",
     "file": "CL-CC-012.webp",

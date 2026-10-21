@@ -50,7 +50,7 @@ Both build commands write to `dist/`. Rebuild the intended target before preview
 | `public/og.jpg` | Shared Open Graph artwork |
 | `scripts/prune-live.mjs` | Keeps only the coming-soon build and its assets for the main domain |
 
-Collection cards select their category. Once a category is selected, cards retain their hover zoom but do not open a popup. Chindi rugs and Fouta towels are excluded from the current collection and footer.
+“All collections” shows one curated thumbnail per category, with an Explore overlay on hover or keyboard focus. Cushion covers are included within Cushions; their footer link opens that combined category. Collection cards select their category. Once a category is selected, cards retain their hover zoom but do not open a popup. Chindi rugs and Fouta towels are excluded from the current collection and footer.
 
 ## Design conventions
 
@@ -60,7 +60,7 @@ Collection cards select their category. Once a category is selected, cards retai
 - Use rem-based sizing and the existing root scaling: desktop `1.111vw`, capped above 1600px; tablet at 991px and below uses 16px; mobile at 767px and below uses `4.444vw`.
 - Large containers have an `83rem` maximum width. Use `100svh` for viewport-height layouts.
 - Reuse the custom motion curve `--ease--apple: cubic-bezier(0.32, 0.72, 0, 1)` and existing reduced-motion handling.
-- Content raster images use WebP. SVG artwork, browser icons and the JPEG social-sharing image have separate format requirements.
+- Collection product photos and category thumbnails share a subtle display-only brightness/contrast correction in `ProductCard.astro`; original image files stay unchanged. Content raster images use WebP. SVG artwork, browser icons and the JPEG social-sharing image have separate format requirements.
 - Both footer variants use `CopyrightYear.astro`, which updates the year in the browser using UTC.
 
 ## Contact form
