@@ -65,11 +65,11 @@ Both build commands write to `dist/`. Rebuild the intended target before preview
 
 ## Contact form
 
-The contact form submits to FormSubmit through its AJAX endpoint, addressed to `info@crestloom.in`. Visitors stay on the website; no email application opens.
+The contact form submits to FormSubmit through its standard POST endpoint, addressed to `info@crestloom.in`. Visitors complete the provider’s spam verification and return to the contact page; no email application opens. The AJAX endpoint was replaced after repeated timeouts.
 
 The payload includes first name, email, optional company and message. Required fields and email format are checked in the browser, messages containing links are rejected, and a populated honeypot stops submission. The honeypot is excluded from the outgoing payload. Browser checks can be bypassed and are not server-side spam protection.
 
-The form prevents duplicate submissions while sending, shows a confirmation only after a successful service response, and preserves entered details on failure. FormSubmit must activate the recipient address before delivery works. Activation uses the confirmation email sent to that inbox; verify actual receipt after activation. A successful HTTP response alone does not prove inbox delivery.
+The form prevents duplicate submissions while transferring to the provider and shows a confirmation when the provider redirects back after submission. FormSubmit must activate the recipient address before delivery works. Activation uses the confirmation email sent to that inbox; verify actual receipt after activation. A successful HTTP response alone does not prove inbox delivery.
 
 The collection enquiry popup is no longer mounted. Legacy popup and mail-draft utilities remain in the source but are not the active contact form.
 
