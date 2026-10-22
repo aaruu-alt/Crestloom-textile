@@ -70,7 +70,8 @@ export const categoryGroups = [
     "slugs": [
       "cushions",
       "throws",
-      "poufs"
+      "poufs",
+      "halloween-collection"
     ]
   },
   {
@@ -87,8 +88,7 @@ export const categoryGroups = [
     "slugs": [
       "baskets",
       "wall-hangings",
-      "wall-art",
-      "halloween-collection"
+      "wall-art"
     ]
   }
 ];

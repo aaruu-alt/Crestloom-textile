@@ -1,12 +1,12 @@
 ---
-import brand from '../assets/home/footer-brand.svg';
+import Wordmark from './Wordmark.astro';
 import CopyrightYear from './CopyrightYear.astro';
 import { routes } from '../lib/routes';
 const columns = [
   { title: 'Rugs & flooring', links: ['Rugs', 'Bathmats'] },
-  { title: 'Soft furnishings', links: ['Cushions', 'Cushion covers', 'Throws', 'Poufs'] },
+  { title: 'Soft furnishings', links: ['Cushions', 'Throws', 'Poufs', 'Halloween collection'] },
   { title: 'Bath, kitchen & table', links: ['Terry towels', 'Table cloth', 'Shower curtains', 'Table covers'] },
-  { title: 'Storage & décor', links: ['Baskets', 'Wall hangings', 'Wall art', 'Halloween collection'] },
+  { title: 'Storage & décor', links: ['Baskets', 'Wall hangings', 'Wall art'] },
 ];
 const categorySlug = (label: string) => ({ 'Cushion covers': 'cushions', 'Table cloth': 'table-covers', 'Table covers': 'table-covers' }[label] ?? label.toLowerCase().replaceAll(' ', '-'));
 const site = [{ label: 'About', href: routes.about }, { label: 'Sourcing', href: routes.sourcing }, { label: 'Contact', href: routes.contact }, { label: 'Privacy', href: routes.privacy }];
@@ -14,7 +14,7 @@ const site = [{ label: 'About', href: routes.about }, { label: 'Sourcing', href:
 <footer class="directory-footer padding-global">
   <div class="container-large directory-footer_inner">
     <div class="directory-footer_top">
-      <a href={routes.home} aria-label="Crestloom Textile — home" class="directory-footer_brand"><img src={brand.src} alt="Crestloom Textile" width="336" height="57" /></a>
+      <Wordmark href={routes.home} padded={false} class="directory-footer_brand" />
       <div class="directory-footer_email"><p>Sourcing enquiries</p><a href="mailto:info@crestloom.in">info@crestloom.in</a></div>
     </div>
     <div class="directory-footer_rule"></div>
@@ -27,7 +27,7 @@ const site = [{ label: 'About', href: routes.about }, { label: 'Sourcing', href:
     </div>
     <div class="directory-footer_bottom">
       <div class="directory-footer_rule"></div>
-      <div class="directory-footer_meta"><p class="directory-footer_place">Panipat <span aria-hidden="true">·</span> India</p><p>© <CopyrightYear /> Crestloom Textile · All rights reserved</p></div>
+      <div class="directory-footer_meta"><p class="directory-footer_place">Panipat <span aria-hidden="true">·</span> India</p><p>© <CopyrightYear /> Crestloom Textiles · All rights reserved</p></div>
     </div>
   </div>
 </footer>
@@ -35,7 +35,7 @@ const site = [{ label: 'About', href: routes.about }, { label: 'Sourcing', href:
   .directory-footer { padding-block: 3rem 1.25rem; background: var(--color--cyan-blue); color: var(--color--offwhite); }
   .directory-footer_inner { display: flex; flex-direction: column; gap: 1.875rem; }
   .directory-footer_top { display: flex; justify-content: space-between; min-height: 5.75rem; gap: 2rem; }
-  .directory-footer_brand { width: 21.007rem; flex-shrink: 0; }
+  .directory-footer_top :global(.directory-footer_brand) { width: 21.007rem; height: auto; aspect-ratio: 580 / 96; align-self: flex-start; flex-shrink: 0; --wordmark-color: var(--color--offwhite); --wordmark-accent: var(--color--sandy-gold); }
   .directory-footer_email { display: flex; flex-direction: column; gap: .5rem; }
   .directory-footer_email p, .directory-footer_column h2, .directory-footer_place { font: 500 .75rem/120% var(--font--accent); letter-spacing: .18em; text-transform: uppercase; color: var(--color--sandy-gold); }
   .directory-footer_email a { font: 500 1.75rem/100% var(--font--heading); letter-spacing: .01em; }
@@ -61,7 +61,7 @@ const site = [{ label: 'About', href: routes.about }, { label: 'Sourcing', href:
     .directory-footer { padding-block: 2.25rem 1.5rem; }
     .directory-footer_inner { gap: 1.5rem; }
     .directory-footer_top { flex-direction: column; gap: 1.75rem; min-height: 9.5625rem; }
-    .directory-footer_brand { width: 100%; max-width: 21.4375rem; }
+    .directory-footer_top :global(.directory-footer_brand) { width: 100%; max-width: 21.4375rem; }
     .directory-footer_body { gap: 1.75rem; }
     .directory-footer_columns { grid-template-columns: 1fr 1fr; gap: 1.75rem 1rem; }
     .directory-footer_column { gap: 1.125rem; }

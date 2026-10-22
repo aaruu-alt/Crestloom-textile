@@ -1,25 +1,34 @@
 ---
 /**
- * Wordmark — "CRESTLOOM / TEXTILE" lockup as an inline vector
- * (Figma "Brand / Wordmark" 103:9, flattened; 260 × 58 box).
+ * Wordmark — "CRESTLOOM / TEXTILES" lockup as an inline vector
+ * (Figma 758:1651; scaled to the existing layout boxes).
  * Colours come from CSS vars so each context can theme it:
  *   --wordmark-color   (CRESTLOOM)  default: --color--text
- *   --wordmark-accent  (TEXTILE)    default: --color--gold
+ *   --wordmark-accent  (TEXTILES)    default: --color--gold
  */
-import raw from '../assets/wordmark.svg?raw';
-// The <svg> is the image; the wrapper is a plain link/div.
-const svg = raw.replace('<svg ', '<svg role="img" aria-label="Crestloom Textile" focusable="false" ');
+import raw from '../assets/crestloom-textiles.svg?raw';
 
 interface Props {
   href?: string;
+  padded?: boolean;
   class?: string;
   [key: string]: unknown;
 }
-const { href, class: className, ...rest } = Astro.props;
+const { href, padded = true, class: className, ...rest } = Astro.props;
 const Tag = href ? 'a' : 'div';
+// Keep the supplied vector paths intact; only theme the fills and scale the lockup.
+const artwork = raw.slice(raw.indexOf('>') + 1, raw.lastIndexOf('</svg>'))
+  .replace('<g id="TEXTILES">', padded ? '<g transform="translate(290 87) scale(1.25) translate(-290 -87)">' : '<g>')
+  .replaceAll(/ id="[^"]*"/g, '')
+  .replaceAll('fill="#F6F5F2"', 'fill="currentColor"')
+  .replaceAll('fill="white"', 'fill="var(--wordmark-accent, var(--color--gold))"');
+// The old navbar artwork occupied 222 × 37 within its 260 × 58 layout box.
+const viewBox = padded ? '0 0 260 58' : '0 0 580 96';
+const contents = padded ? '<g transform="translate(18 11) scale(0.38275862069)">' + artwork + '</g>' : artwork;
+const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="' + viewBox + '" role="img" aria-label="Crestloom Textiles" focusable="false">' + contents + '</svg>';
 ---
 
-<Tag href={href} class:list={['wordmark', className]} aria-label={href ? 'Crestloom Textile — home' : undefined} {...rest} set:html={svg} />
+<Tag href={href} class:list={['wordmark', className]} aria-label={href ? 'Crestloom Textiles — home' : undefined} {...rest} set:html={svg} />
 
 <style>
   .wordmark {
